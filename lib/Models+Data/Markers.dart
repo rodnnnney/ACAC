@@ -90,7 +90,7 @@ class markers {
       {Color color = Colors.black, double size = 100}) async {
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint = Paint()..color = color;
+    //final Paint paint = Paint()..color = color;
     final TextPainter textPainter =
         TextPainter(textDirection: TextDirection.ltr);
 

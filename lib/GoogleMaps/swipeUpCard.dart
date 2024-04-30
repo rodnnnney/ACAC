@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/Providers/Polyline_Info.dart';
 import 'package:provider/provider.dart';
@@ -65,14 +64,14 @@ class _AddTaskState extends State<AddTask> {
                 }
               }
 
-              double calculateDistance() {
-                double distance = Geolocator.distanceBetween(
-                    widget.userLocation.latitude,
-                    widget.userLocation.longitude,
-                    data.restaurantInfo[index].location.latitude,
-                    data.restaurantInfo[index].location.longitude);
-                return distance / 1000;
-              }
+              // double calculateDistance() {
+              //   double distance = Geolocator.distanceBetween(
+              //       widget.userLocation.latitude,
+              //       widget.userLocation.longitude,
+              //       data.restaurantInfo[index].location.latitude,
+              //       data.restaurantInfo[index].location.longitude);
+              //   return distance / 1000;
+              // }
 
               return Container(
                 child: Card(
