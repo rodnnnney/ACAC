@@ -11,8 +11,8 @@ import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+
 import 'Login/Login.dart';
-import 'Login/Sign_Up.dart';
 import 'Login/Welcome.dart';
 
 void main() {
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           colorScheme: const ShadZincColorScheme.dark(),
         ),
-        initialRoute: HomePage.id,
+        initialRoute: RegistrationScreen.id,
         routes: appRoutes,
       ),
     );

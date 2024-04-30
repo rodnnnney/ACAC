@@ -1,16 +1,11 @@
-import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:googlemaptest/Models+Data/Cards.dart';
 import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
+
 import '../GoogleMaps/WelcomeText.dart';
 import '../GoogleMaps/appBar.dart';
-import 'Account.dart';
-import 'maps.dart';
-import 'package:pocketbase/pocketbase.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
@@ -43,13 +38,12 @@ class HomePage extends StatelessWidget {
               children: [
                 Welcome(),
                 Text(
-                  user.name == ''
-                      ? 'rodney'
-                      : cutAndLowercase(
-                          user.getName(
-                            user.authData.toString(),
-                          ),
-                        ),
+                  user.name == '' ? 'rodney' : user.name,
+                  // : cutAndLowercase(
+                  //     user.getName(
+                  //       user.authData.toString(),
+                  //     ),
+                  //   ),
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
