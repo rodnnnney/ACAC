@@ -3,7 +3,6 @@ import 'package:googlemaptest/Login/Sign_Up.dart';
 import 'package:googlemaptest/Pages/Account.dart';
 import 'package:googlemaptest/Pages/Home.dart';
 import 'package:googlemaptest/Pages/Maps.dart';
-import 'package:googlemaptest/Pages/ShadTest.dart';
 import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/Navigation_Info_Provider.dart';
 import 'package:googlemaptest/Providers/Polyline_Info.dart';
@@ -11,8 +10,8 @@ import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+
 import 'Login/Login.dart';
-import 'Login/Sign_Up.dart';
 import 'Login/Welcome.dart';
 
 void main() {
@@ -26,9 +25,12 @@ final appRoutes = <String, WidgetBuilder>{
   MapScreen.id: (context) => MapScreen(),
   HomePage.id: (context) => HomePage(),
   AccountInfo.id: (context) => AccountInfo(),
-  ShadTest.id: (context) => ShadTest(),
-  cardViewerHomePage.id: (context) => cardViewerHomePage(),
+  cardViewerHomePage.id: (context) => cardViewerHomePage(
+        cuisineType: ModalRoute.of(context)!.settings.arguments as String,
+      ),
 };
+
+class CardViewerHomePage {}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           colorScheme: const ShadZincColorScheme.dark(),
         ),
-        initialRoute: HomePage.id,
+        initialRoute: LoginScreen.id,
         routes: appRoutes,
       ),
     );

@@ -1,19 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/Pages/Account.dart';
-import 'package:googlemaptest/Pages/Home.dart';
-import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
-import '../GoogleMaps/appBar.dart';
-import '../Models+Data/Markers.dart';
 import 'package:googlemaptest/GoogleMaps/swipeUpCard.dart';
 import 'package:provider/provider.dart';
+
+import '../GoogleMaps/appBar.dart';
+import '../GoogleMaps/infoCard.dart';
+import '../Locations/location.dart';
+import '../Models+Data/Markers.dart';
 import '../Providers/Navigation_Info_Provider.dart';
 import '../Providers/Polyline_Info.dart';
-import '../Providers/Restaurant_Provider.dart';
-import '../Locations/location.dart';
-import '../GoogleMaps/infoCard.dart';
 
 class MapScreen extends StatefulWidget {
   static String id = 'Map_Screen';
@@ -22,17 +17,15 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  //GoogleMapController? controller;
   markers markerManager = markers();
   bool isLocationLoaded = false;
   Location location = Location();
-  late LatLng userPosition;
+  LatLng userPosition = LatLng(0, 0);
 
   @override
   void initState() {
     super.initState();
     getLocation();
-    markerManager.initializeMarkers(context);
   }
 
   void getLocation() async {
@@ -41,6 +34,8 @@ class _MapScreenState extends State<MapScreen> {
       isLocationLoaded = true;
       userPosition = userLocation;
     });
+    markerManager.initializeUserLocation(userPosition);
+    markerManager.initializeMarkers(context);
   }
 
   @override
@@ -65,9 +60,9 @@ class _MapScreenState extends State<MapScreen> {
         children: [
           GoogleMap(
             onMapCreated: maps.onMapCreated,
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(45.36855573032455, -75.70277367823537),
-              zoom: 13,
+            initialCameraPosition: CameraPosition(
+              target: userPosition,
+              zoom: 11,
             ),
             myLocationButtonEnabled: false,
             markers: markerManager.marker,

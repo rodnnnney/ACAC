@@ -13,6 +13,7 @@ class infoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    PolyInfo maps = Provider.of<PolyInfo>(context);
     return Padding(
       padding: EdgeInsets.only(
           top: screenSize.height * 0.70, left: screenSize.width * 0.05),
@@ -55,6 +56,7 @@ class infoCard extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               nav.closeNav();
+                              maps.clearPoly();
                             },
                             child: Text('End Navigation'),
                           )

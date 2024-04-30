@@ -1,44 +1,59 @@
+import 'dart:ui' as ui;
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/Models+Data/Cards.dart';
 import 'package:googlemaptest/Providers/Polyline_Info.dart';
-import 'package:provider/provider.dart';
 import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
-import 'dart:ui' as ui;
+import 'package:provider/provider.dart';
+
+import '../Locations/location.dart';
 
 class markers {
+  late final LatLng userLocation = LatLng(0, 0);
   late GoogleMapController controller;
+  Location location = Location();
 
   final Set<Marker> markerList = {};
   Set<Marker> get marker => markerList;
   void getUserLocation() {}
 
-  void initializeMarkers(BuildContext context) async {
+  void initializeUserLocation(LatLng userLocation) {
+    markerList.add(
+      Marker(markerId: MarkerId('User'), position: userLocation),
+    );
+  }
+
+  void initializeMarkers(BuildContext context) {
     markerList.add(
       Marker(
-          markerId: const MarkerId('Kinton'),
-          position: const LatLng(45.41913804744197, -75.6914954746089),
-          onTap: () {
-            goTo(context, const LatLng(45.41913804744197, -75.6914954746089));
-          }),
+        markerId: const MarkerId('Kinton'),
+        position: const LatLng(45.41913804744197, -75.6914954746089),
+        onTap: () {
+          goTo(context, const LatLng(45.41913804744197, -75.6914954746089));
+        },
+      ),
     );
     markerList.add(
       Marker(
-          markerId: const MarkerId('KTV'),
-          position: const LatLng(45.36855573032455, -75.70277367823537),
-          onTap: () {
-            goTo(context, const LatLng(45.36855573032455, -75.70277367823537));
-          }),
+        markerId: const MarkerId('KTV'),
+        position: const LatLng(45.36855573032455, -75.70277367823537),
+        onTap: () {
+          goTo(context, const LatLng(45.36855573032455, -75.70277367823537));
+        },
+      ),
     );
-    markerList.add(Marker(
+    markerList.add(
+      Marker(
         markerId: const MarkerId('PapaSpicy'),
         position: const LatLng(45.4278039812124, -75.69032978995092),
         onTap: () {
           goTo(context, const LatLng(45.4278039812124, -75.69032978995092));
-        }));
+        },
+      ),
+    );
     markerList.add(
       Marker(
         infoWindow: const InfoWindow(title: 'ChaTime', snippet: 'Bubble Tea'),

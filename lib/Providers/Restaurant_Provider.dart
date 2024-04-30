@@ -1,18 +1,19 @@
 import 'dart:async';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/Models+Data/startStop.dart';
+
 import '../Models+Data/Cards.dart';
 import '../Models+Data/Times.dart';
-import 'package:http/http.dart' as http;
 
 class Restaurant extends ChangeNotifier {
   LatLng? distance;
 
   List<Cards> restaurantInfo = [
     Cards(
-      restaurantName: 'Kinton',
+      restaurantName: 'Kinton Ramen',
       location: const LatLng(45.41913804744197, -75.6914954746089),
       address: '216 Elgin St #2',
       imageSrc: 'images/Kinton/kinton.jpeg',

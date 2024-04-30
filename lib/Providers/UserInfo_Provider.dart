@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'dart:convert';
 
 final pb = PocketBase('http://127.0.0.1:8090');
 
@@ -12,8 +13,11 @@ class UserInfo extends ChangeNotifier {
   int selected = 0;
 
   String get name => _name;
+
   String get email => _email;
+
   String get password => _password;
+
   dynamic get authData => _authData;
 
   set setName(String name) {
@@ -28,6 +32,11 @@ class UserInfo extends ChangeNotifier {
 
   set setPassword(String password) {
     _password = password;
+    notifyListeners();
+  }
+
+  void set setO2AuthData(dynamic authData) {
+    _authData = authData;
     notifyListeners();
   }
 
@@ -50,7 +59,8 @@ class UserInfo extends ChangeNotifier {
         "emailVisibility": true,
         "password": password,
         "passwordConfirm": password,
-        "name": name
+        "name": name,
+        //"username": name
       };
       final record = await pb.collection('users').create(body: body);
       setAuthData = record;
@@ -59,13 +69,6 @@ class UserInfo extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
-  }
-
-  Future<void> read() async {
-    final records = await pb.collection('users').getFullList(
-          sort: '-username',
-        );
-    print(records);
   }
 
   String getName(dynamic data) {
@@ -85,8 +88,45 @@ class UserInfo extends ChangeNotifier {
     print(record);
   }
 
+  Future<void> o2AthSendFeedBack(
+      String feedback, String email, dynamic id) async {
+    final body = <String, dynamic>{
+      "field": id,
+      "feedback": feedback,
+      'email': email,
+    };
+    final record = await pb.collection('feedback').create(body: body);
+    print(record);
+  }
+
   void setNum(int hover) {
     selected = hover;
     notifyListeners();
+  }
+
+  Future<void> signOut() async {
+    _authData = '';
+  }
+
+  String getUserNameAuthData() {
+    // var prettyString = JsonEncoder.withIndent('  ').convert(authData);
+    // print(prettyString);
+    Map<String, dynamic> userData = jsonDecode(authData.toString());
+    String nameFromO2Auth = userData['record']['username'];
+    return nameFromO2Auth;
+  }
+
+  String getUserEmailAuthData() {
+    var prettyString = JsonEncoder.withIndent('  ').convert(authData);
+    print(prettyString);
+    Map<String, dynamic> userData = jsonDecode(authData.toString());
+    String emailFromO2Auth = userData['record']['email'];
+    return emailFromO2Auth;
+  }
+
+  String getO2AuthID() {
+    Map<String, dynamic> userData = jsonDecode(authData.toString());
+    String idFromO2Auth = userData['record']['id'];
+    return idFromO2Auth;
   }
 }

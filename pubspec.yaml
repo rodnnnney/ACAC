@@ -45,6 +45,8 @@ dependencies:
   pocketbase: ^0.18.1
   animated_text_kit: ^4.2.2
   shadcn_ui: ^0.2.4
+  url_launcher: ^6.2.6
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

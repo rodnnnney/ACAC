@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Login/Sign_Up.dart';
 import 'package:googlemaptest/Pages/Home.dart';
-import 'package:googlemaptest/Pages/maps.dart';
-
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Providers/UserInfo_Provider.dart';
 import 'Welcome.dart';
-import 'navButton.dart';
 
 final pb = PocketBase('http://127.0.0.1:8090');
 
@@ -112,6 +109,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   }
+                },
+              ),
+              ShadButton(
+                text: Text('Google'),
+                onPressed: () async {
+                  final authData = await pb.collection('users').authWithOAuth2(
+                    'google',
+                    (_url) async {
+                      await launchUrl(_url);
+                    },
+                  );
+                  user.setAuthData = authData;
+                  Navigator.pushNamed(context, HomePage.id);
                 },
               ),
             ],

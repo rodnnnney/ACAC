@@ -1,15 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Login/Login.dart';
-import 'package:googlemaptest/Login/Welcome.dart';
+import 'package:googlemaptest/Pages/Home.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../Pages/Maps.dart';
 import '../Providers/UserInfo_Provider.dart';
 
 class RegistrationScreen extends StatelessWidget {
   static const String id = 'Registration_screen';
+
   RegistrationScreen({super.key});
 
   static TextStyle styling = const TextStyle(
@@ -18,10 +20,12 @@ class RegistrationScreen extends StatelessWidget {
       fontWeight: FontWeight.normal,
       decoration: TextDecoration.none);
   final pb = PocketBase('http://127.0.0.1:8090');
+  final Uri _url = Uri.parse('http://127.0.0.1:8090/api/oauth2-redirect');
+  bool isFormValid = false;
 
   @override
   Widget build(BuildContext context) {
-    UserInfo user = Provider.of(context);
+    UserInfo userInfo = Provider.of<UserInfo>(context);
     final theme = ShadTheme.of(context);
     return Scaffold(
       body: Center(
@@ -39,8 +43,8 @@ class RegistrationScreen extends StatelessWidget {
                 ),
                 ShadInput(
                   placeholder: const Text('Enter your first name'),
-                  onSubmitted: (name) {
-                    user.setName = name;
+                  onChanged: (name) {
+                    userInfo.setName = name;
                   },
                 ),
                 const SizedBox(height: 6),
@@ -51,7 +55,7 @@ class RegistrationScreen extends StatelessWidget {
                 ShadInput(
                   placeholder: const Text('Enter an email'),
                   onChanged: (email) {
-                    user.setEmail = email;
+                    userInfo.setEmail = email;
                   },
                 ),
                 const SizedBox(height: 6),
@@ -63,7 +67,7 @@ class RegistrationScreen extends StatelessWidget {
                   placeholder: const Text('Enter your password'),
                   obscureText: true,
                   onChanged: (pass) {
-                    user.setPassword = pass;
+                    userInfo.setPassword = pass;
                   },
                 ),
               ],
@@ -88,8 +92,7 @@ class RegistrationScreen extends StatelessWidget {
                     child: const ShadProgress(),
                   );
                   try {
-                    user.signUp(user.name, user.email, user.password);
-                    if (user.password.length < 7) {
+                    if (userInfo.password.length < 7) {
                       ShadToaster.of(context).show(
                         const ShadToast.destructive(
                           title:
@@ -98,7 +101,16 @@ class RegistrationScreen extends StatelessWidget {
                               'Ensure the password is more than 8 characters'),
                         ),
                       );
-                    } else if (user.email.contains('@') == false) {
+                    } else if (userInfo.email.contains('@') == false) {
+                      ShadToaster.of(context).show(
+                        const ShadToast.destructive(
+                          title: Text('Uh oh, somethings not right'),
+                          description: Text('Please enter a valid email'),
+                        ),
+                      );
+                    } else if (userInfo.name.isEmpty &&
+                        userInfo.email.isEmpty &&
+                        userInfo.password.isEmpty) {
                       ShadToaster.of(context).show(
                         const ShadToast.destructive(
                           title: Text('Uh oh, somethings not right'),
@@ -106,13 +118,30 @@ class RegistrationScreen extends StatelessWidget {
                         ),
                       );
                     } else {
-                      Navigator.pushNamed(context, MapScreen.id);
+                      userInfo
+                          .signUp(
+                              userInfo.name, userInfo.email, userInfo.password)
+                          .then((value) =>
+                              Navigator.pushNamed(context, MapScreen.id));
                     }
                   } catch (e) {
                     print(e);
                   }
                 },
               ),
+              ShadButton(
+                text: Text('Google'),
+                onPressed: () async {
+                  final authData = await pb.collection('users').authWithOAuth2(
+                    'google',
+                    (_url) async {
+                      await launchUrl(_url);
+                    },
+                  );
+                  Navigator.pushNamed(context, HomePage.id);
+                  userInfo.setO2AuthData = authData;
+                },
+              )
             ],
           ),
         ),

@@ -1,30 +1,23 @@
-import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:googlemaptest/Models+Data/Cards.dart';
 import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
+
 import '../GoogleMaps/WelcomeText.dart';
 import '../GoogleMaps/appBar.dart';
-import 'Account.dart';
-import 'maps.dart';
-import 'package:pocketbase/pocketbase.dart';
+import '../Models+Data/homePageCard.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
   final pb = PocketBase('http://127.0.0.1:8090');
 
   String cutAndLowercase(String name) {
-    int spaceIndex = name.indexOf(' '); // Find the index of the first space
+    int spaceIndex = name.indexOf(' ');
     if (spaceIndex == -1) {
-      return name
-          .toLowerCase(); // If no space found, return the whole string in lowercase
+      return name.toLowerCase();
     }
-    return name
-        .substring(0, spaceIndex)
-        .toLowerCase(); // Cut off after the first space and convert to lowercase
+    return name.substring(0, spaceIndex).toLowerCase();
   }
 
   @override
@@ -42,16 +35,9 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Welcome(),
-                Text(
-                  user.name == ''
-                      ? 'rodney'
-                      : cutAndLowercase(
-                          user.getName(
-                            user.authData.toString(),
-                          ),
-                        ),
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-                ),
+                Text(user.getUserEmailAuthData() == null
+                    ? user.name
+                    : user.getUserNameAuthData()),
                 SizedBox(
                   height: 20,
                 ),
@@ -102,21 +88,42 @@ class HomePage extends StatelessWidget {
                               displayIMG: 'images/tofu.webp',
                               text: 'chinese',
                               flag: '🇨🇳',
-                              routeName: cardViewerHomePage.id,
+                              routeName:
+                                  (BuildContext context, String cuisineType) {
+                                Navigator.pushNamed(
+                                  context,
+                                  cardViewerHomePage.id,
+                                  arguments: 'Chinese',
+                                );
+                              },
                             ),
                             HomeCard(
                               screenHeight: screenHeight,
                               displayIMG: 'images/viet.webp',
                               text: 'vietnamese',
                               flag: '🇻🇳',
-                              routeName: null,
+                              routeName:
+                                  (BuildContext context, String cuisineType) {
+                                Navigator.pushNamed(
+                                  context,
+                                  cardViewerHomePage.id,
+                                  arguments: cuisineType,
+                                );
+                              },
                             ),
                             HomeCard(
                               screenHeight: screenHeight,
                               displayIMG: 'images/japan.avif',
                               text: 'japanese',
                               flag: '🇯🇵',
-                              routeName: null,
+                              routeName:
+                                  (BuildContext context, String cuisineType) {
+                                Navigator.pushNamed(
+                                  context,
+                                  cardViewerHomePage.id,
+                                  arguments: cuisineType,
+                                );
+                              },
                             )
                           ],
                         ),
@@ -128,21 +135,42 @@ class HomePage extends StatelessWidget {
                               displayIMG: 'images/korean.jpeg',
                               text: 'korean',
                               flag: '🇰🇷',
-                              routeName: null,
+                              routeName:
+                                  (BuildContext context, String cuisineType) {
+                                Navigator.pushNamed(
+                                  context,
+                                  cardViewerHomePage.id,
+                                  arguments: 'Chinese',
+                                );
+                              },
                             ),
                             HomeCard(
                               screenHeight: screenHeight,
                               displayIMG: 'images/boba.jpeg',
                               text: 'bubble tea',
                               flag: '🧋',
-                              routeName: null,
+                              routeName:
+                                  (BuildContext context, String cuisineType) {
+                                Navigator.pushNamed(
+                                  context,
+                                  cardViewerHomePage.id,
+                                  arguments: cuisineType,
+                                );
+                              },
                             ),
                             HomeCard(
                               screenHeight: screenHeight,
                               displayIMG: 'images/club.webp',
                               text: 'bars',
                               flag: '🍷',
-                              routeName: null,
+                              routeName:
+                                  (BuildContext context, String cuisineType) {
+                                Navigator.pushNamed(
+                                  context,
+                                  cardViewerHomePage.id,
+                                  arguments: cuisineType,
+                                );
+                              },
                             )
                           ],
                         )
@@ -162,55 +190,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class HomeCard extends StatelessWidget {
-  HomeCard(
-      {super.key,
-      required this.screenHeight,
-      required this.displayIMG,
-      required this.text,
-      required this.flag,
-      required this.routeName});
-
-  final double screenHeight;
-  final String displayIMG;
-  final String text;
-  final String flag;
-  final String? routeName;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, routeName!);
-        },
-        child: Card(
-          child: Container(
-            padding: EdgeInsets.all(5),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    displayIMG,
-                    height: screenHeight * 0.15,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(text),
-                    Text(flag),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 // 21 Total Restaurants
 
 // Pomelo Hat || Bubble Tea

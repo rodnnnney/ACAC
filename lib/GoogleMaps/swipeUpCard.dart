@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/Providers/Polyline_Info.dart';
 import 'package:provider/provider.dart';
+
 import '../Providers/Navigation_Info_Provider.dart';
 import '../Providers/Restaurant_Provider.dart';
 
@@ -77,7 +76,7 @@ class _AddTaskState extends State<AddTask> {
 
               return Container(
                 child: Card(
-                  elevation: 2,
+                  elevation: 1,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: Column(
@@ -129,7 +128,6 @@ class _AddTaskState extends State<AddTask> {
                                         try {
                                           LatLng user =
                                               await data.getLocation();
-                                          //debugPrint(user.toString());
                                           String url = await maps.createHttpUrl(
                                               user.latitude,
                                               user.longitude,
@@ -152,14 +150,23 @@ class _AddTaskState extends State<AddTask> {
                                       child: Text('Find on Map'),
                                     ),
                                     const SizedBox(
-                                      width: 22,
+                                      width: 18,
                                     ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.asset(
-                                        data.restaurantInfo[index].imageLogo,
-                                        width: 40,
-                                        height: 40,
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xFFE8E8E8),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Text(
+                                          data.restaurantInfo[index].rating
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     )
                                   ],
