@@ -4,12 +4,11 @@ import 'package:googlemaptest/Pages/Home.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../Providers/UserInfo_Provider.dart';
 import 'Welcome.dart';
 
-final pb = PocketBase('http://127.0.0.1:8090');
+final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
 const kInputDecoration = InputDecoration(
   hintText: 'Enter your email',
@@ -92,7 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   try {
                     await user.signIn(user.email, user.password);
                     if (user.authData != '') {
-                      (Navigator.pushNamed(context, HomePage.id),);
+                      (Navigator.pushNamed(context, HomePage.id)
+                          .then((value) => user.signedInWithAccount()));
                     } else {
                       ShadToaster.of(context).show(
                         const ShadToast.destructive(
@@ -114,14 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ShadButton(
                 text: Text('Google'),
                 onPressed: () async {
-                  final authData = await pb.collection('users').authWithOAuth2(
-                    'google',
-                    (_url) async {
-                      await launchUrl(_url);
-                    },
-                  );
-                  user.setAuthData = authData;
-                  Navigator.pushNamed(context, HomePage.id);
+                  await user.O2AuthSignUp().then((value) =>
+                      Navigator.pushNamed(context, HomePage.id)
+                          .then((value) => user.signedInWithO2Auth()));
                 },
               ),
             ],

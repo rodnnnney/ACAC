@@ -10,7 +10,7 @@ import '../Models+Data/homePageCard.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
-  final pb = PocketBase('http://127.0.0.1:8090');
+  final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
   String cutAndLowercase(String name) {
     int spaceIndex = name.indexOf(' ');
@@ -35,10 +35,10 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Welcome(),
-                Text(user.getUserEmailAuthData() == null
+                Text(user.signInAcc
                     ? user.name
-                    : user.getUserNameAuthData()),
-                SizedBox(
+                    : user.getUserNameAuthData().toString()),
+                const SizedBox(
                   height: 20,
                 ),
                 Column(

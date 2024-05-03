@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-final pb = PocketBase('http://127.0.0.1:8090');
+final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
 class UserInfo extends ChangeNotifier {
   String _name = '';
@@ -11,6 +12,18 @@ class UserInfo extends ChangeNotifier {
   String _password = '';
   dynamic _authData = '';
   int selected = 0;
+  bool signInAcc = false;
+  bool signInAuth2 = false;
+
+  void signedInWithAccount() {
+    signInAcc = true;
+    notifyListeners();
+  }
+
+  void signedInWithO2Auth() {
+    signInAuth2 = true;
+    notifyListeners();
+  }
 
   String get name => _name;
 
@@ -36,7 +49,7 @@ class UserInfo extends ChangeNotifier {
   }
 
   void set setO2AuthData(dynamic authData) {
-    _authData = authData;
+    authData = authData;
     notifyListeners();
   }
 
@@ -60,21 +73,27 @@ class UserInfo extends ChangeNotifier {
         "password": password,
         "passwordConfirm": password,
         "name": name,
-        //"username": name
       };
       final record = await pb.collection('users').create(body: body);
       setAuthData = record;
-      pb.authStore.isValid;
+      //pb.authStore.isValid;
       notifyListeners();
     } catch (e) {
       print(e);
     }
   }
 
+  void userId() {
+    RecordModel jsonString = authData;
+    Map<String, dynamic> user = jsonDecode(jsonString as String);
+    String userId = user['id'];
+    print('User ID: $userId');
+  }
+
   String getName(dynamic data) {
     Map<String, dynamic> jsonData = jsonDecode(data);
     String name = jsonData['record']['name'];
-    //print(name);
+
     return name;
   }
 
@@ -91,8 +110,8 @@ class UserInfo extends ChangeNotifier {
   Future<void> o2AthSendFeedBack(
       String feedback, String email, dynamic id) async {
     final body = <String, dynamic>{
-      "field": id,
       "feedback": feedback,
+      "field": id,
       'email': email,
     };
     final record = await pb.collection('feedback').create(body: body);
@@ -106,13 +125,14 @@ class UserInfo extends ChangeNotifier {
 
   Future<void> signOut() async {
     _authData = '';
+    pb.authStore.clear();
   }
 
   String getUserNameAuthData() {
     // var prettyString = JsonEncoder.withIndent('  ').convert(authData);
     // print(prettyString);
     Map<String, dynamic> userData = jsonDecode(authData.toString());
-    String nameFromO2Auth = userData['record']['username'];
+    String nameFromO2Auth = userData['record']['name'];
     return nameFromO2Auth;
   }
 
@@ -128,5 +148,23 @@ class UserInfo extends ChangeNotifier {
     Map<String, dynamic> userData = jsonDecode(authData.toString());
     String idFromO2Auth = userData['record']['id'];
     return idFromO2Auth;
+  }
+
+  Future<void> O2AuthSignUp() async {
+    final Uri url = Uri.parse(
+        'https://acac2-thrumming-wind-3122.fly.dev/api/oauth2-redirect');
+    final authData = await pb.collection('users').authWithOAuth2(
+      'google',
+      (url) async {
+        await launchUrl(url);
+      },
+    );
+
+    setAuthData = authData;
+    notifyListeners();
+  }
+
+  void getInfo() {
+    print(pb.authStore.isValid);
   }
 }

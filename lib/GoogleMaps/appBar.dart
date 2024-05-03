@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
+
 import '../Pages/Account.dart';
 import '../Pages/Home.dart';
 import '../Pages/maps.dart';
@@ -35,6 +33,14 @@ class _AppBarBottomState extends State<AppBarBottom> {
             onPressed: () {
               user.setNum(0);
               Navigator.pushNamed(context, HomePage.id);
+              // print(user.name);
+              // print(user.signInAcc);
+              // print(user.signInAuth2);
+              // print(user.email);
+              // print(user.password);
+              print(user.signInAuth2);
+              print(user.signInAcc);
+              (user.getInfo());
             },
             icon: Container(
               padding: EdgeInsets.all(5),

@@ -79,14 +79,16 @@ class _AccountInfoState extends State<AccountInfo> {
                                     'Please enter something in feedback box'),
                               ),
                             );
-                          } else if (user.email == '') {
-                            user.o2AthSendFeedBack(
-                                feedbackText,
-                                user.getUserEmailAuthData(),
-                                user.getO2AuthID());
-                            _controller.clear();
-                          } else
-                            user.sendFeedBack(feedbackText, user.email);
+                          } else {
+                            user.sendFeedBack(feedbackText, user.email).then(
+                                  (value) => ShadToaster.of(context).show(
+                                    ShadToast(
+                                      backgroundColor: Colors.green[300],
+                                      description: Text('Message Sent!'),
+                                    ),
+                                  ),
+                                );
+                          }
                           _controller.clear();
                         },
                         gradient: const LinearGradient(colors: [

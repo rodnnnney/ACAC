@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Login/Login.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
-import 'Sign_Up.dart';
-import 'Sign_Up.dart';
-import 'navButton.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
-final pb = PocketBase('http://127.0.0.1:8090');
+import 'Sign_Up.dart';
+
+final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'Welcome_screen';
