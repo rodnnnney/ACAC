@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:googlemaptest/Pages/Maps.dart';
 import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
 import 'package:provider/provider.dart';
 
 import '../Models+Data/Cards.dart';
+import '../Providers/Polyline_Info.dart';
 
 class cardViewerHomePage extends StatelessWidget {
   static String id = 'card_viewer';
@@ -13,6 +15,7 @@ class cardViewerHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PolyInfo maps = Provider.of<PolyInfo>(context);
     Restaurant data = Provider.of<Restaurant>(context);
     List<Cards> filteredRestaurants = data.restaurantInfo
         .where((card) => card.cuisineType == cuisineType)
@@ -94,7 +97,7 @@ class cardViewerHomePage extends StatelessWidget {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
@@ -119,7 +122,14 @@ class cardViewerHomePage extends StatelessWidget {
                               foregroundColor:
                                   MaterialStatePropertyAll<Color>(Colors.white),
                             ),
-                            onPressed: () async {},
+                            onPressed: () async {
+                              try {
+                                Navigator.pushNamed(context, MapScreen.id).then(
+                                  (value) => maps.goToNewLatLng(
+                                      data.restaurantInfo[index].location),
+                                );
+                              } catch (e) {}
+                            },
                             child: const Text('Find on Map'),
                           ),
                           const SizedBox(

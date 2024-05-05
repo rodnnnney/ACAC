@@ -24,9 +24,9 @@ class HomeCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           routeName(context, text);
-          debugPrint(user.getUserNameAuthData());
-          debugPrint(user.getUserEmailAuthData());
-          debugPrint(user.getO2AuthID());
+          // debugPrint(user.getUserNameAuthData());
+          // debugPrint(user.getUserEmailAuthData());
+          // debugPrint(user.getO2AuthID());
         },
         child: Card(
           child: Container(

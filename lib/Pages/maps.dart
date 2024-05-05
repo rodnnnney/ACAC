@@ -67,6 +67,8 @@ class _MapScreenState extends State<MapScreen> {
             myLocationButtonEnabled: false,
             markers: markerManager.marker,
             polylines: Set<Polyline>.of(maps.polylines.values),
+            zoomGesturesEnabled: true,
+            scrollGesturesEnabled: true,
           ),
           infoCard(nav.travelTime),
         ],

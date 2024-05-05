@@ -30,17 +30,28 @@ class _AppBarBottomState extends State<AppBarBottom> {
         mainAxisSize: MainAxisSize.max,
         children: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               user.setNum(0);
               Navigator.pushNamed(context, HomePage.id);
-              // print(user.name);
+              print(user.name);
+              print(user.signInAcc);
+              // print(pb.authStore.model.data['name']);
               // print(user.signInAcc);
               // print(user.signInAuth2);
+              //print(await user.userDetails);
+              // final userDetails = pb.authStore.model;
+              // print(userDetails.data['name']);
+              // print(userDetails);
+              // print(await pb
+              //     .collection('users')
+              //     .getList(filter: 'email = "rodneyshenn@gmail.com"'));
+
               // print(user.email);
               // print(user.password);
-              print(user.signInAuth2);
-              print(user.signInAcc);
-              (user.getInfo());
+              // print(user.signInAuth2);
+              // print(user.signInAcc);
+              // // (user.getInfo());
+              // user.sendUserAuthMail(user.email);
             },
             icon: Container(
               padding: EdgeInsets.all(5),

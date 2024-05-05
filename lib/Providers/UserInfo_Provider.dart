@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,6 +9,7 @@ class UserInfo extends ChangeNotifier {
   String _email = '';
   String _password = '';
   dynamic _authData = '';
+
   int selected = 0;
   bool signInAcc = false;
   bool signInAuth2 = false;
@@ -53,16 +52,24 @@ class UserInfo extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setAuthData(dynamic authData) {
-    _authData = authData;
+  set setAuthData(dynamic inputAuthData) {
+    _authData = inputAuthData;
     notifyListeners();
   }
 
+  void setUserDetails() {}
+
   Future<void> signIn(String email, String password) async {
-    final authData =
-        await pb.collection('users').authWithPassword(email, password);
-    setAuthData = authData;
-    notifyListeners();
+    try {
+      final authData =
+          await pb.collection('users').authWithPassword(email, password);
+      setAuthData = authData;
+      notifyListeners();
+    } on ClientException catch (e) {
+      print('$e\n');
+      print(e.response);
+      print(e.response['data']);
+    }
   }
 
   Future<void> signUp(String name, String email, String password) async {
@@ -75,26 +82,11 @@ class UserInfo extends ChangeNotifier {
         "name": name,
       };
       final record = await pb.collection('users').create(body: body);
-      setAuthData = record;
-      //pb.authStore.isValid;
-      notifyListeners();
-    } catch (e) {
-      print(e);
+      print(await pb.authStore.model);
+    } on ClientException catch (e) {
+      print('$e\n');
+      print(e.response['response']);
     }
-  }
-
-  void userId() {
-    RecordModel jsonString = authData;
-    Map<String, dynamic> user = jsonDecode(jsonString as String);
-    String userId = user['id'];
-    print('User ID: $userId');
-  }
-
-  String getName(dynamic data) {
-    Map<String, dynamic> jsonData = jsonDecode(data);
-    String name = jsonData['record']['name'];
-
-    return name;
   }
 
   Future<void> sendFeedBack(String feedback, String email) async {
@@ -124,47 +116,48 @@ class UserInfo extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    _authData = '';
     pb.authStore.clear();
+    setName = '';
+    setEmail = '';
+    setPassword = '';
+    notifyListeners();
   }
 
-  String getUserNameAuthData() {
-    // var prettyString = JsonEncoder.withIndent('  ').convert(authData);
-    // print(prettyString);
-    Map<String, dynamic> userData = jsonDecode(authData.toString());
-    String nameFromO2Auth = userData['record']['name'];
-    return nameFromO2Auth;
-  }
-
-  String getUserEmailAuthData() {
-    var prettyString = JsonEncoder.withIndent('  ').convert(authData);
-    print(prettyString);
-    Map<String, dynamic> userData = jsonDecode(authData.toString());
-    String emailFromO2Auth = userData['record']['email'];
-    return emailFromO2Auth;
-  }
-
-  String getO2AuthID() {
-    Map<String, dynamic> userData = jsonDecode(authData.toString());
-    String idFromO2Auth = userData['record']['id'];
-    return idFromO2Auth;
+  Future<bool> emailExists(String email) async {
+    try {
+      var list =
+          await pb.collection('users').getList(filter: 'email = "$email"');
+      return list.items.isNotEmpty;
+    } catch (e) {
+      print('Error checking email: $e');
+      return false;
+    }
   }
 
   Future<void> O2AuthSignUp() async {
-    final Uri url = Uri.parse(
-        'https://acac2-thrumming-wind-3122.fly.dev/api/oauth2-redirect');
+    // final Uri url = Uri.parse(
+    //     'https://acac2-thrumming-wind-3122.fly.dev/api/oauth2-redirect');
     final authData = await pb.collection('users').authWithOAuth2(
       'google',
       (url) async {
         await launchUrl(url);
       },
     );
-
-    setAuthData = authData;
-    notifyListeners();
   }
 
   void getInfo() {
     print(pb.authStore.isValid);
+  }
+
+  void sendUserAuthMail(String email) async {
+    try {
+      // Sends the user's verification email and waits for the operation to complete
+      await pb.collection('users').requestVerification(email);
+      // If the requestVerification method completes without throwing an error, the email was sent
+      print("Email sent successfully to $email.");
+    } catch (e) {
+      // If an error occurs, it will be caught here and you can handle it accordingly
+      print("Failed to send email to $email. Error: $e");
+    }
   }
 }

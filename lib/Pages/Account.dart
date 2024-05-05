@@ -45,12 +45,16 @@ class _AccountInfoState extends State<AccountInfo> {
 
   @override
   Widget build(BuildContext context) {
+    //UserInfo userInfo = Provider.of<UserInfo>(context);
     UserInfo user = Provider.of<UserInfo>(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            // Text('Name: ${user.name}'),
+            // Text('Email: ${user.email}'),
+            // Text('Email: ${}'),
             Container(
               padding: EdgeInsets.all(20),
               child: Column(
@@ -84,7 +88,7 @@ class _AccountInfoState extends State<AccountInfo> {
                                   (value) => ShadToaster.of(context).show(
                                     ShadToast(
                                       backgroundColor: Colors.green[300],
-                                      description: Text('Message Sent!'),
+                                      description: const Text('Message Sent!'),
                                     ),
                                   ),
                                 );

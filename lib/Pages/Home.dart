@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
-import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 
 import '../GoogleMaps/WelcomeText.dart';
@@ -10,7 +9,8 @@ import '../Models+Data/homePageCard.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
-  final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
+
+  //final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
   String cutAndLowercase(String name) {
     int spaceIndex = name.indexOf(' ');
@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     UserInfo user = Provider.of<UserInfo>(context);
+    final userDetails = pb.authStore.model;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,18 +36,41 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Welcome(),
-                Text(user.signInAcc
-                    ? user.name
-                    : user.getUserNameAuthData().toString()),
+                Text(
+                  user.name == '' ? pb.authStore.model.data['name'] : user.name,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'featured',
-                      style: TextStyle(fontSize: 24),
+                    // const Text(
+                    //   'featured',
+                    //   style: TextStyle(fontSize: 24),
+                    // ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(colors: [
+                        Color(0xff14342B),
+                        Color(0xff60935D),
+                        Color(0xffF3F9D2),
+                      ], stops: [
+                        0.1,
+                        0.9,
+                        1
+                      ]).createShader(bounds),
+                      child: const Text(
+                        'featured',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     SizedBox(
                       height: 15,

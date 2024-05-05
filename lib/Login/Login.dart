@@ -89,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: const Text('Login'),
                 onPressed: () async {
                   try {
-                    await user.signIn(user.email, user.password);
+                    final data = await user.signIn(user.email, user.password);
+
                     if (user.authData != '') {
                       (Navigator.pushNamed(context, HomePage.id)
                           .then((value) => user.signedInWithAccount()));

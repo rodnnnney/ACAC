@@ -18,6 +18,9 @@ class RegistrationScreen extends StatelessWidget {
       fontWeight: FontWeight.normal,
       decoration: TextDecoration.none);
   final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
+  String uName = '';
+  String uEmail = '';
+  String uPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class RegistrationScreen extends StatelessWidget {
                 ShadInput(
                   placeholder: const Text('Enter your first name'),
                   onChanged: (name) {
+                    uName = name;
                     userInfo.setName = name;
                   },
                 ),
@@ -51,6 +55,7 @@ class RegistrationScreen extends StatelessWidget {
                 ShadInput(
                   placeholder: const Text('Enter an email'),
                   onChanged: (email) {
+                    uEmail = email;
                     userInfo.setEmail = email;
                   },
                 ),
@@ -63,6 +68,7 @@ class RegistrationScreen extends StatelessWidget {
                   placeholder: const Text('Enter your password'),
                   obscureText: true,
                   onChanged: (pass) {
+                    uPassword = pass;
                     userInfo.setPassword = pass;
                   },
                 ),
@@ -80,7 +86,7 @@ class RegistrationScreen extends StatelessWidget {
               ),
               ShadButton(
                 text: const Text('Create Account'),
-                onPressed: () {
+                onPressed: () async {
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxWidth: MediaQuery.sizeOf(context).width * 0.6,
@@ -113,13 +119,32 @@ class RegistrationScreen extends StatelessWidget {
                           description: Text('Please enter a valid email'),
                         ),
                       );
+                    } else if (await userInfo.emailExists(userInfo.email)) {
+                      ShadToaster.of(context).show(
+                        ShadToast.destructive(
+                          title: const Text('That email is taken'),
+                          description: const Text('Navigate to sign in?'),
+                          action: ShadButton.outline(
+                              text: const Text(
+                                'Login',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, LoginScreen.id);
+                                ShadToaster.of(context).hide();
+                                userInfo.setEmail = '';
+                                userInfo.setPassword = '';
+                                userInfo.setName = '';
+                              }),
+                        ),
+                      );
                     } else {
+                      print(await userInfo.emailExists(userInfo.email));
+                      print(userInfo.email);
                       userInfo.signedInWithAccount();
-                      userInfo
-                          .signUp(
-                              userInfo.name, userInfo.email, userInfo.password)
-                          .then((value) =>
-                              Navigator.pushNamed(context, HomePage.id));
+                      userInfo.signUp(uName, uEmail, uPassword).then(
+                          (value) => Navigator.pushNamed(context, HomePage.id));
+                      userInfo.sendUserAuthMail(userInfo.email);
                     }
                   } catch (e) {
                     print(e);
