@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -15,17 +16,14 @@ class NavInfo extends ChangeNotifier {
         data['routes'].isEmpty) {
       throw Exception("Invalid data or no routes available");
     }
-
     var route = data['routes'][0];
     var legs = route['legs'];
     if (legs == null || legs.isEmpty) {
       print("No route information available.");
       return;
     }
-
     double totalDistance = 0;
     int totalDurationInSeconds = 0;
-
     for (var leg in legs) {
       if (leg['distance'] != null && leg['distance']['value'] != null) {
         totalDistance += leg['distance']?['value'] ?? 0;
@@ -34,21 +32,15 @@ class NavInfo extends ChangeNotifier {
         totalDurationInSeconds += leg['duration']?['value'] as int;
       }
     }
-
-    // Calculate total distance in kilometers
-    travelKm = totalDistance / 1000;
-
-    // Calculate total duration in minutes
-    travelTime = totalDurationInSeconds / 60;
-
-    // Calculate ETA based on current time and total duration
-    DateTime now = DateTime.now();
+    travelKm = totalDistance / 1000; // Calculate total distance in kilometers
+    travelTime =
+        totalDurationInSeconds / 60; // Calculate total duration in minutes
+    DateTime now = DateTime
+        .now(); // Calculate ETA based on current time and total duration
     DateTime arrivalTime = now.add(Duration(seconds: totalDurationInSeconds));
     eta = DateFormat('h:mm a').format(arrivalTime);
 
-    // Notify all listeners about the changes
-    notifyListeners();
-
+    notifyListeners(); // Notify all listeners about the changes
     print('Updated travel Km: $travelKm');
     print('Updated travel Time: $travelTime');
     print('Updated ETA: $eta');

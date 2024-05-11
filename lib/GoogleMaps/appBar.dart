@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 
 import '../Pages/Account.dart';
 import '../Pages/Home.dart';
 import '../Pages/maps.dart';
+import '../Providers/Polyline_Info.dart';
 
 class AppBarBottom extends StatefulWidget {
   final String id;
@@ -24,6 +29,9 @@ class _AppBarBottomState extends State<AppBarBottom> {
   @override
   Widget build(BuildContext context) {
     UserInfo user = Provider.of<UserInfo>(context);
+    Restaurant location = Provider.of<Restaurant>(context);
+    PolyInfo maps = Provider.of<PolyInfo>(context);
+
     return BottomAppBar(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -33,8 +41,20 @@ class _AppBarBottomState extends State<AppBarBottom> {
             onPressed: () async {
               user.setNum(0);
               Navigator.pushNamed(context, HomePage.id);
-              print(user.name);
-              print(user.signInAcc);
+
+              LatLng position = await location.getLocation();
+              print(position);
+              String url = await maps.createHttpUrl(position.latitude,
+                  position.longitude, 45.36865077062187, -75.7027755746115);
+              // print(url);
+              var decodedJson = jsonDecode(url);
+
+              String distance =
+                  decodedJson['routes'][0]['legs'][0]['distance']['text'];
+              print(distance);
+
+              //print(user.name);
+              //print(user.signInAcc);
               // print(pb.authStore.model.data['name']);
               // print(user.signInAcc);
               // print(user.signInAuth2);

@@ -14,7 +14,7 @@ import '../Locations/location.dart';
 class markers {
   late final LatLng userLocation = LatLng(0, 0);
   late GoogleMapController controller;
-  Location location = Location();
+  UserLocation location = UserLocation();
 
   final Set<Marker> markerList = {};
   Set<Marker> get marker => markerList;

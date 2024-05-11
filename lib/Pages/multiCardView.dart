@@ -1,24 +1,54 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/Pages/Maps.dart';
 import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
 import 'package:provider/provider.dart';
 
+import '../Locations/location.dart';
 import '../Models+Data/Cards.dart';
+import '../Providers/Navigation_Info_Provider.dart';
 import '../Providers/Polyline_Info.dart';
+import '../Providers/UserInfo_Provider.dart';
 
-class cardViewerHomePage extends StatelessWidget {
+class cardViewerHomePage extends StatefulWidget {
   static String id = 'card_viewer';
+
+  late String cuisineType;
 
   cardViewerHomePage({required this.cuisineType});
 
-  late String cuisineType;
+  @override
+  State<cardViewerHomePage> createState() => _cardViewerHomePageState();
+}
+
+class _cardViewerHomePageState extends State<cardViewerHomePage> {
+  LatLng userPosition = LatLng(0, 0);
+  UserLocation location = UserLocation();
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
+  void getLocation() async {
+    LatLng newPosition = await location.find();
+    setState(() {
+      userPosition = newPosition;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     PolyInfo maps = Provider.of<PolyInfo>(context);
     Restaurant data = Provider.of<Restaurant>(context);
+    NavInfo nav = Provider.of<NavInfo>(context);
+    UserInfo loco = Provider.of<UserInfo>(context);
     List<Cards> filteredRestaurants = data.restaurantInfo
-        .where((card) => card.cuisineType == cuisineType)
+        .where((card) => card.cuisineType == widget.cuisineType)
         .toList();
 
     return Scaffold(
@@ -55,6 +85,19 @@ class cardViewerHomePage extends StatelessWidget {
             }
           }
 
+          Future<String> getDistance() async {
+            String url = await maps.createHttpUrl(
+                userPosition.latitude,
+                userPosition.longitude,
+                filteredRestaurants[index].location.latitude,
+                filteredRestaurants[index].location.longitude);
+            var decodedJson = jsonDecode(url);
+
+            String distance =
+                decodedJson['routes'][0]['legs'][0]['distance']['text'];
+            return distance;
+          }
+
           return Container(
             // decoration: BoxDecoration(color: Colors.white),
             margin: EdgeInsets.all(15),
@@ -77,36 +120,43 @@ class cardViewerHomePage extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 filteredRestaurants[index].restaurantName,
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(height: 4),
-                              Text(filteredRestaurants[index].address),
-                              Row(
-                                children: [
-                                  Text(
-                                    filteredRestaurants[index].hours.getDay(),
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    getHours(),
-                                  ),
-                                ],
-                              )
+                              FutureBuilder(
+                                future: getDistance(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                      snapshot.data ?? 'Getting Distance..');
+                                },
+                              ),
                             ],
                           ),
+                          const SizedBox(height: 4),
+                          Text(filteredRestaurants[index].address),
+                          Row(
+                            children: [
+                              Text(
+                                filteredRestaurants[index].hours.getDay(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                getHours(),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -124,10 +174,28 @@ class cardViewerHomePage extends StatelessWidget {
                             ),
                             onPressed: () async {
                               try {
-                                Navigator.pushNamed(context, MapScreen.id).then(
-                                  (value) => maps.goToNewLatLng(
-                                      data.restaurantInfo[index].location),
-                                );
+                                // Navigator.pushNamed(context, MapScreen.id,
+                                //     arguments:
+                                //         data.restaurantInfo[index].location);
+                                LatLng user = await data.getLocation();
+                                String url = await maps.createHttpUrl(
+                                    user.latitude,
+                                    user.longitude,
+                                    filteredRestaurants[index]
+                                        .location
+                                        .latitude,
+                                    filteredRestaurants[index]
+                                        .location
+                                        .longitude);
+
+                                maps.processPolylineData(url);
+                                maps.updateCameraBounds([
+                                  user,
+                                  filteredRestaurants[index].location
+                                ]);
+                                nav.updateRouteDetails(url);
+                                Navigator.pushNamed(context, MapScreen.id);
+                                loco.setNum(1);
                               } catch (e) {}
                             },
                             child: const Text('Find on Map'),

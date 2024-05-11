@@ -7,16 +7,16 @@ import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/Navigation_Info_Provider.dart';
 import 'package:googlemaptest/Providers/Polyline_Info.dart';
 import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
+import 'package:googlemaptest/Providers/Theme.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'Login/Login.dart';
 import 'Login/Welcome.dart';
+import 'Models+Data/Color_theme.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 final appRoutes = <String, WidgetBuilder>{
   WelcomeScreen.id: (context) => WelcomeScreen(),
@@ -43,20 +43,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<PolyInfo>(create: (context) => PolyInfo()),
         ChangeNotifierProvider<NavInfo>(create: (context) => NavInfo()),
         ChangeNotifierProvider<UserInfo>(create: (context) => UserInfo()),
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (context) => ThemeProvider(),
+        ),
       ],
-      child: ShadApp.material(
-        debugShowCheckedModeBanner: false,
-        theme: ShadThemeData(
-          brightness: Brightness.light,
-          colorScheme: ShadZincColorScheme.light(),
-        ),
-        darkTheme: ShadThemeData(
-          brightness: Brightness.dark,
-          colorScheme: const ShadZincColorScheme.dark(),
-        ),
-        initialRoute: LoginScreen.id,
-        routes: appRoutes,
-      ),
+      child: Consumer<ThemeProvider>(builder: (context, theme, child) {
+        return ShadApp.material(
+          debugShowCheckedModeBanner: false,
+          theme: theme.lightDark ? AppTheme.darkTheme : AppTheme.lightTheme,
+          initialRoute: LoginScreen.id,
+          routes: appRoutes,
+        );
+      }),
     );
   }
 }

@@ -19,8 +19,9 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   markers markerManager = markers();
   bool isLocationLoaded = false;
-  Location location = Location();
+  UserLocation location = UserLocation();
   LatLng userPosition = LatLng(0, 0);
+  LatLng? restPosition;
 
   @override
   void initState() {

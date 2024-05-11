@@ -20,6 +20,12 @@ class HomePage extends StatelessWidget {
     return name.substring(0, spaceIndex).toLowerCase();
   }
 
+  final List<String> images = [
+    'images/china.webp',
+    'images/tofu.webp',
+    'images/japan.avif',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -36,13 +42,13 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Welcome(),
-                Text(
-                  user.name == '' ? pb.authStore.model.data['name'] : user.name,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                // Text(
+                //   user.name == '' ? pb.authStore.model.data['name'] : user.name,
+                //   style: TextStyle(
+                //     fontSize: 25,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -53,63 +59,96 @@ class HomePage extends StatelessWidget {
                     //   'featured',
                     //   style: TextStyle(fontSize: 24),
                     // ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(colors: [
-                        Color(0xff14342B),
-                        Color(0xff60935D),
-                        Color(0xffF3F9D2),
-                      ], stops: [
-                        0.1,
-                        0.9,
-                        1
-                      ]).createShader(bounds),
-                      child: const Text(
-                        'featured',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
-                      children: [],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: Card(
-                        elevation: 5,
-                        child: Center(
-                          child: Container(
-                            height: screenHeight * 0.19,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                'images/china.webp',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
-                            ),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            Color(0xff14342B),
+                            Color(0xff60935D),
+                          ], stops: [
+                            0.1,
+                            0.9,
+                          ]).createShader(bounds),
+                          child: const Text(
+                            'featured',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
+                        ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [
+                              Color(0xff036D19),
+                              Color(0xff7EA172),
+                              Color(0xff60935D),
+                            ],
+                            // stops: [
+                            //   0.1,
+                            //   0.9,
+                            // ],
+                          ).createShader(bounds),
+                          child: Text(
+                            'items found: ${images.length}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                        height: screenHeight * 0.19,
+                        child: PageView.builder(
+                            itemCount: images.length,
+                            itemBuilder: (context, index) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset(
+                                  images[index],
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              );
+                            })),
+                    const SizedBox(
                       height: 20,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('category'),
+                        ShaderMask(
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            Color(0xff14342B),
+                            Color(0xff60935D),
+                            Color(0xffF3F9D2),
+                          ], stops: [
+                            0.1,
+                            0.9,
+                            1
+                          ]).createShader(bounds),
+                          child: const Text(
+                            'categories:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             HomeCard(
                               screenHeight: screenHeight,
-                              displayIMG: 'images/tofu.webp',
+                              displayIMG: 'images/chinese2.png',
                               text: 'chinese',
                               flag: '🇨🇳',
                               routeName:
@@ -170,7 +209,7 @@ class HomePage extends StatelessWidget {
                             ),
                             HomeCard(
                               screenHeight: screenHeight,
-                              displayIMG: 'images/boba.jpeg',
+                              displayIMG: 'images/boba.webp',
                               text: 'bubble tea',
                               flag: '🧋',
                               routeName:

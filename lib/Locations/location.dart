@@ -1,14 +1,15 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class Location {
+class UserLocation {
   late bool servicePermission;
   late LocationPermission permission;
 
-  Location() {
+  UserLocation() {
     servicePermission = false;
     permission = LocationPermission.denied;
   }
+
   Future<LatLng> find() async {
     try {
       servicePermission = await Geolocator.isLocationServiceEnabled();

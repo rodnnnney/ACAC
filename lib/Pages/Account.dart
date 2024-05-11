@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Login/Login.dart';
+import 'package:googlemaptest/Providers/Theme.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -17,6 +18,7 @@ class AccountInfo extends StatefulWidget {
 
 class _AccountInfoState extends State<AccountInfo> {
   bool isSwitched = false;
+  bool lightDark = false; //false => light, true => dark
   String feedbackText = '';
   final TextEditingController _controller = TextEditingController();
 
@@ -47,6 +49,7 @@ class _AccountInfoState extends State<AccountInfo> {
   Widget build(BuildContext context) {
     //UserInfo userInfo = Provider.of<UserInfo>(context);
     UserInfo user = Provider.of<UserInfo>(context);
+    ThemeProvider theme = Provider.of<ThemeProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -87,8 +90,19 @@ class _AccountInfoState extends State<AccountInfo> {
                             user.sendFeedBack(feedbackText, user.email).then(
                                   (value) => ShadToaster.of(context).show(
                                     ShadToast(
-                                      backgroundColor: Colors.green[300],
-                                      description: const Text('Message Sent!'),
+                                      backgroundColor: Color(0xffBEE7B8),
+                                      title: const Text('Message Sent!'),
+                                      description: const Text(
+                                          'Thank you for your feedback🫡'),
+                                      action: ShadButton.outline(
+                                          text: const Text(
+                                            'Close',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          onPressed: () {
+                                            ShadToaster.of(context).hide();
+                                          }),
                                     ),
                                   ),
                                 );
@@ -123,9 +137,17 @@ class _AccountInfoState extends State<AccountInfo> {
                             },
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
+                  Switch(
+                      value: lightDark,
+                      onChanged: (_) {
+                        theme.setTheme();
+                        setState(() {
+                          lightDark = _;
+                        });
+                      })
                 ],
               ),
             ),

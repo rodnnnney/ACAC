@@ -135,8 +135,6 @@ class UserInfo extends ChangeNotifier {
   }
 
   Future<void> O2AuthSignUp() async {
-    // final Uri url = Uri.parse(
-    //     'https://acac2-thrumming-wind-3122.fly.dev/api/oauth2-redirect');
     final authData = await pb.collection('users').authWithOAuth2(
       'google',
       (url) async {

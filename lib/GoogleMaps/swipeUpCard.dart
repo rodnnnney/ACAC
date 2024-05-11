@@ -64,15 +64,6 @@ class _AddTaskState extends State<AddTask> {
                 }
               }
 
-              // double calculateDistance() {
-              //   double distance = Geolocator.distanceBetween(
-              //       widget.userLocation.latitude,
-              //       widget.userLocation.longitude,
-              //       data.restaurantInfo[index].location.latitude,
-              //       data.restaurantInfo[index].location.longitude);
-              //   return distance / 1000;
-              // }
-
               return Container(
                 child: Card(
                   elevation: 1,
