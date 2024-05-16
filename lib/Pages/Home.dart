@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
-import 'package:provider/provider.dart';
 
 import '../GoogleMaps/WelcomeText.dart';
 import '../GoogleMaps/appBar.dart';
@@ -29,8 +28,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    UserInfo user = Provider.of<UserInfo>(context);
-    final userDetails = pb.authStore.model;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,13 +39,13 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Welcome(),
-                // Text(
-                //   user.name == '' ? pb.authStore.model.data['name'] : user.name,
-                //   style: TextStyle(
-                //     fontSize: 25,
-                //     fontWeight: FontWeight.w500,
-                //   ),
-                // ),
+                Text(
+                  pb.authStore.model.data['name'],
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),

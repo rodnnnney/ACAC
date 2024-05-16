@@ -81,7 +81,7 @@ class UserInfo extends ChangeNotifier {
         "passwordConfirm": password,
         "name": name,
       };
-      final record = await pb.collection('users').create(body: body);
+      await pb.collection('users').create(body: body);
       print(await pb.authStore.model);
     } on ClientException catch (e) {
       print('$e\n');
@@ -135,7 +135,7 @@ class UserInfo extends ChangeNotifier {
   }
 
   Future<void> O2AuthSignUp() async {
-    final authData = await pb.collection('users').authWithOAuth2(
+    await pb.collection('users').authWithOAuth2(
       'google',
       (url) async {
         await launchUrl(url);
@@ -158,4 +158,28 @@ class UserInfo extends ChangeNotifier {
       print("Failed to send email to $email. Error: $e");
     }
   }
+
+// Future<void> init() async {
+//   // 2
+//
+//   final storage = getIt<LocalStorage>();
+//   // 3
+//   final token = await storage.getToken();
+//   final customAuthStore = AsyncAuthStore(
+//     initial: token,
+//     save: storage.setToken,
+//     clear: storage.deleteToken,
+//   );
+//   // 4
+//   pb = PocketBase(
+//     'https://acac2-thrumming-wind-3122.fly.dev',
+//     authStore: customAuthStore,
+//   );
+//
+//   if (pb.authStore.isValid) {
+//     // 5
+//     final authRecord = await pb.collection('users').authRefresh();
+//     print(authRecord);
+//   } else {}
+// }
 }

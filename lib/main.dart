@@ -32,9 +32,14 @@ final appRoutes = <String, WidgetBuilder>{
 
 class CardViewerHomePage {}
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeProvider>(builder: (context, theme, child) {
         return ShadApp.material(
           debugShowCheckedModeBanner: false,
-          theme: theme.lightDark ? AppTheme.darkTheme : AppTheme.lightTheme,
+          theme: theme.isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
           initialRoute: LoginScreen.id,
           routes: appRoutes,
         );

@@ -5,6 +5,7 @@ import 'package:googlemaptest/Providers/Theme.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GoogleMaps/appBar.dart';
 
@@ -43,6 +44,18 @@ class _AccountInfoState extends State<AccountInfo> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      lightDark = prefs.getBool('lightOrDark') ?? false;
+    });
   }
 
   @override
@@ -141,13 +154,16 @@ class _AccountInfoState extends State<AccountInfo> {
                     ],
                   ),
                   Switch(
-                      value: lightDark,
-                      onChanged: (_) {
-                        theme.setTheme();
-                        setState(() {
-                          lightDark = _;
-                        });
-                      })
+                    value: theme.isDarkMode,
+                    onChanged: (_) async {
+                      setState(
+                        () {
+                          theme.toggleTheme();
+                        },
+                      );
+                    },
+                  ),
+                  Text(theme.isDarkMode ? 'Dark Mode🌚' : 'Light Mode🌞'),
                 ],
               ),
             ),
