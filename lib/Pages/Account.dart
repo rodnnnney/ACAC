@@ -47,7 +47,6 @@ class _AccountInfoState extends State<AccountInfo> {
 
   @override
   Widget build(BuildContext context) {
-    //UserInfo userInfo = Provider.of<UserInfo>(context);
     UserInfo user = Provider.of<UserInfo>(context);
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
     return Scaffold(
