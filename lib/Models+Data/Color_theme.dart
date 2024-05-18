@@ -58,7 +58,7 @@ class AppTheme {
             secondary: Colors.white,
             secondaryForeground: Colors.white,
             muted: Colors.grey,
-            mutedForeground: Colors.grey,
+            mutedForeground: Colors.white,
             accent: Colors.grey,
             accentForeground: Colors.white,
             destructive: Colors.red,

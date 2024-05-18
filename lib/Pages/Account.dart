@@ -5,7 +5,6 @@ import 'package:googlemaptest/Providers/Theme.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GoogleMaps/appBar.dart';
 
@@ -47,38 +46,177 @@ class _AccountInfoState extends State<AccountInfo> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  void loadPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      lightDark = prefs.getBool('lightOrDark') ?? false;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     //UserInfo userInfo = Provider.of<UserInfo>(context);
     UserInfo user = Provider.of<UserInfo>(context);
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+          title: const Text('Account Settings'),
+          automaticallyImplyLeading: false),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Text('Name: ${user.name}'),
-            // Text('Email: ${user.email}'),
-            // Text('Email: ${}'),
             Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  text(),
+                  Row(
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Email',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text('Email@email.com')
+                        ],
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        style: ButtonStyle(
+                          elevation: WidgetStateProperty.all(0),
+                        ),
+                        onPressed: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: theme.isDarkMode
+                                ? Border.all(color: Colors.white, width: 1)
+                                : Border.all(color: Colors.black, width: 1),
+                            //borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Change',
+                            style: TextStyle(
+                                color: theme.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Password',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text('*******')
+                        ],
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        style: ButtonStyle(
+                          elevation: WidgetStateProperty.all(0),
+                        ),
+                        onPressed: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: theme.isDarkMode
+                                ? Border.all(color: Colors.white, width: 1)
+                                : Border.all(color: Colors.black, width: 1),
+                            //borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Change',
+                            style: TextStyle(
+                                color: theme.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'App Appearance',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(theme.isDarkMode
+                              ? 'Dark Mode🌚'
+                              : 'Light Mode🌞'),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          TextButton(
+                            style: ButtonStyle(
+                              elevation: WidgetStateProperty.all(0),
+                              padding: WidgetStateProperty.all(EdgeInsets.zero),
+                            ),
+                            onPressed: () {
+                              theme.toggleThemeOff();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: theme.isDarkMode
+                                    ? null
+                                    : Border.all(color: Colors.black, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              child: Icon(Icons.light_mode,
+                                  color:
+                                      theme.isDarkMode ? Colors.white : null),
+                            ),
+                          ),
+                          TextButton(
+                            style: ButtonStyle(
+                                elevation: WidgetStateProperty.all(0),
+                                padding:
+                                    WidgetStateProperty.all(EdgeInsets.zero)),
+                            onPressed: () {
+                              theme.toggleThemeOn();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: theme.isDarkMode
+                                      ? Border.all(
+                                          color: Colors.white, width: 1)
+                                      : null
+                                  //borderRadius: BorderRadius.circular(8),
+                                  ),
+                              padding: const EdgeInsets.all(10),
+                              child: Icon(
+                                Icons.dark_mode,
+                                color: theme.isDarkMode ? Colors.white : null,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 15),
                   ShadInputFormField(
-                    label: const Text('Feedback'),
+                    label: Text(
+                      'Feedback',
+                      style: TextStyle(
+                          color:
+                              theme.isDarkMode ? Colors.white : Colors.black),
+                    ),
                     placeholder:
                         const Text('Name a feature you wish this app had!'),
                     controller: _controller,
@@ -103,7 +241,7 @@ class _AccountInfoState extends State<AccountInfo> {
                             user.sendFeedBack(feedbackText, user.email).then(
                                   (value) => ShadToaster.of(context).show(
                                     ShadToast(
-                                      backgroundColor: Color(0xffBEE7B8),
+                                      backgroundColor: const Color(0xffBEE7B8),
                                       title: const Text('Message Sent!'),
                                       description: const Text(
                                           'Thank you for your feedback🫡'),
@@ -153,24 +291,13 @@ class _AccountInfoState extends State<AccountInfo> {
                       ),
                     ],
                   ),
-                  Switch(
-                    value: theme.isDarkMode,
-                    onChanged: (_) async {
-                      setState(
-                        () {
-                          theme.toggleTheme();
-                        },
-                      );
-                    },
-                  ),
-                  Text(theme.isDarkMode ? 'Dark Mode🌚' : 'Light Mode🌞'),
                 ],
               ),
             ),
             const Spacer(),
             const Spacer(),
             ShadButton.destructive(
-              text: Text('Logout'),
+              text: const Text('Logout'),
               onPressed: () async {
                 await user.signOut();
                 Navigator.pushNamed(context, LoginScreen.id);

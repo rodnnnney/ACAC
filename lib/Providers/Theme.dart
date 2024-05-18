@@ -17,8 +17,14 @@ class ThemeProvider with ChangeNotifier {
   ShadThemeData get themeData =>
       _isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
 
-  void toggleTheme() {
-    _isDarkMode = !_isDarkMode;
+  void toggleThemeOff() {
+    _isDarkMode = false;
+    _saveTheme(_isDarkMode);
+    notifyListeners();
+  }
+
+  void toggleThemeOn() {
+    _isDarkMode = true;
     _saveTheme(_isDarkMode);
     notifyListeners();
   }
