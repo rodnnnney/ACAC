@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/Pages/multiCardView.dart';
-import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 
 import '../GoogleMaps/WelcomeText.dart';
 import '../GoogleMaps/appBar.dart';
@@ -39,13 +38,13 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Welcome(),
-                Text(
-                  pb.authStore.model.data['name'],
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                // Text(
+                //   pb.authStore.model.data['name'],
+                //   style: TextStyle(
+                //     fontSize: 25,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -100,7 +99,7 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 5,
                     ),
                     Container(
                         height: screenHeight * 0.19,

@@ -16,12 +16,19 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'Login/Login.dart';
 import 'Login/Welcome.dart';
 import 'Models+Data/Color_theme.dart';
+import 'Providers/riverpod_test.dart';
 
 void main() => runApp(
       const ProviderScope(
         child: MyApp(),
       ),
     );
+
+final userPageCounter = ChangeNotifierProvider<RiverpodTest>(
+  (ref) {
+    return RiverpodTest(counter: 0);
+  },
+);
 
 final appRoutes = <String, WidgetBuilder>{
   WelcomeScreen.id: (context) => WelcomeScreen(),

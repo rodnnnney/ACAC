@@ -1,36 +1,28 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
-import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
-import 'package:provider/provider.dart';
+import 'package:googlemaptest/Pages/Account.dart';
+import 'package:googlemaptest/Pages/Home.dart';
+import 'package:googlemaptest/Pages/Maps.dart';
+import 'package:googlemaptest/main.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../Pages/Account.dart';
-import '../Pages/Home.dart';
-import '../Pages/maps.dart';
-import '../Providers/Polyline_Info.dart';
-
-class AppBarBottom extends StatefulWidget {
+class AppBarBottom extends ConsumerWidget {
   final String id;
   AppBarBottom({
     super.key,
     required this.id,
   });
 
-  @override
-  State<AppBarBottom> createState() => _AppBarBottomState();
-}
-
-class _AppBarBottomState extends State<AppBarBottom> {
   BoxDecoration selected = BoxDecoration(
       borderRadius: BorderRadius.circular(20), color: Colors.lightGreen);
 
   @override
-  Widget build(BuildContext context) {
-    UserInfo user = Provider.of<UserInfo>(context);
-    Restaurant location = Provider.of<Restaurant>(context);
-    PolyInfo maps = Provider.of<PolyInfo>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final watchCounter = ref.watch(userPageCounter);
+
+    void updatePage(int index, String route) {
+      Navigator.pushNamed(context, route);
+      ref.read(userPageCounter).setCounter(index);
+    }
 
     return BottomAppBar(
       child: Row(
@@ -38,72 +30,42 @@ class _AppBarBottomState extends State<AppBarBottom> {
         mainAxisSize: MainAxisSize.max,
         children: [
           IconButton(
-            onPressed: () async {
-              user.setNum(0);
-              Navigator.pushNamed(context, HomePage.id);
-
-              LatLng position = await location.getLocation();
-              print(position);
-              String url = await maps.createHttpUrl(position.latitude,
-                  position.longitude, 45.36865077062187, -75.7027755746115);
-              // print(url);
-              var decodedJson = jsonDecode(url);
-
-              String distance =
-                  decodedJson['routes'][0]['legs'][0]['distance']['text'];
-              print(distance);
-
-              //print(user.name);
-              //print(user.signInAcc);
-              // print(pb.authStore.model.data['name']);
-              // print(user.signInAcc);
-              // print(user.signInAuth2);
-              //print(await user.userDetails);
-              // final userDetails = pb.authStore.model;
-              // print(userDetails.data['name']);
-              // print(userDetails);
-              // print(await pb
-              //     .collection('users')
-              //     .getList(filter: 'email = "rodneyshenn@gmail.com"'));
-
-              // print(user.email);
-              // print(user.password);
-              // print(user.signInAuth2);
-              // print(user.signInAcc);
-              // // (user.getInfo());
-              // user.sendUserAuthMail(user.email);
+            onPressed: () {
+              updatePage(0, HomePage.id);
             },
             icon: Container(
-              padding: EdgeInsets.all(5),
-              decoration: user.selected == 0 ? selected : null,
+              decoration: watchCounter.counter == 0 ? selected : null,
+              padding: const EdgeInsets.all(5),
               child: Icon(
                 Icons.home,
-                color: user.selected == 0 ? Colors.white : Colors.grey,
+                color: watchCounter.counter == 0 ? Colors.white : Colors.grey,
               ),
             ),
           ),
           IconButton(
             onPressed: () {
-              user.setNum(1);
-              Navigator.pushNamed(context, MapScreen.id);
+              updatePage(1, MapScreen.id);
             },
             icon: Container(
-              padding: EdgeInsets.all(5),
-              decoration: user.selected == 1 ? selected : null,
-              child: Icon(Icons.map,
-                  color: user.selected == 1 ? Colors.white : Colors.grey),
+              decoration: watchCounter.counter == 1 ? selected : null,
+              padding: const EdgeInsets.all(5),
+              child: Icon(
+                Icons.map,
+                color: watchCounter.counter == 1 ? Colors.white : Colors.grey,
+              ),
             ),
           ),
           IconButton(
             onPressed: () {
-              user.setNum(2);
-              Navigator.pushNamed(context, AccountInfo.id);
+              updatePage(2, AccountInfo.id);
             },
             icon: Container(
-              padding: EdgeInsets.all(5),
-              decoration: user.selected == 2 ? selected : null,
-              child: Icon(Icons.account_circle,
-                  color: user.selected == 2 ? Colors.white : Colors.grey),
+              decoration: watchCounter.counter == 2 ? selected : null,
+              padding: const EdgeInsets.all(5),
+              child: Icon(
+                Icons.account_circle,
+                color: watchCounter.counter == 2 ? Colors.white : Colors.grey,
+              ),
             ),
           ),
         ],
