@@ -1,10 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/Providers/riverpod_test.dart';
+import 'package:googlemaptest/common/widgets/appBar.dart';
+import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-
-import '../GoogleMaps/appBar.dart';
 
 class AccountInfo extends ConsumerWidget {
   static String id = 'Account_screen';

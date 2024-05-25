@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
-import 'package:provider/provider.dart';
 
 class HomeCard extends StatelessWidget {
   HomeCard(
@@ -19,14 +17,10 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserInfo user = Provider.of<UserInfo>(context);
     return Expanded(
       child: GestureDetector(
         onTap: () {
           routeName(context, text);
-          // debugPrint(user.getUserNameAuthData());
-          // debugPrint(user.getUserEmailAuthData());
-          // debugPrint(user.getO2AuthID());
         },
         child: Card(
           child: Container(

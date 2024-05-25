@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/Models+Data/startStop.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/startStop.dart';
 
-import '../Models+Data/Cards.dart';
-import '../Models+Data/Times.dart';
+import '../../../domain_layer/repository_interface/Cards.dart';
+import '../../../domain_layer/repository_interface/Times.dart';
 
 class Restaurant extends ChangeNotifier {
   LatLng? distance;

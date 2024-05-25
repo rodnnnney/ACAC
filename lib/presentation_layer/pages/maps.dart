@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/GoogleMaps/appBar.dart';
-import 'package:googlemaptest/GoogleMaps/infoCard.dart';
-import 'package:googlemaptest/GoogleMaps/swipeUpCard.dart';
-import 'package:googlemaptest/Locations/location.dart';
-import 'package:googlemaptest/Models+Data/Markers.dart';
-import 'package:googlemaptest/Providers/Navigation_Info_Provider.dart';
-import 'package:googlemaptest/Providers/Polyline_Info.dart';
-import 'package:googlemaptest/Providers/riverpod_test.dart';
+import 'package:googlemaptest/common/widgets/appBar.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/Markers.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:googlemaptest/presentation_layer/widgets/infoCard.dart';
+import 'package:googlemaptest/presentation_layer/widgets/swipeUpCard.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 

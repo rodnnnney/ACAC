@@ -4,28 +4,27 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/Pages/Maps.dart';
-import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/Cards.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
-
-import '../Locations/location.dart';
-import '../Models+Data/Cards.dart';
-import '../Providers/Navigation_Info_Provider.dart';
-import '../Providers/Polyline_Info.dart';
-import '../Providers/UserInfo_Provider.dart';
 
 class cardViewerHomePage extends StatefulWidget {
   static String id = 'card_viewer';
 
   late String cuisineType;
 
-  cardViewerHomePage({required this.cuisineType});
+  cardViewerHomePage({super.key, required this.cuisineType});
 
   @override
-  State<cardViewerHomePage> createState() => _cardViewerHomePageState();
+  State<cardViewerHomePage> createState() => CardViewerHomePageState();
 }
 
-class _cardViewerHomePageState extends State<cardViewerHomePage> {
-  LatLng userPosition = LatLng(0, 0);
+class CardViewerHomePageState extends State<cardViewerHomePage> {
+  LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
 
   @override
@@ -56,7 +55,7 @@ class _cardViewerHomePageState extends State<cardViewerHomePage> {
         title: Text(filteredRestaurants[0].cuisineType),
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 20),
               child:
                   Text('${filteredRestaurants.length.toString()} items found')),
         ],
@@ -100,7 +99,7 @@ class _cardViewerHomePageState extends State<cardViewerHomePage> {
 
           return Container(
             // decoration: BoxDecoration(color: Colors.white),
-            margin: EdgeInsets.all(15),
+            margin: const EdgeInsets.all(15),
             child: Container(
               child: Card(
                 shape: RoundedRectangleBorder(
@@ -147,7 +146,8 @@ class _cardViewerHomePageState extends State<cardViewerHomePage> {
                             children: [
                               Text(
                                 filteredRestaurants[index].hours.getDay(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -161,16 +161,16 @@ class _cardViewerHomePageState extends State<cardViewerHomePage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 13),
+                      padding: const EdgeInsets.only(bottom: 13),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           TextButton(
                             style: const ButtonStyle(
                               backgroundColor:
-                                  MaterialStatePropertyAll<Color>(Colors.green),
+                                  WidgetStatePropertyAll<Color>(Colors.green),
                               foregroundColor:
-                                  MaterialStatePropertyAll<Color>(Colors.white),
+                                  WidgetStatePropertyAll<Color>(Colors.white),
                             ),
                             onPressed: () async {
                               try {
@@ -209,7 +209,7 @@ class _cardViewerHomePageState extends State<cardViewerHomePage> {
                               color: Color(0xFFE8E8E8),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
                               child: Text(
                                 filteredRestaurants[index].rating.toString(),
                                 style: const TextStyle(

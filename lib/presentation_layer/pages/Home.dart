@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/Pages/multiCardView.dart';
+import 'package:googlemaptest/common/widgets/appBar.dart';
+import 'package:googlemaptest/presentation_layer/pages/multiCardView.dart';
 
-import '../GoogleMaps/WelcomeText.dart';
-import '../GoogleMaps/appBar.dart';
-import '../Models+Data/homePageCard.dart';
+import '../widgets/WelcomeText.dart';
+import '../widgets/homePageCard.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
