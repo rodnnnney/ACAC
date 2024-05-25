@@ -1,26 +1,18 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/Login/Login.dart';
-import 'package:googlemaptest/Providers/Theme.dart';
-import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
-import 'package:provider/provider.dart';
+import 'package:googlemaptest/Providers/riverpod_test.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../GoogleMaps/appBar.dart';
 
-class AccountInfo extends StatefulWidget {
+class AccountInfo extends ConsumerWidget {
   static String id = 'Account_screen';
   AccountInfo({super.key});
 
-  @override
-  State<AccountInfo> createState() => _AccountInfoState();
-}
-
-class _AccountInfoState extends State<AccountInfo> {
-  bool isSwitched = false;
-  bool lightDark = false; //false => light, true => dark
   String feedbackText = '';
   final TextEditingController _controller = TextEditingController();
+  bool isSwitched = false;
 
   Center text() {
     return Center(
@@ -46,9 +38,8 @@ class _AccountInfoState extends State<AccountInfo> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    UserInfo user = Provider.of<UserInfo>(context);
-    ThemeProvider theme = Provider.of<ThemeProvider>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    // UserInfo user = Provider.of<UserInfo>(context);
     return Scaffold(
       appBar: AppBar(
           title: const Text('Account Settings'),
@@ -83,7 +74,7 @@ class _AccountInfoState extends State<AccountInfo> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            border: theme.isDarkMode
+                            border: ref.watch(darkLight).theme
                                 ? Border.all(color: Colors.white, width: 1)
                                 : Border.all(color: Colors.black, width: 1),
                             //borderRadius: BorderRadius.circular(8),
@@ -92,7 +83,7 @@ class _AccountInfoState extends State<AccountInfo> {
                           child: Text(
                             'Change',
                             style: TextStyle(
-                                color: theme.isDarkMode
+                                color: ref.watch(darkLight).theme
                                     ? Colors.white
                                     : Colors.black),
                           ),
@@ -122,7 +113,7 @@ class _AccountInfoState extends State<AccountInfo> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            border: theme.isDarkMode
+                            border: ref.watch(darkLight).theme
                                 ? Border.all(color: Colors.white, width: 1)
                                 : Border.all(color: Colors.black, width: 1),
                             //borderRadius: BorderRadius.circular(8),
@@ -131,7 +122,7 @@ class _AccountInfoState extends State<AccountInfo> {
                           child: Text(
                             'Change',
                             style: TextStyle(
-                                color: theme.isDarkMode
+                                color: ref.watch(darkLight).theme
                                     ? Colors.white
                                     : Colors.black),
                           ),
@@ -151,7 +142,7 @@ class _AccountInfoState extends State<AccountInfo> {
                             'App Appearance',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text(theme.isDarkMode
+                          Text(ref.watch(darkLight).theme
                               ? 'Dark Mode🌚'
                               : 'Light Mode🌞'),
                         ],
@@ -165,19 +156,20 @@ class _AccountInfoState extends State<AccountInfo> {
                               padding: WidgetStateProperty.all(EdgeInsets.zero),
                             ),
                             onPressed: () {
-                              theme.toggleThemeOff();
+                              ref.read(darkLight).toggleThemeOff();
                             },
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                border: theme.isDarkMode
+                                border: ref.watch(darkLight).theme
                                     ? null
                                     : Border.all(color: Colors.black, width: 1),
                               ),
                               padding: const EdgeInsets.all(10),
                               child: Icon(Icons.light_mode,
-                                  color:
-                                      theme.isDarkMode ? Colors.white : null),
+                                  color: ref.watch(darkLight).theme
+                                      ? Colors.white
+                                      : null),
                             ),
                           ),
                           TextButton(
@@ -186,12 +178,12 @@ class _AccountInfoState extends State<AccountInfo> {
                                 padding:
                                     WidgetStateProperty.all(EdgeInsets.zero)),
                             onPressed: () {
-                              theme.toggleThemeOn();
+                              ref.read(darkLight).toggleThemeOn();
                             },
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  border: theme.isDarkMode
+                                  border: ref.watch(darkLight).theme
                                       ? Border.all(
                                           color: Colors.white, width: 1)
                                       : null
@@ -200,7 +192,9 @@ class _AccountInfoState extends State<AccountInfo> {
                               padding: const EdgeInsets.all(10),
                               child: Icon(
                                 Icons.dark_mode,
-                                color: theme.isDarkMode ? Colors.white : null,
+                                color: ref.watch(darkLight).theme
+                                    ? Colors.white
+                                    : null,
                               ),
                             ),
                           )
@@ -213,8 +207,9 @@ class _AccountInfoState extends State<AccountInfo> {
                     label: Text(
                       'Feedback',
                       style: TextStyle(
-                          color:
-                              theme.isDarkMode ? Colors.white : Colors.black),
+                          color: ref.watch(darkLight).theme
+                              ? Colors.white
+                              : Colors.black),
                     ),
                     placeholder:
                         const Text('Name a feature you wish this app had!'),
@@ -226,64 +221,64 @@ class _AccountInfoState extends State<AccountInfo> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ShadButton(
-                        onPressed: () {
-                          if (feedbackText.isEmpty) {
-                            ShadToaster.of(context).show(
-                              const ShadToast.destructive(
-                                title: Text('Uh oh, somethings not right'),
-                                description: Text(
-                                    'Please enter something in feedback box'),
-                              ),
-                            );
-                          } else {
-                            user.sendFeedBack(feedbackText, user.email).then(
-                                  (value) => ShadToaster.of(context).show(
-                                    ShadToast(
-                                      backgroundColor: const Color(0xffBEE7B8),
-                                      title: const Text('Message Sent!'),
-                                      description: const Text(
-                                          'Thank you for your feedback🫡'),
-                                      action: ShadButton.outline(
-                                          text: const Text(
-                                            'Close',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                          onPressed: () {
-                                            ShadToaster.of(context).hide();
-                                          }),
-                                    ),
-                                  ),
-                                );
-                          }
-                          _controller.clear();
-                        },
-                        gradient: const LinearGradient(colors: [
-                          Colors.greenAccent,
-                          Colors.cyan,
-                        ]),
-                        shadows: [
-                          BoxShadow(
-                            color: Colors.blue.withOpacity(.4),
-                            spreadRadius: 4,
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                        text: const Text('Submit'),
-                      ),
+                      // ShadButton(
+                      //   onPressed: () {
+                      //     if (feedbackText.isEmpty) {
+                      //       ShadToaster.of(context).show(
+                      //         const ShadToast.destructive(
+                      //           title: Text('Uh oh, somethings not right'),
+                      //           description: Text(
+                      //               'Please enter something in feedback box'),
+                      //         ),
+                      //       );
+                      //     } else {
+                      //    user.sendFeedBack(feedbackText, user.email).then(
+                      //             (value) => ShadToaster.of(context).show(
+                      //               ShadToast(
+                      //                 backgroundColor: const Color(0xffBEE7B8),
+                      //                 title: const Text('Message Sent!'),
+                      //                 description: const Text(
+                      //                     'Thank you for your feedback🫡'),
+                      //                 action: ShadButton.outline(
+                      //                     text: const Text(
+                      //                       'Close',
+                      //                       style:
+                      //                           TextStyle(color: Colors.black),
+                      //                     ),
+                      //                     onPressed: () {
+                      //                       ShadToaster.of(context).hide();
+                      //                     }),
+                      //               ),
+                      //             ),
+                      //           );
+                      //     }
+                      //     _controller.clear();
+                      //   },
+                      //   gradient: const LinearGradient(colors: [
+                      //     Colors.greenAccent,
+                      //     Colors.cyan,
+                      //   ]),
+                      //   shadows: [
+                      //     BoxShadow(
+                      //       color: Colors.blue.withOpacity(.4),
+                      //       spreadRadius: 4,
+                      //       blurRadius: 10,
+                      //       offset: const Offset(0, 2),
+                      //     ),
+                      //   ],
+                      //   text: const Text('Submit'),
+                      // ),
                       Row(
                         children: [
                           const Text('Send Anonymously'),
                           Switch(
                             value: isSwitched,
                             onChanged: (value) {
-                              setState(
-                                () {
-                                  isSwitched = value;
-                                },
-                              );
+                              // setState(
+                              //       () {
+                              //     isSwitched = value;
+                              //   },
+                              // );
                             },
                           ),
                         ],
@@ -298,8 +293,8 @@ class _AccountInfoState extends State<AccountInfo> {
             ShadButton.destructive(
               text: const Text('Logout'),
               onPressed: () async {
-                await user.signOut();
-                Navigator.pushNamed(context, LoginScreen.id);
+                // await user.signOut();
+                // Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
             const Spacer(),

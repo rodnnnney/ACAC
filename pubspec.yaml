@@ -44,12 +44,14 @@ dependencies:
   modal_progress_hud_nsn: ^0.5.1
   pocketbase: ^0.18.1
   animated_text_kit: ^4.2.2
-  shadcn_ui: ^0.4.7
+  shadcn_ui: ^0.5.1
   url_launcher: ^6.2.6
   google_sign_in: ^6.2.1
   device_preview: ^1.1.0
   shared_preferences: ^2.2.3
   hooks_riverpod: ^2.5.1
+  riverpod_generator: ^2.4.0
+  riverpod_annotation: ^2.3.5
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +63,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

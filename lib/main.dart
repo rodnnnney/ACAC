@@ -7,10 +7,10 @@ import 'package:googlemaptest/Pages/multiCardView.dart';
 import 'package:googlemaptest/Providers/Navigation_Info_Provider.dart';
 import 'package:googlemaptest/Providers/Polyline_Info.dart';
 import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
-import 'package:googlemaptest/Providers/Theme.dart';
 import 'package:googlemaptest/Providers/UserInfo_Provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
+import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'Login/Login.dart';
@@ -18,17 +18,21 @@ import 'Login/Welcome.dart';
 import 'Models+Data/Color_theme.dart';
 import 'Providers/riverpod_test.dart';
 
-void main() => runApp(
-      const ProviderScope(
+void main() => runApp(MultiProvider(
+      providers: [
+        provider.ChangeNotifierProvider<Restaurant>(
+            create: (context) => Restaurant()),
+        provider.ChangeNotifierProvider<PolyInfo>(
+            create: (context) => PolyInfo()),
+        provider.ChangeNotifierProvider<NavInfo>(
+            create: (context) => NavInfo()),
+        provider.ChangeNotifierProvider<UserInfo>(
+            create: (context) => UserInfo()),
+      ],
+      child: const ProviderScope(
         child: MyApp(),
       ),
-    );
-
-final userPageCounter = ChangeNotifierProvider<RiverpodTest>(
-  (ref) {
-    return RiverpodTest(counter: 0);
-  },
-);
+    ));
 
 final appRoutes = <String, WidgetBuilder>{
   WelcomeScreen.id: (context) => WelcomeScreen(),
@@ -42,38 +46,19 @@ final appRoutes = <String, WidgetBuilder>{
       ),
 };
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return provider.MultiProvider(
-      providers: [
-        provider.ChangeNotifierProvider<Restaurant>(
-            create: (context) => Restaurant()),
-        provider.ChangeNotifierProvider<PolyInfo>(
-            create: (context) => PolyInfo()),
-        provider.ChangeNotifierProvider<NavInfo>(
-            create: (context) => NavInfo()),
-        provider.ChangeNotifierProvider<UserInfo>(
-            create: (context) => UserInfo()),
-        provider.ChangeNotifierProvider<ThemeProvider>(
-          create: (context) => ThemeProvider(),
-        ),
-      ],
-      child: provider.Consumer<ThemeProvider>(builder: (context, theme, child) {
-        return ShadApp.material(
-          debugShowCheckedModeBanner: false,
-          theme: theme.isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
-          initialRoute: LoginScreen.id,
-          routes: appRoutes,
-        );
-      }),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ShadApp.material(
+      debugShowCheckedModeBanner: false,
+      theme:
+          ref.watch(darkLight).theme ? AppTheme.darkTheme : AppTheme.lightTheme,
+      initialRoute: LoginScreen.id,
+      routes: appRoutes,
     );
   }
 }
+
+// Widget build(BuildContext context) {
