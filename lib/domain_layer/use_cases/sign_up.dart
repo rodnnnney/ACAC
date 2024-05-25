@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/domain_layer/use_cases/Login.dart';
-import 'package:googlemaptest/presentation_layer/pages/Home.dart';
+import 'package:googlemaptest/domain_layer/use_cases/login.dart';
+import 'package:googlemaptest/presentation_layer/pages/home.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../presentation_layer/state_management/provider/UserInfo_Provider.dart';
+import '../../presentation_layer/state_management/provider/user_info_provider.dart';
 
 class RegistrationScreen extends StatelessWidget {
   static const String id = 'Registration_screen';

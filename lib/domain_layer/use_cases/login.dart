@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/domain_layer/use_cases/Sign_Up.dart';
-import 'package:googlemaptest/presentation_layer/pages/Home.dart';
+import 'package:googlemaptest/domain_layer/use_cases/sign_up.dart';
+import 'package:googlemaptest/presentation_layer/pages/home.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../presentation_layer/state_management/provider/UserInfo_Provider.dart';
-import 'Welcome.dart';
+import '../../presentation_layer/state_management/provider/user_info_provider.dart';
+import 'welcome.dart';
 
 final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 

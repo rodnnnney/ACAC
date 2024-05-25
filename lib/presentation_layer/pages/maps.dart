@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/common/widgets/appBar.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/Markers.dart';
+import 'package:googlemaptest/common/widgets/app_bar.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/markers.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
-import 'package:googlemaptest/presentation_layer/widgets/infoCard.dart';
-import 'package:googlemaptest/presentation_layer/widgets/swipeUpCard.dart';
+import 'package:googlemaptest/presentation_layer/widgets/info_card.dart';
+import 'package:googlemaptest/presentation_layer/widgets/swipe_up_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 
@@ -19,7 +19,7 @@ class MapScreen extends ConsumerStatefulWidget {
 }
 
 class _MapScreenState extends ConsumerState<MapScreen> {
-  markers markerManager = markers();
+  Markers markerManager = Markers();
   bool isLocationLoaded = false;
   UserLocation location = UserLocation();
   LatLng userPosition = const LatLng(0, 0);

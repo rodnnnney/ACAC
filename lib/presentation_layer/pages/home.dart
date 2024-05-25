@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/common/widgets/appBar.dart';
-import 'package:googlemaptest/presentation_layer/pages/multiCardView.dart';
+import 'package:googlemaptest/common/widgets/app_bar.dart';
+import 'package:googlemaptest/presentation_layer/pages/multi_card_view.dart';
 
-import '../widgets/WelcomeText.dart';
-import '../widgets/homePageCard.dart';
+import '../widgets/home_page_card.dart';
+import '../widgets/welcome_text.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
-
-  //final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
   String cutAndLowercase(String name) {
     int spaceIndex = name.indexOf(' ');

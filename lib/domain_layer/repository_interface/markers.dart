@@ -3,15 +3,15 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/Cards.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/cards.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'location.dart';
 
-class markers {
-  late final LatLng userLocation = LatLng(0, 0);
+class Markers {
+  late final LatLng userLocation = const LatLng(0, 0);
   late GoogleMapController controller;
   UserLocation location = UserLocation();
 
@@ -21,7 +21,7 @@ class markers {
 
   void initializeUserLocation(LatLng userLocation) {
     markerList.add(
-      Marker(markerId: MarkerId('User'), position: userLocation),
+      Marker(markerId: const MarkerId('User'), position: userLocation),
     );
   }
 

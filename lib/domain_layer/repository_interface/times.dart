@@ -1,4 +1,4 @@
-import 'package:googlemaptest/domain_layer/repository_interface/startStop.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/start_stop.dart';
 
 class Time {
   List<StartStop> hours;

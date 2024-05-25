@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/domain_layer/use_cases/Login.dart';
+import 'package:googlemaptest/domain_layer/use_cases/login.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import 'Sign_Up.dart';
+import 'sign_up.dart';
 
 final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 

@@ -15,14 +15,14 @@ class UserLocation {
       servicePermission = await Geolocator.isLocationServiceEnabled();
       if (!servicePermission) {
         print('Location services are disabled.');
-        return LatLng(0, 0);
+        return const LatLng(0, 0);
       }
 
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          return LatLng(0, 0);
+          return const LatLng(0, 0);
         }
       }
       Position position = await Geolocator.getCurrentPosition(
@@ -30,7 +30,7 @@ class UserLocation {
       return LatLng(position.latitude, position.longitude);
     } catch (e) {
       print('An error occurred: $e');
-      return LatLng(0, 0);
+      return const LatLng(0, 0);
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'Times.dart';
+import 'times.dart';
 
 class Cards {
   late String restaurantName;

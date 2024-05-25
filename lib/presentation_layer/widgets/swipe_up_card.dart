@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddTask extends StatefulWidget {

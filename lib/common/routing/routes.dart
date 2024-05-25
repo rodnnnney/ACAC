@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:googlemaptest/domain_layer/use_cases/Login.dart';
-import 'package:googlemaptest/domain_layer/use_cases/Sign_Up.dart';
-import 'package:googlemaptest/domain_layer/use_cases/Welcome.dart';
-import 'package:googlemaptest/presentation_layer/pages/Account.dart';
-import 'package:googlemaptest/presentation_layer/pages/Home.dart';
+import 'package:googlemaptest/domain_layer/use_cases/login.dart';
+import 'package:googlemaptest/domain_layer/use_cases/sign_up.dart';
+import 'package:googlemaptest/domain_layer/use_cases/welcome.dart';
+import 'package:googlemaptest/presentation_layer/pages/account.dart';
+import 'package:googlemaptest/presentation_layer/pages/home.dart';
 import 'package:googlemaptest/presentation_layer/pages/maps.dart';
-import 'package:googlemaptest/presentation_layer/pages/multiCardView.dart';
+import 'package:googlemaptest/presentation_layer/pages/multi_card_view.dart';
 
 final appRoutes = <String, WidgetBuilder>{
-  WelcomeScreen.id: (context) => WelcomeScreen(),
-  LoginScreen.id: (context) => LoginScreen(),
+  WelcomeScreen.id: (context) => const WelcomeScreen(),
+  LoginScreen.id: (context) => const LoginScreen(),
   RegistrationScreen.id: (context) => RegistrationScreen(),
   MapScreen.id: (context) => MapScreen(),
   HomePage.id: (context) => HomePage(),
