@@ -1,15 +1,14 @@
 import 'dart:ui' as ui;
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/Models+Data/Cards.dart';
-import 'package:googlemaptest/Providers/Polyline_Info.dart';
-import 'package:googlemaptest/Providers/Restaurant_Provider.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/Cards.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
 import 'package:provider/provider.dart';
 
-import '../Locations/location.dart';
+import 'location.dart';
 
 class markers {
   late final LatLng userLocation = LatLng(0, 0);
@@ -88,7 +87,7 @@ class markers {
 
   Future<ui.Image> getMarkerFromIcon(IconData iconData,
       {Color color = Colors.black, double size = 100}) async {
-    final PictureRecorder pictureRecorder = PictureRecorder();
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
     //final Paint paint = Paint()..color = color;
     final TextPainter textPainter =
@@ -105,7 +104,7 @@ class markers {
     textPainter.layout();
 
     textPainter.paint(canvas, Offset.zero);
-    final Picture picture = pictureRecorder.endRecording();
+    final ui.Picture picture = pictureRecorder.endRecording();
     final ui.Image markerAsImage = await picture.toImage(
         textPainter.width.toInt(), textPainter.height.toInt());
     return markerAsImage;

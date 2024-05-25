@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/Providers/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
 import 'package:provider/provider.dart';
-
-import '../Providers/Navigation_Info_Provider.dart';
-import '../Providers/Restaurant_Provider.dart';
 
 class AddTask extends StatefulWidget {
   LatLng userLocation;
@@ -108,10 +107,10 @@ class _AddTaskState extends State<AddTask> {
                                     TextButton(
                                       style: const ButtonStyle(
                                         backgroundColor:
-                                            MaterialStatePropertyAll<Color>(
+                                            WidgetStatePropertyAll<Color>(
                                                 Colors.green),
                                         foregroundColor:
-                                            MaterialStatePropertyAll<Color>(
+                                            WidgetStatePropertyAll<Color>(
                                                 Colors.white),
                                       ),
                                       onPressed: () async {

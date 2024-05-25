@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
 import 'package:provider/provider.dart';
-
-import '../Providers/Navigation_Info_Provider.dart';
-import '../Providers/Polyline_Info.dart';
-import '../Providers/Restaurant_Provider.dart';
 
 class infoCard extends StatelessWidget {
   double? travelTime;
 
-  infoCard(this.travelTime);
+  infoCard(this.travelTime, {super.key});
 
   @override
   Widget build(BuildContext context) {

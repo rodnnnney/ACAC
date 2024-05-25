@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/GoogleMaps/swipeUpCard.dart';
-import 'package:provider/provider.dart';
+import 'package:googlemaptest/common/widgets/appBar.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/Markers.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/provider/Polyline_Info.dart';
+import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:googlemaptest/presentation_layer/widgets/infoCard.dart';
+import 'package:googlemaptest/presentation_layer/widgets/swipeUpCard.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart' as legacy_provider;
 
-import '../GoogleMaps/appBar.dart';
-import '../GoogleMaps/infoCard.dart';
-import '../Locations/location.dart';
-import '../Models+Data/Markers.dart';
-import '../Providers/Navigation_Info_Provider.dart';
-import '../Providers/Polyline_Info.dart';
-import '../Providers/Theme.dart';
-
-class MapScreen extends StatefulWidget {
+class MapScreen extends ConsumerStatefulWidget {
   static String id = 'Map_Screen';
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> {
   markers markerManager = markers();
   bool isLocationLoaded = false;
   UserLocation location = UserLocation();
-  LatLng userPosition = LatLng(0, 0);
+  LatLng userPosition = const LatLng(0, 0);
   LatLng? restPosition;
   GoogleMapController? _controller;
 
@@ -32,7 +32,7 @@ class _MapScreenState extends State<MapScreen> {
     getLocation();
   }
 
-  void getLocation() async {
+  Future<void> getLocation() async {
     LatLng userLocation = await location.find();
     setState(() {
       isLocationLoaded = true;
@@ -45,27 +45,39 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child:
-            isLocationLoaded ? buildMap() : const CircularProgressIndicator(),
+      body: FutureBuilder<void>(
+        future: getLocation(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text('Something went wrong'),
+            );
+          } else {
+            return buildMap();
+          }
+        },
       ),
     );
   }
 
   Widget buildMap() {
     const String id = 'Map_Screen';
-    PolyInfo maps = Provider.of<PolyInfo>(context);
-    NavInfo nav = Provider.of<NavInfo>(context);
-    ThemeProvider theme = Provider.of<ThemeProvider>(context);
+    PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
+    NavInfo nav = legacy_provider.Provider.of<NavInfo>(context);
 
-    Future<void> _setMapStyle() async {
+    Future<void> setMapStyle() async {
       if (_controller != null) {
         String style =
             await rootBundle.loadString('assets/map_style_dark.json');
-        _controller!.setMapStyle(theme.isDarkMode ? style : null);
+        _controller!.setMapStyle(ref.watch(darkLight).theme ? style : null);
       }
     }
 
+//Use GoogleMap.style instead.
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomLeft,
@@ -74,7 +86,7 @@ class _MapScreenState extends State<MapScreen> {
             onMapCreated: (controller) {
               maps.onMapCreated(controller);
               _controller = controller;
-              _setMapStyle();
+              setMapStyle();
             },
             initialCameraPosition: CameraPosition(
               target: userPosition,
