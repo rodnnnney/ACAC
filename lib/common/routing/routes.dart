@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:googlemaptest/Pages/Maps.dart';
 import 'package:googlemaptest/domain_layer/use_cases/Login.dart';
 import 'package:googlemaptest/domain_layer/use_cases/Sign_Up.dart';
 import 'package:googlemaptest/domain_layer/use_cases/Welcome.dart';
 import 'package:googlemaptest/presentation_layer/pages/Account.dart';
 import 'package:googlemaptest/presentation_layer/pages/Home.dart';
+import 'package:googlemaptest/presentation_layer/pages/maps.dart';
 import 'package:googlemaptest/presentation_layer/pages/multiCardView.dart';
 
 final appRoutes = <String, WidgetBuilder>{

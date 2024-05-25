@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/Pages/Maps.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/Cards.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/Navigation_Info_Provider.dart';
@@ -11,6 +10,8 @@ import 'package:googlemaptest/presentation_layer/state_management/provider/Polyl
 import 'package:googlemaptest/presentation_layer/state_management/provider/Restaurant_Provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/UserInfo_Provider.dart';
 import 'package:provider/provider.dart';
+
+import 'maps.dart';
 
 class cardViewerHomePage extends StatefulWidget {
   static String id = 'card_viewer';
