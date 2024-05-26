@@ -175,9 +175,6 @@ class CardViewerHomePageState extends State<cardViewerHomePage> {
                             ),
                             onPressed: () async {
                               try {
-                                // Navigator.pushNamed(context, MapScreen.id,
-                                //     arguments:
-                                //         data.restaurantInfo[index].location);
                                 LatLng user = await data.getLocation();
                                 String url = await maps.createHttpUrl(
                                     user.latitude,
@@ -196,7 +193,6 @@ class CardViewerHomePageState extends State<cardViewerHomePage> {
                                 ]);
                                 nav.updateRouteDetails(url);
                                 Navigator.pushNamed(context, MapScreen.id);
-                                loco.setNum(1);
                               } catch (e) {}
                             },
                             child: const Text('Find on Map'),

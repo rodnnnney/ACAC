@@ -59,16 +59,18 @@ class UserInfo extends ChangeNotifier {
 
   void setUserDetails() {}
 
-  Future<void> signIn(String email, String password) async {
+  Future<int> signIn(String email, String password) async {
     try {
       final authData =
           await pb.collection('users').authWithPassword(email, password);
-      setAuthData = authData;
       notifyListeners();
+      return 200; // Success status code
     } on ClientException catch (e) {
       print('$e\n');
       print(e.response);
       print(e.response['data']);
+      return e
+          .response['statusCode']; // Return the status code from the exception
     }
   }
 
@@ -110,16 +112,8 @@ class UserInfo extends ChangeNotifier {
     print(record);
   }
 
-  void setNum(int hover) {
-    selected = hover;
-    notifyListeners();
-  }
-
   Future<void> signOut() async {
     pb.authStore.clear();
-    setName = '';
-    setEmail = '';
-    setPassword = '';
     notifyListeners();
   }
 

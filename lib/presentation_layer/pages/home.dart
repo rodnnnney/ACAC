@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/common/widgets/app_bar.dart';
 import 'package:googlemaptest/presentation_layer/pages/multi_card_view.dart';
-
-import '../widgets/home_page_card.dart';
-import '../widgets/welcome_text.dart';
+import 'package:googlemaptest/presentation_layer/widgets/home_page_card.dart';
+import 'package:googlemaptest/presentation_layer/widgets/welcome_text.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
@@ -38,7 +37,7 @@ class HomePage extends StatelessWidget {
                 Welcome(),
                 // Text(
                 //   pb.authStore.model.data['name'],
-                //   style: TextStyle(
+                //   style: const TextStyle(
                 //     fontSize: 25,
                 //     fontWeight: FontWeight.w500,
                 //   ),
@@ -154,20 +153,20 @@ class HomePage extends StatelessWidget {
                                 );
                               },
                             ),
-                            HomeCard(
-                              screenHeight: screenHeight,
-                              displayIMG: 'images/viet.webp',
-                              text: 'vietnamese',
-                              flag: '🇻🇳',
-                              routeName:
-                                  (BuildContext context, String cuisineType) {
-                                Navigator.pushNamed(
-                                  context,
-                                  cardViewerHomePage.id,
-                                  arguments: cuisineType,
-                                );
-                              },
-                            ),
+                            // HomeCard(
+                            //   screenHeight: screenHeight,
+                            //   displayIMG: 'images/viet.webp',
+                            //   text: 'vietnamese',
+                            //   flag: '🇻🇳',
+                            //   routeName:
+                            //       (BuildContext context, String cuisineType) {
+                            //     Navigator.pushNamed(
+                            //       context,
+                            //       cardViewerHomePage.id,
+                            //       arguments: cuisineType,
+                            //     );
+                            //   },
+                            // ),
                             HomeCard(
                               screenHeight: screenHeight,
                               displayIMG: 'images/japan.avif',

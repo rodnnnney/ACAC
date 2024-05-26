@@ -151,34 +151,34 @@ class RegistrationScreen extends StatelessWidget {
                   }
                 },
               ),
-              ShadButton(
-                text: Text('Google'),
-                onPressed: () async {
-                  //launchUrl('www.google.com' as Uri);
-
-                  try {
-                    // final Uri url = Uri.parse(
-                    //     'https://acac2-thrumming-wind-3122.fly.dev/api/oauth2-redirect');
-                    // final authData =
-                    //     await pb.collection('users').authWithOAuth2(
-                    //   'google',
-                    //   (url) async {
-                    //     await launchUrl(url);
-                    //   },
-                    // );
-                    await userInfo.O2AuthSignUp().then((value) =>
-                        Navigator.pushNamed(context, HomePage.id)
-                            .then((value) => userInfo.signedInWithO2Auth()));
-                  } catch (e) {
-                    ShadToaster.of(context).show(
-                      ShadToast.destructive(
-                        title: const Text('Uh oh, somethings not right'),
-                        description: Text('Error: $e'),
-                      ),
-                    );
-                  }
-                },
-              )
+              // ShadButton(
+              //   text: Text('Google'),
+              //   onPressed: () async {
+              //     //launchUrl('www.google.com' as Uri);
+              //
+              //     try {
+              //       // final Uri url = Uri.parse(
+              //       //     'https://acac2-thrumming-wind-3122.fly.dev/api/oauth2-redirect');
+              //       // final authData =
+              //       //     await pb.collection('users').authWithOAuth2(
+              //       //   'google',
+              //       //   (url) async {
+              //       //     await launchUrl(url);
+              //       //   },
+              //       // );
+              //       await userInfo.O2AuthSignUp().then((value) =>
+              //           Navigator.pushNamed(context, HomePage.id)
+              //               .then((value) => userInfo.signedInWithO2Auth()));
+              //     } catch (e) {
+              //       ShadToaster.of(context).show(
+              //         ShadToast.destructive(
+              //           title: const Text('Uh oh, somethings not right'),
+              //           description: Text('Error: $e'),
+              //         ),
+              //       );
+              //     }
+              //   },
+              // )
             ],
           ),
         ),

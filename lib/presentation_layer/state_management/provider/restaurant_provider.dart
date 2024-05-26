@@ -11,6 +11,7 @@ import '../../../domain_layer/repository_interface/times.dart';
 class Restaurant extends ChangeNotifier {
   LatLng? distance;
 
+//TODO make more cards
   List<Cards> restaurantInfo = [
     Cards(
       restaurantName: 'Kinton Ramen',

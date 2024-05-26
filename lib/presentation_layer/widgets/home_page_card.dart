@@ -32,7 +32,7 @@ class HomeCard extends StatelessWidget {
                   child: Image.asset(
                     displayIMG,
                     height: screenHeight * 0.15,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 Row(
