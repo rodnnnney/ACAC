@@ -1,9 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/common/widgets/app_bar.dart';
+import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
 import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class AccountInfo extends ConsumerWidget {
   static String id = 'Account_screen';
@@ -168,7 +167,7 @@ class AccountInfo extends ConsumerWidget {
                               child: Icon(Icons.light_mode,
                                   color: ref.watch(darkLight).theme
                                       ? Colors.white
-                                      : null),
+                                      : Colors.black),
                             ),
                           ),
                           TextButton(
@@ -193,7 +192,7 @@ class AccountInfo extends ConsumerWidget {
                                 Icons.dark_mode,
                                 color: ref.watch(darkLight).theme
                                     ? Colors.white
-                                    : null,
+                                    : Colors.black,
                               ),
                             ),
                           )
@@ -202,100 +201,100 @@ class AccountInfo extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  ShadInputFormField(
-                    label: Text(
-                      'Feedback',
-                      style: TextStyle(
-                          color: ref.watch(darkLight).theme
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                    placeholder:
-                        const Text('Name a feature you wish this app had!'),
-                    controller: _controller,
-                    onChanged: (value) {
-                      feedbackText = value;
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // ShadButton(
-                      //   onPressed: () {
-                      //     if (feedbackText.isEmpty) {
-                      //       ShadToaster.of(context).show(
-                      //         const ShadToast.destructive(
-                      //           title: Text('Uh oh, somethings not right'),
-                      //           description: Text(
-                      //               'Please enter something in feedback box'),
-                      //         ),
-                      //       );
-                      //     } else {
-                      //    user.sendFeedBack(feedbackText, user.email).then(
-                      //             (value) => ShadToaster.of(context).show(
-                      //               ShadToast(
-                      //                 backgroundColor: const Color(0xffBEE7B8),
-                      //                 title: const Text('Message Sent!'),
-                      //                 description: const Text(
-                      //                     'Thank you for your feedback🫡'),
-                      //                 action: ShadButton.outline(
-                      //                     text: const Text(
-                      //                       'Close',
-                      //                       style:
-                      //                           TextStyle(color: Colors.black),
-                      //                     ),
-                      //                     onPressed: () {
-                      //                       ShadToaster.of(context).hide();
-                      //                     }),
-                      //               ),
-                      //             ),
-                      //           );
-                      //     }
-                      //     _controller.clear();
-                      //   },
-                      //   gradient: const LinearGradient(colors: [
-                      //     Colors.greenAccent,
-                      //     Colors.cyan,
-                      //   ]),
-                      //   shadows: [
-                      //     BoxShadow(
-                      //       color: Colors.blue.withOpacity(.4),
-                      //       spreadRadius: 4,
-                      //       blurRadius: 10,
-                      //       offset: const Offset(0, 2),
-                      //     ),
-                      //   ],
-                      //   text: const Text('Submit'),
-                      // ),
-                      Row(
-                        children: [
-                          const Text('Send Anonymously'),
-                          Switch(
-                            value: isSwitched,
-                            onChanged: (value) {
-                              // setState(
-                              //       () {
-                              //     isSwitched = value;
-                              //   },
-                              // );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  // ShadInputFormField(
+                  //   label: Text(
+                  //     'Feedback',
+                  //     style: TextStyle(
+                  //         color: ref.watch(darkLight).theme
+                  //             ? Colors.white
+                  //             : Colors.black),
+                  //   ),
+                  //   placeholder:
+                  //       const Text('Name a feature you wish this app had!'),
+                  //   controller: _controller,
+                  //   onChanged: (value) {
+                  //     feedbackText = value;
+                  //   },
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     // ShadButton(
+                  //     //   onPressed: () {
+                  //     //     if (feedbackText.isEmpty) {
+                  //     //       ShadToaster.of(context).show(
+                  //     //         const ShadToast.destructive(
+                  //     //           title: Text('Uh oh, somethings not right'),
+                  //     //           description: Text(
+                  //     //               'Please enter something in feedback box'),
+                  //     //         ),
+                  //     //       );
+                  //     //     } else {
+                  //     //    user.sendFeedBack(feedbackText, user.email).then(
+                  //     //             (value) => ShadToaster.of(context).show(
+                  //     //               ShadToast(
+                  //     //                 backgroundColor: const Color(0xffBEE7B8),
+                  //     //                 title: const Text('Message Sent!'),
+                  //     //                 description: const Text(
+                  //     //                     'Thank you for your feedback🫡'),
+                  //     //                 action: ShadButton.outline(
+                  //     //                     text: const Text(
+                  //     //                       'Close',
+                  //     //                       style:
+                  //     //                           TextStyle(color: Colors.black),
+                  //     //                     ),
+                  //     //                     onPressed: () {
+                  //     //                       ShadToaster.of(context).hide();
+                  //     //                     }),
+                  //     //               ),
+                  //     //             ),
+                  //     //           );
+                  //     //     }
+                  //     //     _controller.clear();
+                  //     //   },
+                  //     //   gradient: const LinearGradient(colors: [
+                  //     //     Colors.greenAccent,
+                  //     //     Colors.cyan,
+                  //     //   ]),
+                  //     //   shadows: [
+                  //     //     BoxShadow(
+                  //     //       color: Colors.blue.withOpacity(.4),
+                  //     //       spreadRadius: 4,
+                  //     //       blurRadius: 10,
+                  //     //       offset: const Offset(0, 2),
+                  //     //     ),
+                  //     //   ],
+                  //     //   text: const Text('Submit'),
+                  //     // ),
+                  //     // Row(
+                  //     //   children: [
+                  //     //     const Text('Send Anonymously'),
+                  //     //     Switch(
+                  //     //       value: isSwitched,
+                  //     //       onChanged: (value) {
+                  //     //         // setState(
+                  //     //         //       () {
+                  //     //         //     isSwitched = value;
+                  //     //         //   },
+                  //     //         // );
+                  //     //       },
+                  //     //     ),
+                  //     //   ],
+                  //     // ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
             const Spacer(),
             const Spacer(),
-            ShadButton.destructive(
-              text: const Text('Logout'),
-              onPressed: () async {
-                // await user.signOut();
-                // Navigator.pushNamed(context, LoginScreen.id);
-              },
-            ),
+            // ShadButton.destructive(
+            //   text: const Text('Logout'),
+            //   onPressed: () async {
+            //     // await user.signOut();
+            //     // Navigator.pushNamed(context, LoginScreen.id);
+            //   },
+            // ),
             const Spacer(),
           ],
         ),

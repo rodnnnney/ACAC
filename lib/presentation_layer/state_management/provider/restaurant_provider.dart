@@ -68,7 +68,7 @@ class Restaurant extends ChangeNotifier {
       cuisineType: 'Chinese',
     ),
     Cards(
-      restaurantName: 'Chatime(Somerset)',
+      restaurantName: 'Chatime',
       location: const LatLng(45.411220513918316, -75.70696356085315),
       address: '695 Somerset St',
       imageSrc: 'images/Chatime/boba.jpeg',

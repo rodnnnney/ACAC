@@ -8,7 +8,6 @@ import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/user_info_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'maps.dart';
@@ -46,7 +45,6 @@ class CardViewerHomePageState extends State<cardViewerHomePage> {
     PolyInfo maps = Provider.of<PolyInfo>(context);
     Restaurant data = Provider.of<Restaurant>(context);
     NavInfo nav = Provider.of<NavInfo>(context);
-    UserInfo loco = Provider.of<UserInfo>(context);
     List<Cards> filteredRestaurants = data.restaurantInfo
         .where((card) => card.cuisineType == widget.cuisineType)
         .toList();

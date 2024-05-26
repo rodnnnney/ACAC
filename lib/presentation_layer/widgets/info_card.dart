@@ -32,7 +32,8 @@ class infoCard extends StatelessWidget {
                         children: [
                           Text(
                             '${travelTime?.toStringAsFixed(0)} mins',
-                            style: TextStyle(fontSize: 22, color: Colors.green),
+                            style: const TextStyle(
+                                fontSize: 22, color: Colors.green),
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -41,14 +42,14 @@ class infoCard extends StatelessWidget {
                                 nav.travelKm != null
                                     ? '${nav.travelKm?.toStringAsFixed(1)}km'
                                     : '',
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
                                 nav.eta.toString(),
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
                             ],
                           ),
@@ -57,7 +58,7 @@ class infoCard extends StatelessWidget {
                               nav.closeNav();
                               maps.clearPoly();
                             },
-                            child: Text('End Navigation'),
+                            child: const Text('End Navigation'),
                           )
                         ],
                       ),

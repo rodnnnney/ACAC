@@ -5,66 +5,72 @@ import 'package:googlemaptest/presentation_layer/state_management/provider/polyl
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:provider/provider.dart';
 
-class AddTask extends StatefulWidget {
+class SwipeUpMenu extends StatefulWidget {
   LatLng userLocation;
 
-  AddTask({super.key, required this.userLocation});
+  SwipeUpMenu({super.key, required this.userLocation});
 
   @override
-  State<AddTask> createState() => _AddTaskState();
+  State<SwipeUpMenu> createState() => _SwipeUpMenuState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _SwipeUpMenuState extends State<SwipeUpMenu> {
   @override
   Widget build(BuildContext context) {
     Restaurant data = Provider.of<Restaurant>(context);
     PolyInfo maps = Provider.of<PolyInfo>(context);
     NavInfo nav = Provider.of<NavInfo>(context);
-    return Padding(
-      padding: const EdgeInsets.only(right: 10, left: 10, bottom: 10, top: 50),
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Center(
-            child: Icon(Icons.remove, size: 40),
-          ),
-        ),
-        // padding: EdgeInsets.only(top: 80),
-        body: Scaffold(
-          body: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Number of cards in a row
-              crossAxisSpacing: 10, // Horizontal space between cards
-              mainAxisSpacing: 10, // Vertical space between cards
-              childAspectRatio: 0.74, // Aspect ratio of the cards
+        body: Padding(
+          padding: EdgeInsets.only(
+              top: screenHeight * 0.05364807, left: 5, right: 5),
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: const Center(
+                child: Icon(
+                  Icons.remove,
+                  size: 35,
+                  color: Colors.black,
+                ),
+              ),
             ),
-            itemCount: data.restaurantInfo.length,
-            // Assuming 'items' is a list in your Data provider
-            itemBuilder: (context, index) {
-              String getHours() {
-                DateTime now = DateTime.now();
-                int weekday = now.weekday;
-                if (weekday == 1) {
-                  return ('${data.restaurantInfo[index].hours.monday.startTime} - ${data.restaurantInfo[index].hours.monday.endTime}');
-                } else if (weekday == 2) {
-                  return ('${data.restaurantInfo[index].hours.tuesday.startTime} - ${data.restaurantInfo[index].hours.tuesday.endTime}');
-                } else if (weekday == 3) {
-                  return ('${data.restaurantInfo[index].hours.wednesday.startTime} - ${data.restaurantInfo[index].hours.wednesday.endTime}');
-                } else if (weekday == 4) {
-                  return ('${data.restaurantInfo[index].hours.thursday.startTime} - ${data.restaurantInfo[index].hours.thursday.endTime}');
-                } else if (weekday == 5) {
-                  return ('${data.restaurantInfo[index].hours.friday.startTime} - ${data.restaurantInfo[index].hours.friday.endTime}');
-                } else if (weekday == 6) {
-                  return ('${data.restaurantInfo[index].hours.saturday.startTime} - ${data.restaurantInfo[index].hours.saturday.endTime}');
-                } else if (weekday == 7) {
-                  return ('${data.restaurantInfo[index].hours.sunday.startTime} - ${data.restaurantInfo[index].hours.sunday.endTime}');
-                } else {
-                  return 'Closed';
+            // padding: EdgeInsets.only(top: 80),
+            body: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Number of cards in a row
+                crossAxisSpacing: 10, // Horizontal space between cards
+                mainAxisSpacing: 10, // Vertical space between cards
+                childAspectRatio:
+                    (screenHeight * 0.00081316), // Aspect ratio of the cards
+              ),
+              itemCount: data.restaurantInfo.length,
+              itemBuilder: (context, index) {
+                String getHours() {
+                  DateTime now = DateTime.now();
+                  int weekday = now.weekday;
+                  if (weekday == 1) {
+                    return ('${data.restaurantInfo[index].hours.monday.startTime} - ${data.restaurantInfo[index].hours.monday.endTime}');
+                  } else if (weekday == 2) {
+                    return ('${data.restaurantInfo[index].hours.tuesday.startTime} - ${data.restaurantInfo[index].hours.tuesday.endTime}');
+                  } else if (weekday == 3) {
+                    return ('${data.restaurantInfo[index].hours.wednesday.startTime} - ${data.restaurantInfo[index].hours.wednesday.endTime}');
+                  } else if (weekday == 4) {
+                    return ('${data.restaurantInfo[index].hours.thursday.startTime} - ${data.restaurantInfo[index].hours.thursday.endTime}');
+                  } else if (weekday == 5) {
+                    return ('${data.restaurantInfo[index].hours.friday.startTime} - ${data.restaurantInfo[index].hours.friday.endTime}');
+                  } else if (weekday == 6) {
+                    return ('${data.restaurantInfo[index].hours.saturday.startTime} - ${data.restaurantInfo[index].hours.saturday.endTime}');
+                  } else if (weekday == 7) {
+                    return ('${data.restaurantInfo[index].hours.sunday.startTime} - ${data.restaurantInfo[index].hours.sunday.endTime}');
+                  } else {
+                    return 'Closed';
+                  }
                 }
-              }
 
-              return Container(
-                child: Card(
+                return Card(
                   elevation: 1,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -86,7 +92,7 @@ class _AddTaskState extends State<AddTask> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           //mainAxisAlignment: MainAxisAlignment.start,
@@ -102,10 +108,16 @@ class _AddTaskState extends State<AddTask> {
                                 const SizedBox(height: 4),
                                 Text(data.restaurantInfo[index].address),
                                 Text(getHours()),
+
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     TextButton(
                                       style: const ButtonStyle(
+                                        padding: WidgetStatePropertyAll(
+                                            EdgeInsets.symmetric(
+                                                horizontal: 8)),
                                         backgroundColor:
                                             WidgetStatePropertyAll<Color>(
                                                 Colors.green),
@@ -136,10 +148,10 @@ class _AddTaskState extends State<AddTask> {
                                           print(e);
                                         }
                                       },
-                                      child: Text('Find on Map'),
+                                      child: const Text('Find on Map'),
                                     ),
                                     const SizedBox(
-                                      width: 18,
+                                      width: 5,
                                     ),
                                     Container(
                                       decoration: const BoxDecoration(
@@ -147,14 +159,14 @@ class _AddTaskState extends State<AddTask> {
                                         color: Color(0xFFE8E8E8),
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.all(12),
+                                        padding: const EdgeInsets.all(12),
                                         child: Text(
                                           data.restaurantInfo[index].rating
                                               .toString(),
                                           style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
                                         ),
                                       ),
                                     )
@@ -167,9 +179,9 @@ class _AddTaskState extends State<AddTask> {
                       ),
                     ],
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/common/widgets/app_bar.dart';
+import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/markers.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
@@ -29,10 +29,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   void initState() {
     super.initState();
-    getLocation();
+    _initializeLocation();
   }
 
-  Future<void> getLocation() async {
+  Future<void> _initializeLocation() async {
     LatLng userLocation = await location.find();
     setState(() {
       isLocationLoaded = true;
@@ -45,22 +45,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<void>(
-        future: getLocation(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Something went wrong'),
-            );
-          } else {
-            return buildMap();
-          }
-        },
-      ),
+      body: isLocationLoaded
+          ? buildMap()
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -77,7 +64,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       }
     }
 
-//Use GoogleMap.style instead.
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomLeft,
@@ -102,10 +88,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: ref.watch(darkLight).theme
+            ? const Color(0xff402C7D)
+            : const Color(0xffE2F1D6),
         onPressed: () => showModalBottomSheet(
             isScrollControlled: true,
             context: context,
-            builder: (context) => AddTask(
+            builder: (context) => SwipeUpMenu(
                   userLocation: userPosition,
                 )),
         child: const Icon(Icons.menu),

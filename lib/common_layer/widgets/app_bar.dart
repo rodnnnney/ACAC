@@ -39,6 +39,7 @@ class AppBarBottom extends ConsumerWidget {
             onPressed: () {
               updatePage(0, HomePage.id);
               print(pb.authStore.token);
+              print(MediaQuery.sizeOf(context).height);
             },
             icon: Container(
               decoration: watchCounter.counter == 0 ? selected : null,

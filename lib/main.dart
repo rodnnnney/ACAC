@@ -4,11 +4,12 @@ import 'package:googlemaptest/presentation_layer/state_management/provider/navig
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/user_info_provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
 
-import 'common/routing/routes.dart';
+import 'common_layer/routing/routes.dart';
 
 void main() => runApp(MultiProvider(
       providers: [
@@ -33,10 +34,10 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //theme: ref.watch(darkLight).theme ? AppTheme.darkTheme : AppTheme.lightTheme,
-      //TODO Fix this dark/light theme
+      theme: ref.watch(darkLight).theme ? ThemeData.dark() : ThemeData.light(),
       initialRoute: HomePage.id,
       routes: appRoutes,
     );
   }
 }
+//

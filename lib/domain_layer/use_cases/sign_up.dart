@@ -25,11 +25,11 @@ class RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserInfo userInfo = Provider.of<UserInfo>(context);
-    final theme = ShadTheme.of(context);
+    //final theme = ShadTheme.of(context);
     return Scaffold(
       body: Center(
         child: ShadCard(
-          title: Text('Create Account', style: theme.textTheme.h4),
+          title: const Text('Create Account'),
           content: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
