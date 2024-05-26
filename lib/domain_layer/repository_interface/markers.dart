@@ -3,9 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/cards.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'location.dart';
@@ -81,9 +79,9 @@ class Markers {
     Provider.of<PolyInfo>(context, listen: false).goToNewLatLng(location);
   }
 
-  List<Cards> getList(BuildContext context) {
-    return Provider.of<Restaurant>(context).restaurantInfo;
-  }
+  // List<Cards> getList(BuildContext context) {
+  //   return Provider.of<Restaurant>(context).restaurantInfo;
+  // }
 
   Future<ui.Image> getMarkerFromIcon(IconData iconData,
       {Color color = Colors.black, double size = 100}) async {

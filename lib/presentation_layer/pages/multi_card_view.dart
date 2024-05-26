@@ -8,11 +8,13 @@ import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart' as provider;
 
 import 'maps.dart';
 
-class cardViewerHomePage extends StatefulWidget {
+class cardViewerHomePage extends ConsumerStatefulWidget {
   static String id = 'card_viewer';
 
   late String cuisineType;
@@ -20,10 +22,10 @@ class cardViewerHomePage extends StatefulWidget {
   cardViewerHomePage({super.key, required this.cuisineType});
 
   @override
-  State<cardViewerHomePage> createState() => CardViewerHomePageState();
+  ConsumerState<cardViewerHomePage> createState() => CardViewerHomePageState();
 }
 
-class CardViewerHomePageState extends State<cardViewerHomePage> {
+class CardViewerHomePageState extends ConsumerState<cardViewerHomePage> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
 
@@ -42,10 +44,12 @@ class CardViewerHomePageState extends State<cardViewerHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PolyInfo maps = Provider.of<PolyInfo>(context);
-    Restaurant data = Provider.of<Restaurant>(context);
-    NavInfo nav = Provider.of<NavInfo>(context);
-    List<Cards> filteredRestaurants = data.restaurantInfo
+    final restaurantProvider = ref.read(restaurant);
+
+    PolyInfo maps = provider.Provider.of<PolyInfo>(context);
+    Restaurant data = provider.Provider.of<Restaurant>(context);
+    NavInfo nav = provider.Provider.of<NavInfo>(context);
+    List<restaurantCard> filteredRestaurants = restaurantProvider
         .where((card) => card.cuisineType == widget.cuisineType)
         .toList();
 

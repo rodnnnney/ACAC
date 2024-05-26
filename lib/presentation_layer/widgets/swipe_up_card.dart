@@ -3,23 +3,26 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart' as legacy;
 
-class SwipeUpMenu extends StatefulWidget {
+class SwipeUpMenu extends ConsumerStatefulWidget {
   LatLng userLocation;
 
   SwipeUpMenu({super.key, required this.userLocation});
 
   @override
-  State<SwipeUpMenu> createState() => _SwipeUpMenuState();
+  ConsumerState<SwipeUpMenu> createState() => _SwipeUpMenuState();
 }
 
-class _SwipeUpMenuState extends State<SwipeUpMenu> {
+class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
   @override
   Widget build(BuildContext context) {
-    Restaurant data = Provider.of<Restaurant>(context);
-    PolyInfo maps = Provider.of<PolyInfo>(context);
-    NavInfo nav = Provider.of<NavInfo>(context);
+    final restaurantProvider = ref.read(restaurant);
+    Restaurant data = legacy.Provider.of<Restaurant>(context);
+    PolyInfo maps = legacy.Provider.of<PolyInfo>(context);
+    NavInfo nav = legacy.Provider.of<NavInfo>(context);
     final double screenHeight = MediaQuery.sizeOf(context).height;
     return SafeArea(
       child: Scaffold(
@@ -46,25 +49,25 @@ class _SwipeUpMenuState extends State<SwipeUpMenu> {
                 childAspectRatio:
                     (screenHeight * 0.00081316), // Aspect ratio of the cards
               ),
-              itemCount: data.restaurantInfo.length,
+              itemCount: restaurantProvider.length,
               itemBuilder: (context, index) {
                 String getHours() {
                   DateTime now = DateTime.now();
                   int weekday = now.weekday;
                   if (weekday == 1) {
-                    return ('${data.restaurantInfo[index].hours.monday.startTime} - ${data.restaurantInfo[index].hours.monday.endTime}');
+                    return ('${restaurantProvider[index].hours.monday.startTime} - ${restaurantProvider[index].hours.monday.endTime}');
                   } else if (weekday == 2) {
-                    return ('${data.restaurantInfo[index].hours.tuesday.startTime} - ${data.restaurantInfo[index].hours.tuesday.endTime}');
+                    return ('${restaurantProvider[index].hours.tuesday.startTime} - ${restaurantProvider[index].hours.tuesday.endTime}');
                   } else if (weekday == 3) {
-                    return ('${data.restaurantInfo[index].hours.wednesday.startTime} - ${data.restaurantInfo[index].hours.wednesday.endTime}');
+                    return ('${restaurantProvider[index].hours.wednesday.startTime} - ${restaurantProvider[index].hours.wednesday.endTime}');
                   } else if (weekday == 4) {
-                    return ('${data.restaurantInfo[index].hours.thursday.startTime} - ${data.restaurantInfo[index].hours.thursday.endTime}');
+                    return ('${restaurantProvider[index].hours.thursday.startTime} - ${restaurantProvider[index].hours.thursday.endTime}');
                   } else if (weekday == 5) {
-                    return ('${data.restaurantInfo[index].hours.friday.startTime} - ${data.restaurantInfo[index].hours.friday.endTime}');
+                    return ('${restaurantProvider[index].hours.friday.startTime} - ${restaurantProvider[index].hours.friday.endTime}');
                   } else if (weekday == 6) {
-                    return ('${data.restaurantInfo[index].hours.saturday.startTime} - ${data.restaurantInfo[index].hours.saturday.endTime}');
+                    return ('${restaurantProvider[index].hours.saturday.startTime} - ${restaurantProvider[index].hours.saturday.endTime}');
                   } else if (weekday == 7) {
-                    return ('${data.restaurantInfo[index].hours.sunday.startTime} - ${data.restaurantInfo[index].hours.sunday.endTime}');
+                    return ('${restaurantProvider[index].hours.sunday.startTime} - ${restaurantProvider[index].hours.sunday.endTime}');
                   } else {
                     return 'Closed';
                   }
@@ -82,7 +85,7 @@ class _SwipeUpMenuState extends State<SwipeUpMenu> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset(
-                              data.restaurantInfo[index]
+                              restaurantProvider[index]
                                   .imageSrc, // Adjust the image path as necessary
                               width: double.infinity,
                               height: 130,
@@ -100,13 +103,14 @@ class _SwipeUpMenuState extends State<SwipeUpMenu> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(data.restaurantInfo[index].restaurantName,
+                                Text(restaurantProvider[index].restaurantName,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight:
                                             FontWeight.bold)), // Example title
                                 const SizedBox(height: 4),
-                                Text(data.restaurantInfo[index].address),
+                                Text(restaurantProvider[index].address),
                                 Text(getHours()),
 
                                 Row(
@@ -132,14 +136,16 @@ class _SwipeUpMenuState extends State<SwipeUpMenu> {
                                           String url = await maps.createHttpUrl(
                                               user.latitude,
                                               user.longitude,
-                                              data.restaurantInfo[index]
-                                                  .location.latitude,
-                                              data.restaurantInfo[index]
-                                                  .location.longitude);
+                                              restaurantProvider[index]
+                                                  .location
+                                                  .latitude,
+                                              restaurantProvider[index]
+                                                  .location
+                                                  .longitude);
                                           maps.processPolylineData(url);
                                           maps.updateCameraBounds([
                                             user,
-                                            data.restaurantInfo[index].location
+                                            restaurantProvider[index].location
                                           ]);
                                           nav.updateRouteDetails(url);
 
@@ -161,7 +167,8 @@ class _SwipeUpMenuState extends State<SwipeUpMenu> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(12),
                                         child: Text(
-                                          data.restaurantInfo[index].rating
+                                          restaurantProvider[index]
+                                              .rating
                                               .toString(),
                                           style: const TextStyle(
                                               fontSize: 16,

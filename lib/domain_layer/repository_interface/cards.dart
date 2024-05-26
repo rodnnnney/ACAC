@@ -2,7 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'times.dart';
 
-class Cards {
+class restaurantCard {
   late String restaurantName;
   late LatLng location;
   late String address;
@@ -11,8 +11,11 @@ class Cards {
   late Time hours;
   late double rating;
   late String cuisineType;
+  late int reviewNum;
+  late List<String> discounts;
+  late String phoneNumber;
 
-  Cards(
+  restaurantCard(
       {required this.restaurantName,
       required this.location,
       required this.address,
@@ -20,5 +23,8 @@ class Cards {
       required this.imageLogo,
       required this.hours,
       required this.rating,
-      required this.cuisineType});
+      required this.reviewNum,
+      required this.cuisineType,
+      required this.discounts,
+      required this.phoneNumber});
 }
