@@ -54,6 +54,5 @@
       <string>https</string>
       <string>http</string>
    </array>
-    <!-- Add other schemes here if needed -->
 </dict>
 </plist>

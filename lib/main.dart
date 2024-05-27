@@ -10,6 +10,7 @@ import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
 
 import 'common_layer/routing/routes.dart';
+import 'common_layer/theme/color_theme.dart';
 
 void main() => runApp(MultiProvider(
       providers: [
@@ -32,9 +33,12 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorTheme = ColorTheme(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ref.watch(darkLight).theme ? ThemeData.dark() : ThemeData.light(),
+      theme: ref.watch(darkLight).theme
+          ? colorTheme.themeDataDark()
+          : colorTheme.themeDataLight(),
       initialRoute: HomePage.id,
       routes: appRoutes,
     );

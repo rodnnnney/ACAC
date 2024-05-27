@@ -8,7 +8,7 @@ import 'package:googlemaptest/presentation_layer/state_management/provider/navig
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:googlemaptest/presentation_layer/widgets/info_card.dart';
-import 'package:googlemaptest/presentation_layer/widgets/swipe_up_card.dart';
+import 'package:googlemaptest/presentation_layer/widgets/swipe_up_menu.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 

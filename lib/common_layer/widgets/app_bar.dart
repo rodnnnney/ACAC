@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:googlemaptest/presentation_layer/pages/account.dart';
 import 'package:googlemaptest/presentation_layer/pages/home.dart';
 import 'package:googlemaptest/presentation_layer/pages/maps.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/user_info_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:provider/provider.dart' as provider;
 
 final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
@@ -23,7 +21,6 @@ class AppBarBottom extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final watchCounter = ref.watch(userPageCounter);
-    UserInfo user = provider.Provider.of<UserInfo>(context);
 
     void updatePage(int index, String route) {
       Navigator.pushNamed(context, route);
@@ -38,8 +35,6 @@ class AppBarBottom extends ConsumerWidget {
           IconButton(
             onPressed: () {
               updatePage(0, HomePage.id);
-              print(pb.authStore.token);
-              print(MediaQuery.sizeOf(context).height);
             },
             icon: Container(
               decoration: watchCounter.counter == 0 ? selected : null,

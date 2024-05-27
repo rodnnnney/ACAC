@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ColorTheme {
-  static const Color kBackGroundColorITMZ = Color(0xffEFEFEF);
-  static const Color kTextColorITMZ = Color(0xff2E2E2E);
+  ColorTheme(this.context);
 
-  static ThemeData get dark {
+  late BuildContext context;
+
+  ThemeData themeDataLight() {
+    return ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ));
+  }
+
+  ThemeData themeDataDark() {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context)
+          .textTheme
+          .apply(bodyColor: Colors.white, displayColor: Colors.white)),
     );
   }
 }
-
-// The color scheme reflects the platform's light or dark setting
-// which is retrieved with `MediaQuery.platformBrightnessOf`. The color
-// scheme's colors will be different for light and dark settings although
