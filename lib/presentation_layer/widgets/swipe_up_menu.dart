@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
@@ -18,6 +19,12 @@ class SwipeUpMenu extends ConsumerStatefulWidget {
 }
 
 class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
+  UserLocation location = UserLocation();
+
+  Future<LatLng> getLocation() async {
+    return await location.find();
+  }
+
   @override
   Widget build(BuildContext context) {
     final restaurantProvider = ref.watch(restaurant);
@@ -55,7 +62,7 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
                 return SwipeUpCard(
                   restaurant: restaurantProvider[index],
                   data: data,
-                  maps: maps,
+                  gmaps: maps,
                   nav: nav,
                 );
               },

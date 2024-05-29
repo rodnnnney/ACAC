@@ -71,7 +71,7 @@ List<restaurantCard> restaurantInfo = [
   restaurantCard(
     restaurantName: 'Dakogi',
     location: const LatLng(45.4278039812124, -75.69032978995092),
-    address: '280 Elgin St Apartment 3',
+    address: '280 Elgin St',
     imageSrc: 'images/PapaSpicy/papaSpicy.avif',
     imageLogo: 'images/PapaSpicy/papaSpicy.avif',
     hours: Time(

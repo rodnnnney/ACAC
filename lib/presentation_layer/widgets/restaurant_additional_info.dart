@@ -5,9 +5,11 @@ import 'package:googlemaptest/domain_layer/repository_interface/time_formatter.d
 import 'package:intl/intl.dart';
 
 class RestaurantAdditionalInfo extends StatelessWidget {
-  const RestaurantAdditionalInfo({super.key, required this.restaurant});
+  const RestaurantAdditionalInfo(
+      {super.key, required this.restaurant, required this.distance});
 
   final restaurantCard restaurant;
+  final String distance;
 
   String formatNumber(int number) {
     final formatter = NumberFormat('#,###');
@@ -108,9 +110,9 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text('Distance'), Text('Cuisine Type')],
+                      children: [Text(distance), Text('Cuisine Type')],
                     ),
                   ],
                 ),

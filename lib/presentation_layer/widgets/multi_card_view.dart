@@ -12,7 +12,7 @@ import 'package:googlemaptest/presentation_layer/state_management/riverpod/river
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 
-import 'maps.dart';
+import '../pages/maps.dart';
 
 class cardViewerHomePage extends ConsumerStatefulWidget {
   static String id = 'card_viewer';

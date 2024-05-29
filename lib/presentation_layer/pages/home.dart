@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
 import 'package:googlemaptest/common_layer/widgets/welcome_text.dart';
-import 'package:googlemaptest/presentation_layer/pages/multi_card_view.dart';
 import 'package:googlemaptest/presentation_layer/widgets/home_page_card.dart';
+import 'package:googlemaptest/presentation_layer/widgets/multi_card_view.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
@@ -25,219 +25,221 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-                left: 30, right: 30, bottom: 5, top: screenHeight * 0.08),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Welcome(),
-                // Text(
-                //   pb.authStore.model.data['name'],
-                //   style: const TextStyle(
-                //     fontSize: 25,
-                //     fontWeight: FontWeight.w500,
-                //   ),
-                // ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // const Text(
-                    //   'featured',
-                    //   style: TextStyle(fontSize: 24),
-                    // ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) =>
-                              const LinearGradient(colors: [
-                            Color(0xff14342B),
-                            Color(0xff60935D),
-                          ], stops: [
-                            0.1,
-                            0.9,
-                          ]).createShader(bounds),
-                          child: const Text(
-                            'featured',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            colors: [
-                              Color(0xff036D19),
-                              Color(0xff7EA172),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                  left: 30, right: 30, bottom: 5, top: screenHeight * 0.08),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Welcome(),
+                  // Text(
+                  //   pb.authStore.model.data['name'],
+                  //   style: const TextStyle(
+                  //     fontSize: 25,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // const Text(
+                      //   'featured',
+                      //   style: TextStyle(fontSize: 24),
+                      // ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) =>
+                                const LinearGradient(colors: [
+                              Color(0xff14342B),
                               Color(0xff60935D),
+                            ], stops: [
+                              0.1,
+                              0.9,
+                            ]).createShader(bounds),
+                            child: const Text(
+                              'featured',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          ShaderMask(
+                            shaderCallback: (bounds) => const LinearGradient(
+                              colors: [
+                                Color(0xff036D19),
+                                Color(0xff7EA172),
+                                Color(0xff60935D),
+                              ],
+                              // stops: [
+                              //   0.1,
+                              //   0.9,
+                              // ],
+                            ).createShader(bounds),
+                            child: Text(
+                              'items found: ${images.length}',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                          height: screenHeight * 0.19,
+                          child: PageView.builder(
+                              itemCount: images.length,
+                              itemBuilder: (context, index) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset(
+                                    images[index],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                );
+                              })),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) =>
+                                const LinearGradient(colors: [
+                              Color(0xff14342B),
+                              Color(0xff60935D),
+                              Color(0xffF3F9D2),
+                            ], stops: [
+                              0.1,
+                              0.9,
+                              1
+                            ]).createShader(bounds),
+                            child: const Text(
+                              'categories:',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              HomeCard(
+                                screenHeight: screenHeight,
+                                displayIMG: 'images/chinese2.png',
+                                text: 'chinese',
+                                flag: '🇨🇳',
+                                routeName:
+                                    (BuildContext context, String cuisineType) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    cardViewerHomePage.id,
+                                    arguments: 'Chinese',
+                                  );
+                                },
+                              ),
+                              HomeCard(
+                                screenHeight: screenHeight,
+                                displayIMG: 'images/viet.webp',
+                                text: 'vietnamese',
+                                flag: '🇻🇳',
+                                routeName:
+                                    (BuildContext context, String cuisineType) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    cardViewerHomePage.id,
+                                    arguments: cuisineType,
+                                  );
+                                },
+                              ),
+                              HomeCard(
+                                screenHeight: screenHeight,
+                                displayIMG: 'images/japan.avif',
+                                text: 'japanese',
+                                flag: '🇯🇵',
+                                routeName:
+                                    (BuildContext context, String cuisineType) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    cardViewerHomePage.id,
+                                    arguments: cuisineType,
+                                  );
+                                },
+                              )
                             ],
-                            // stops: [
-                            //   0.1,
-                            //   0.9,
-                            // ],
-                          ).createShader(bounds),
-                          child: Text(
-                            'items found: ${images.length}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                        height: screenHeight * 0.19,
-                        child: PageView.builder(
-                            itemCount: images.length,
-                            itemBuilder: (context, index) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset(
-                                  images[index],
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
-                              );
-                            })),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) =>
-                              const LinearGradient(colors: [
-                            Color(0xff14342B),
-                            Color(0xff60935D),
-                            Color(0xffF3F9D2),
-                          ], stops: [
-                            0.1,
-                            0.9,
-                            1
-                          ]).createShader(bounds),
-                          child: const Text(
-                            'categories:',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            HomeCard(
-                              screenHeight: screenHeight,
-                              displayIMG: 'images/chinese2.png',
-                              text: 'chinese',
-                              flag: '🇨🇳',
-                              routeName:
-                                  (BuildContext context, String cuisineType) {
-                                Navigator.pushNamed(
-                                  context,
-                                  cardViewerHomePage.id,
-                                  arguments: 'Chinese',
-                                );
-                              },
-                            ),
-                            // HomeCard(
-                            //   screenHeight: screenHeight,
-                            //   displayIMG: 'images/viet.webp',
-                            //   text: 'vietnamese',
-                            //   flag: '🇻🇳',
-                            //   routeName:
-                            //       (BuildContext context, String cuisineType) {
-                            //     Navigator.pushNamed(
-                            //       context,
-                            //       cardViewerHomePage.id,
-                            //       arguments: cuisineType,
-                            //     );
-                            //   },
-                            // ),
-                            HomeCard(
-                              screenHeight: screenHeight,
-                              displayIMG: 'images/japan.avif',
-                              text: 'japanese',
-                              flag: '🇯🇵',
-                              routeName:
-                                  (BuildContext context, String cuisineType) {
-                                Navigator.pushNamed(
-                                  context,
-                                  cardViewerHomePage.id,
-                                  arguments: cuisineType,
-                                );
-                              },
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            HomeCard(
-                              screenHeight: screenHeight,
-                              displayIMG: 'images/korean.jpeg',
-                              text: 'korean',
-                              flag: '🇰🇷',
-                              routeName:
-                                  (BuildContext context, String cuisineType) {
-                                Navigator.pushNamed(
-                                  context,
-                                  cardViewerHomePage.id,
-                                  arguments: 'Chinese',
-                                );
-                              },
-                            ),
-                            HomeCard(
-                              screenHeight: screenHeight,
-                              displayIMG: 'images/boba.webp',
-                              text: 'bubble tea',
-                              flag: '🧋',
-                              routeName:
-                                  (BuildContext context, String cuisineType) {
-                                Navigator.pushNamed(
-                                  context,
-                                  cardViewerHomePage.id,
-                                  arguments: cuisineType,
-                                );
-                              },
-                            ),
-                            HomeCard(
-                              screenHeight: screenHeight,
-                              displayIMG: 'images/club.webp',
-                              text: 'bars',
-                              flag: '🍷',
-                              routeName:
-                                  (BuildContext context, String cuisineType) {
-                                Navigator.pushNamed(
-                                  context,
-                                  cardViewerHomePage.id,
-                                  arguments: cuisineType,
-                                );
-                              },
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              HomeCard(
+                                screenHeight: screenHeight,
+                                displayIMG: 'images/korean.jpeg',
+                                text: 'korean',
+                                flag: '🇰🇷',
+                                routeName:
+                                    (BuildContext context, String cuisineType) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    cardViewerHomePage.id,
+                                    arguments: 'Chinese',
+                                  );
+                                },
+                              ),
+                              HomeCard(
+                                screenHeight: screenHeight,
+                                displayIMG: 'images/boba.webp',
+                                text: 'bubble tea',
+                                flag: '🧋',
+                                routeName:
+                                    (BuildContext context, String cuisineType) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    cardViewerHomePage.id,
+                                    arguments: cuisineType,
+                                  );
+                                },
+                              ),
+                              HomeCard(
+                                screenHeight: screenHeight,
+                                displayIMG: 'images/club.webp',
+                                text: 'bars',
+                                flag: '🍷',
+                                routeName:
+                                    (BuildContext context, String cuisineType) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    cardViewerHomePage.id,
+                                    arguments: cuisineType,
+                                  );
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: AppBarBottom(
         id: id,

@@ -5,7 +5,7 @@ import 'package:googlemaptest/domain_layer/use_cases/welcome.dart';
 import 'package:googlemaptest/presentation_layer/pages/account.dart';
 import 'package:googlemaptest/presentation_layer/pages/home.dart';
 import 'package:googlemaptest/presentation_layer/pages/maps.dart';
-import 'package:googlemaptest/presentation_layer/pages/multi_card_view.dart';
+import 'package:googlemaptest/presentation_layer/widgets/multi_card_view.dart';
 
 final appRoutes = <String, WidgetBuilder>{
   WelcomeScreen.id: (context) => const WelcomeScreen(),
