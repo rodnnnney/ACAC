@@ -1,6 +1,6 @@
 {
-    "name": "googlemaptest",
-    "short_name": "googlemaptest",
+  "name": "acacmobile",
+  "short_name": "acacmobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

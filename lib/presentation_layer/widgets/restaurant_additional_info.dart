@@ -1,14 +1,14 @@
+import 'package:acacmobile/common_layer/widgets/start_builder.dart';
+import 'package:acacmobile/domain_layer/repository_interface/cards.dart';
+import 'package:acacmobile/domain_layer/repository_interface/time_formatter.dart';
+import 'package:acacmobile/presentation_layer/pages/maps.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/common_layer/widgets/start_builder.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/cards.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/time_formatter.dart';
-import 'package:googlemaptest/presentation_layer/pages/maps.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:provider/provider.dart' as legacy_provider;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart' as legacy_provider;
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantAdditionalInfo extends StatelessWidget {

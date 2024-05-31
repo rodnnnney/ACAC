@@ -1,7 +1,7 @@
+import 'package:acacmobile/domain_layer/repository_interface/cards.dart';
+import 'package:acacmobile/domain_layer/repository_interface/start_stop.dart';
+import 'package:acacmobile/domain_layer/repository_interface/times.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/cards.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/start_stop.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/times.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 List<restaurantCard> restaurantInfo = [

@@ -1,8 +1,8 @@
+import 'package:acacmobile/presentation_layer/pages/account.dart';
+import 'package:acacmobile/presentation_layer/pages/home.dart';
+import 'package:acacmobile/presentation_layer/pages/maps.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/presentation_layer/pages/account.dart';
-import 'package:googlemaptest/presentation_layer/pages/home.dart';
-import 'package:googlemaptest/presentation_layer/pages/maps.dart';
-import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 

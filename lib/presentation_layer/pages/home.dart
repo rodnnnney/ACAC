@@ -1,9 +1,9 @@
+import 'package:acacmobile/common_layer/widgets/app_bar.dart';
+import 'package:acacmobile/common_layer/widgets/welcome_text.dart';
+import 'package:acacmobile/domain_layer/local_db/sort_by_country.dart';
+import 'package:acacmobile/domain_layer/local_db/sort_by_food_type.dart';
+import 'package:acacmobile/presentation_layer/widgets/home_page_card.dart';
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
-import 'package:googlemaptest/common_layer/widgets/welcome_text.dart';
-import 'package:googlemaptest/domain_layer/local_db/sort_by_country.dart';
-import 'package:googlemaptest/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:googlemaptest/presentation_layer/widgets/home_page_card.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
@@ -24,8 +24,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final List<HomeCard> countrySort = ref.read(sortByCountry);
-
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(

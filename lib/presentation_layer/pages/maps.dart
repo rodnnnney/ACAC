@@ -1,14 +1,14 @@
+import 'package:acacmobile/common_layer/widgets/app_bar.dart';
+import 'package:acacmobile/domain_layer/repository_interface/location.dart';
+import 'package:acacmobile/domain_layer/repository_interface/markers.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:acacmobile/presentation_layer/widgets/info_card.dart';
+import 'package:acacmobile/presentation_layer/widgets/swipe_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/markers.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
-import 'package:googlemaptest/presentation_layer/widgets/info_card.dart';
-import 'package:googlemaptest/presentation_layer/widgets/swipe_up_menu.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 

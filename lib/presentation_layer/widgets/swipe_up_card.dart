@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:acacmobile/domain_layer/repository_interface/cards.dart';
+import 'package:acacmobile/domain_layer/repository_interface/time_formatter.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/userLocation.dart';
+import 'package:acacmobile/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/cards.dart';
-import 'package:googlemaptest/domain_layer/repository_interface/time_formatter.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:googlemaptest/presentation_layer/state_management/riverpod/userLocation.dart';
-import 'package:googlemaptest/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SwipeUpCard extends ConsumerStatefulWidget {

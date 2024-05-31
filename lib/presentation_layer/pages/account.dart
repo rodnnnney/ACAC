@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
-import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:acacmobile/common_layer/widgets/app_bar.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountInfo extends ConsumerWidget {
