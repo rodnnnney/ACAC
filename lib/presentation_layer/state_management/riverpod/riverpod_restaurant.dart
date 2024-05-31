@@ -26,9 +26,16 @@ List<restaurantCard> restaurantInfo = [
     discounts: ['10% off dine in'],
     phoneNumber: '(613)565-8138',
     discountPercent: 10,
-    topRatedItemsImgSrc: [],
+    topRatedItemsImgSrc: [
+      'images/Kinton/ramen1.webp',
+      'images/Kinton/ramen2.webp',
+      'images/Kinton/ramen2.webp'
+    ],
     topRatedItemsPrice: [],
-    topRatedItemsName: [],
+    topRatedItemsName: ['Pork Original', 'Beef Original', 'Pork Shoyu'],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Friends&KTV ',
@@ -54,6 +61,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Chatime',
@@ -79,6 +89,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Dakogi',
@@ -104,6 +117,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Dakogi',
@@ -129,6 +145,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Gongfu Bao',
@@ -155,6 +174,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Hot Star Chicken',
@@ -180,6 +202,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'La Noodle',
@@ -205,6 +230,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Oriental house',
@@ -232,6 +260,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Pho Lady',
@@ -257,6 +288,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Pomelo Hat',
@@ -282,6 +316,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Shuyi Tealicious',
@@ -307,6 +344,9 @@ List<restaurantCard> restaurantInfo = [
     topRatedItemsImgSrc: [],
     topRatedItemsPrice: [],
     topRatedItemsName: [],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
   restaurantCard(
     restaurantName: 'Fuwa Fuwa',
@@ -334,6 +374,9 @@ List<restaurantCard> restaurantInfo = [
     ],
     topRatedItemsPrice: [],
     topRatedItemsName: ['Blueberry Cheese'],
+    gMapsLink:
+        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+    websiteLink: 'https://www.kintonramen.com/menu/',
   ),
 ];
 

@@ -156,10 +156,12 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                         children: [
                           Text(
                             widget.restaurant.address,
-                            style: const TextStyle(fontSize: 10),
+                            style: const TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 5),
                       Text(
                         getHours(),
                         style: TextStyle(
@@ -175,9 +177,6 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      const SizedBox(width: 7),
-                      Text(
-                          '${widget.restaurant.hours.getTodayStartStop().startTime} - ${widget.restaurant.hours.getTodayStartStop().endTime}'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

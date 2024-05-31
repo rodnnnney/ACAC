@@ -86,6 +86,28 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             scrollGesturesEnabled: true,
           ),
           infoCard(nav.travelTime),
+          Positioned(
+              top: 65,
+              left: 20,
+              child: InkWell(
+                onTap: () => Navigator.of(context).pop(),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: const [
+                        BoxShadow(
+                            blurRadius: 6,
+                            color: Colors.black26,
+                            spreadRadius: 1),
+                      ]),
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                ),
+              ))
         ],
       ),
       floatingActionButton: FloatingActionButton(

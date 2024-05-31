@@ -78,6 +78,10 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
     NavInfo nav = provider.Provider.of<NavInfo>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(widget.cuisineType),
         actions: [
           Padding(
@@ -120,14 +124,13 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                 filteredRestaurants[index].location.latitude,
                 filteredRestaurants[index].location.longitude);
             var decodedJson = jsonDecode(url);
-
             String distance =
                 decodedJson['routes'][0]['legs'][0]['distance']['text'];
             return distance;
           }
 
           return Container(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: const BoxDecoration(color: Colors.transparent),
             margin: const EdgeInsets.all(15),
             child: GestureDetector(
               onTap: () async {

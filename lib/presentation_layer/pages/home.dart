@@ -28,150 +28,154 @@ class HomePage extends StatelessWidget {
 
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                  left: 30, right: 30, bottom: 5, top: screenHeight * 0.08),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Welcome(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ShaderMask(
-                            shaderCallback: (bounds) =>
-                                const LinearGradient(colors: [
-                              Color(0xff14342B),
-                              Color(0xff60935D),
-                            ], stops: [
-                              0.1,
-                              0.9,
-                            ]).createShader(bounds),
-                            child: const Text(
-                              'featured',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ShaderMask(
-                            shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                Color(0xff036D19),
-                                Color(0xff7EA172),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                    left: 20, right: 20, bottom: 5, top: screenHeight * 0.08),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Welcome(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ShaderMask(
+                              shaderCallback: (bounds) =>
+                                  const LinearGradient(colors: [
+                                Color(0xff14342B),
                                 Color(0xff60935D),
-                              ],
-                            ).createShader(bounds),
-                            child: Text(
-                              'items found: ${images.length}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                              ], stops: [
+                                0.1,
+                                0.9,
+                              ]).createShader(bounds),
+                              child: const Text(
+                                'featured',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
+                            ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [
+                                  Color(0xff036D19),
+                                  Color(0xff7EA172),
+                                  Color(0xff60935D),
+                                ],
+                              ).createShader(bounds),
+                              child: Text(
+                                'items found: ${images.length}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                            height: screenHeight * 0.19,
+                            child: PageView.builder(
+                                itemCount: images.length,
+                                itemBuilder: (context, index) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.asset(
+                                      images[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  );
+                                })),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ShaderMask(
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            Color(0xff14342B),
+                            Color(0xff60935D),
+                            Color(0xffF3F9D2),
+                          ], stops: [
+                            0.1,
+                            0.9,
+                            1
+                          ]).createShader(bounds),
+                          child: const Text(
+                            'Country:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                          height: screenHeight * 0.19,
-                          child: PageView.builder(
-                              itemCount: images.length,
-                              itemBuilder: (context, index) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset(
-                                    images[index],
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  ),
-                                );
-                              })),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ShaderMask(
-                        shaderCallback: (bounds) =>
-                            const LinearGradient(colors: [
-                          Color(0xff14342B),
-                          Color(0xff60935D),
-                          Color(0xffF3F9D2),
-                        ], stops: [
-                          0.1,
-                          0.9,
-                          1
-                        ]).createShader(bounds),
-                        child: const Text(
-                          'Country:',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.2,
-                        // Set appropriate height for GridView
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: sortByCountry.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return HomeCard(
-                                displayIMG: sortByCountry[index].displayIMG,
-                                text: sortByCountry[index].text,
-                                routeName: sortByCountry[index].routeName);
-                          },
+                        SizedBox(
+                          height: screenHeight * 0.2,
+                          // Set appropriate height for GridView
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: sortByCountry.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return HomeCard(
+                                  displayIMG: sortByCountry[index].displayIMG,
+                                  text: sortByCountry[index].text,
+                                  routeName: sortByCountry[index].routeName);
+                            },
+                          ),
                         ),
-                      ),
-                      ShaderMask(
-                        shaderCallback: (bounds) =>
-                            const LinearGradient(colors: [
-                          Color(0xff14342B),
-                          Color(0xff60935D),
-                          Color(0xffF3F9D2),
-                        ], stops: [
-                          0.1,
-                          0.9,
-                          1
-                        ]).createShader(bounds),
-                        child: const Text(
-                          'Food Type:',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ShaderMask(
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            Color(0xff14342B),
+                            Color(0xff60935D),
+                            Color(0xffF3F9D2),
+                          ], stops: [
+                            0.1,
+                            0.9,
+                            1
+                          ]).createShader(bounds),
+                          child: const Text(
+                            'Food Type:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.2,
-                        // Set appropriate height for GridView
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: sortByFoodType.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return HomeCard(
-                                displayIMG: sortByCountry[index].displayIMG,
-                                text: sortByFoodType[index].text,
-                                routeName: sortByFoodType[index].routeName);
-                          },
+                        SizedBox(
+                          height: screenHeight * 0.2,
+                          // Set appropriate height for GridView
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: sortByFoodType.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return HomeCard(
+                                  displayIMG: sortByCountry[index].displayIMG,
+                                  text: sortByFoodType[index].text,
+                                  routeName: sortByFoodType[index].routeName);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: AppBarBottom(
@@ -179,4 +183,15 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+class CustomScrollPhysics extends BouncingScrollPhysics {
+  const CustomScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
+
+  @override
+  SpringDescription get spring => SpringDescription(
+        mass: 80, // Mass of the spring (default is 0.5)
+        stiffness: 100, // Stiffness of the spring (default is 100)
+        damping: 1, // Damping (default is 1.0)
+      );
 }

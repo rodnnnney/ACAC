@@ -15,6 +15,8 @@ class restaurantCard {
   late List<String> discounts;
   late int discountPercent;
   late String phoneNumber;
+  late String gMapsLink;
+  late String websiteLink;
   late List<String> topRatedItemsImgSrc;
   late List<String> topRatedItemsName;
   late List<double> topRatedItemsPrice;
@@ -31,6 +33,8 @@ class restaurantCard {
       required this.cuisineType,
       required this.discounts,
       required this.phoneNumber,
+      required this.gMapsLink,
+      required this.websiteLink,
       required this.discountPercent,
       required this.topRatedItemsImgSrc,
       required this.topRatedItemsName,
