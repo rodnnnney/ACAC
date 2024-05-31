@@ -44,6 +44,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //final userLocation1 = ref.read(userLocationProvider1);
     return Scaffold(
       body: isLocationLoaded
           ? buildMap()

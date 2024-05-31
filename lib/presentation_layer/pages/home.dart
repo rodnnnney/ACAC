@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:googlemaptest/common_layer/widgets/app_bar.dart';
 import 'package:googlemaptest/common_layer/widgets/welcome_text.dart';
+import 'package:googlemaptest/domain_layer/local_db/sort_by_country.dart';
+import 'package:googlemaptest/domain_layer/local_db/sort_by_food_type.dart';
 import 'package:googlemaptest/presentation_layer/widgets/home_page_card.dart';
-import 'package:googlemaptest/presentation_layer/widgets/multi_card_view.dart';
 
 class HomePage extends StatelessWidget {
   static String id = 'home_screen';
@@ -23,6 +24,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final List<HomeCard> countrySort = ref.read(sortByCountry);
+
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
@@ -36,23 +39,12 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Welcome(),
-                  // Text(
-                  //   pb.authStore.model.data['name'],
-                  //   style: const TextStyle(
-                  //     fontSize: 25,
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // ),
                   const SizedBox(
                     height: 20,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // const Text(
-                      //   'featured',
-                      //   style: TextStyle(fontSize: 24),
-                      // ),
                       const SizedBox(
                         height: 15,
                       ),
@@ -82,10 +74,6 @@ class HomePage extends StatelessWidget {
                                 Color(0xff7EA172),
                                 Color(0xff60935D),
                               ],
-                              // stops: [
-                              //   0.1,
-                              //   0.9,
-                              // ],
                             ).createShader(bounds),
                             child: Text(
                               'items found: ${images.length}',
@@ -116,123 +104,68 @@ class HomePage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ShaderMask(
-                            shaderCallback: (bounds) =>
-                                const LinearGradient(colors: [
-                              Color(0xff14342B),
-                              Color(0xff60935D),
-                              Color(0xffF3F9D2),
-                            ], stops: [
-                              0.1,
-                              0.9,
-                              1
-                            ]).createShader(bounds),
-                            child: const Text(
-                              'categories:',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              HomeCard(
-                                screenHeight: screenHeight,
-                                displayIMG: 'images/chinese2.png',
-                                text: 'chinese',
-                                flag: '🇨🇳',
-                                routeName:
-                                    (BuildContext context, String cuisineType) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    cardViewerHomePage.id,
-                                    arguments: 'Chinese',
-                                  );
-                                },
-                              ),
-                              HomeCard(
-                                screenHeight: screenHeight,
-                                displayIMG: 'images/viet.webp',
-                                text: 'vietnamese',
-                                flag: '🇻🇳',
-                                routeName:
-                                    (BuildContext context, String cuisineType) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    cardViewerHomePage.id,
-                                    arguments: cuisineType,
-                                  );
-                                },
-                              ),
-                              HomeCard(
-                                screenHeight: screenHeight,
-                                displayIMG: 'images/japan.avif',
-                                text: 'japanese',
-                                flag: '🇯🇵',
-                                routeName:
-                                    (BuildContext context, String cuisineType) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    cardViewerHomePage.id,
-                                    arguments: cuisineType,
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              HomeCard(
-                                screenHeight: screenHeight,
-                                displayIMG: 'images/korean.jpeg',
-                                text: 'korean',
-                                flag: '🇰🇷',
-                                routeName:
-                                    (BuildContext context, String cuisineType) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    cardViewerHomePage.id,
-                                    arguments: 'Chinese',
-                                  );
-                                },
-                              ),
-                              HomeCard(
-                                screenHeight: screenHeight,
-                                displayIMG: 'images/boba.webp',
-                                text: 'bubble tea',
-                                flag: '🧋',
-                                routeName:
-                                    (BuildContext context, String cuisineType) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    cardViewerHomePage.id,
-                                    arguments: cuisineType,
-                                  );
-                                },
-                              ),
-                              HomeCard(
-                                screenHeight: screenHeight,
-                                displayIMG: 'images/club.webp',
-                                text: 'bars',
-                                flag: '🍷',
-                                routeName:
-                                    (BuildContext context, String cuisineType) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    cardViewerHomePage.id,
-                                    arguments: cuisineType,
-                                  );
-                                },
-                              )
-                            ],
-                          )
-                        ],
-                      )
+                      ShaderMask(
+                        shaderCallback: (bounds) =>
+                            const LinearGradient(colors: [
+                          Color(0xff14342B),
+                          Color(0xff60935D),
+                          Color(0xffF3F9D2),
+                        ], stops: [
+                          0.1,
+                          0.9,
+                          1
+                        ]).createShader(bounds),
+                        child: const Text(
+                          'Country:',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenHeight * 0.2,
+                        // Set appropriate height for GridView
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: sortByCountry.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return HomeCard(
+                                displayIMG: sortByCountry[index].displayIMG,
+                                text: sortByCountry[index].text,
+                                routeName: sortByCountry[index].routeName);
+                          },
+                        ),
+                      ),
+                      ShaderMask(
+                        shaderCallback: (bounds) =>
+                            const LinearGradient(colors: [
+                          Color(0xff14342B),
+                          Color(0xff60935D),
+                          Color(0xffF3F9D2),
+                        ], stops: [
+                          0.1,
+                          0.9,
+                          1
+                        ]).createShader(bounds),
+                        child: const Text(
+                          'Food Type:',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenHeight * 0.2,
+                        // Set appropriate height for GridView
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: sortByFoodType.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return HomeCard(
+                                displayIMG: sortByCountry[index].displayIMG,
+                                text: sortByFoodType[index].text,
+                                routeName: sortByFoodType[index].routeName);
+                          },
+                        ),
+                      ),
                     ],
                   )
                 ],
@@ -247,55 +180,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-// 21 Total Restaurants
-
-// Pomelo Hat || Bubble Tea
-// Chatime Chinatown || Bubble Tea
-// Hangout Bubble Tea || Bubble Tea
-// Shuyi tea Merivale || Bubble Tea
-
-// Dakgogi || Korean
-
-// Parle || Viet
-// pho bo ga king || Viet
-// Pho Lady || Viet
-// Yes Mama Kitchen || Viet
-
-// Oriental House || Chinese
-// Papa Spicy || Chinese
-// La Noodle Clyde || Chinese
-// Hot Star Large Fried Chicken || Chinese
-// Meet Noodle || Chinese
-// Friends Restaurant || Chinese
-// gongfu bao || Chinese
-// Dumpling Bowl || Chinese
-
-// 1383 Club Karaoke Bar || Bar
-
-// Kirimaki Sushi || Japanese
-// Kinton Ramen || Japanese
-
-// Bun Bun Bakeshop || Bakery
-
-// 10% drinks
-// 10% off OR free item with $20+ purchase
-// 10% off on $30+ purchase
-// 10% off
-// 20% off
-// 10% off + karaoke deals
-// 15% off
-// 10% off OR free gyoza/takoyaki $40+
-// 10% off OR free fries $40+
-// 10% off
-// 10% off
-// 5% credit, 15% cash
-// 10% off
-// 10% off
-// free item on $20+
-// 10% off
-// 10% credit, 15% cash
-// 10% off
-// 10% off
-// 10% off
-// 10% off

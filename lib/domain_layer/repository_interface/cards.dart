@@ -10,10 +10,14 @@ class restaurantCard {
   late String imageLogo;
   late Time hours;
   late double rating;
-  late String cuisineType;
+  late List<String> cuisineType;
   late int reviewNum;
   late List<String> discounts;
+  late int discountPercent;
   late String phoneNumber;
+  late List<String> topRatedItemsImgSrc;
+  late List<String> topRatedItemsName;
+  late List<double> topRatedItemsPrice;
 
   restaurantCard(
       {required this.restaurantName,
@@ -26,5 +30,9 @@ class restaurantCard {
       required this.reviewNum,
       required this.cuisineType,
       required this.discounts,
-      required this.phoneNumber});
+      required this.phoneNumber,
+      required this.discountPercent,
+      required this.topRatedItemsImgSrc,
+      required this.topRatedItemsName,
+      required this.topRatedItemsPrice});
 }

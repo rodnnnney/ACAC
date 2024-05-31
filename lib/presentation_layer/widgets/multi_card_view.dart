@@ -5,27 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/cards.dart';
 import 'package:googlemaptest/domain_layer/repository_interface/location.dart';
+import 'package:googlemaptest/domain_layer/repository_interface/time_formatter.dart';
+import 'package:googlemaptest/presentation_layer/pages/home.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:googlemaptest/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:googlemaptest/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
+import 'package:googlemaptest/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 
 import '../pages/maps.dart';
 
-class cardViewerHomePage extends ConsumerStatefulWidget {
-  static String id = 'card_viewer';
+class CardViewerHomePage extends ConsumerStatefulWidget {
+  static const String id = 'card_viewer';
 
-  late String cuisineType;
+  late final String cuisineType;
 
-  cardViewerHomePage({super.key, required this.cuisineType});
+  CardViewerHomePage({super.key, required this.cuisineType});
 
   @override
-  ConsumerState<cardViewerHomePage> createState() => CardViewerHomePageState();
+  ConsumerState<CardViewerHomePage> createState() => CardViewerHomePageState();
 }
 
-class CardViewerHomePageState extends ConsumerState<cardViewerHomePage> {
+class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
 
@@ -45,25 +48,48 @@ class CardViewerHomePageState extends ConsumerState<cardViewerHomePage> {
   @override
   Widget build(BuildContext context) {
     final restaurantProvider = ref.read(restaurant);
-
-    PolyInfo maps = provider.Provider.of<PolyInfo>(context);
-    Restaurant data = provider.Provider.of<Restaurant>(context);
-    NavInfo nav = provider.Provider.of<NavInfo>(context);
     List<restaurantCard> filteredRestaurants = restaurantProvider
-        .where((card) => card.cuisineType == widget.cuisineType)
+        .where((card) => card.cuisineType.contains(widget.cuisineType))
         .toList();
 
     return Scaffold(
+      body: SafeArea(
+        child: filteredRestaurants.isEmpty
+            ? Center(
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('No restaurants of the cuisine available!'),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, HomePage.id);
+                      },
+                      child: const Text('Go back'))
+                ],
+              ))
+            : buildList(filteredRestaurants),
+      ),
+    );
+  }
+
+  Widget buildList(List<restaurantCard> filteredRestaurants) {
+    PolyInfo maps = provider.Provider.of<PolyInfo>(context);
+    Restaurant data = provider.Provider.of<Restaurant>(context);
+    NavInfo nav = provider.Provider.of<NavInfo>(context);
+    return Scaffold(
       appBar: AppBar(
-        title: Text(filteredRestaurants[0].cuisineType),
+        title: Text(widget.cuisineType),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 20),
-              child:
-                  Text('${filteredRestaurants.length.toString()} items found')),
+              child: filteredRestaurants.length == 1
+                  ? Text('${filteredRestaurants.length.toString()} item found')
+                  : Text(
+                      '${filteredRestaurants.length.toString()} items found')),
         ],
       ),
       body: ListView.builder(
+        itemCount: filteredRestaurants.length,
         itemBuilder: (BuildContext context, int index) {
           String getHours() {
             DateTime now = DateTime.now();
@@ -101,9 +127,21 @@ class CardViewerHomePageState extends ConsumerState<cardViewerHomePage> {
           }
 
           return Container(
-            // decoration: BoxDecoration(color: Colors.white),
+            decoration: const BoxDecoration(color: Colors.white),
             margin: const EdgeInsets.all(15),
-            child: Container(
+            child: GestureDetector(
+              onTap: () async {
+                String distance = await getDistance();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RestaurantAdditionalInfo(
+                      restaurant: filteredRestaurants[index],
+                      distance: distance,
+                    ),
+                  ),
+                );
+              },
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -157,6 +195,39 @@ class CardViewerHomePageState extends ConsumerState<cardViewerHomePage> {
                               ),
                               Text(
                                 getHours(),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              FutureBuilder<Map<String, dynamic>>(
+                                future: getCurrentStatusWithColor(
+                                    filteredRestaurants[index]
+                                        .hours
+                                        .getTodayStartStop()
+                                        .startTime,
+                                    filteredRestaurants[index]
+                                        .hours
+                                        .getTodayStartStop()
+                                        .endTime),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    var status = snapshot.data?['status'] ??
+                                        'Unknown status';
+                                    var color =
+                                        snapshot.data?['color'] ?? Colors.black;
+                                    return Text(
+                                      status,
+                                      style: TextStyle(color: color),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    );
+                                  }
+                                },
                               ),
                             ],
                           )
@@ -227,7 +298,6 @@ class CardViewerHomePageState extends ConsumerState<cardViewerHomePage> {
             ),
           );
         },
-        itemCount: filteredRestaurants.length,
       ),
     );
   }

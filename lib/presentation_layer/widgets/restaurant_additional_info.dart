@@ -21,118 +21,128 @@ class RestaurantAdditionalInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Image.asset(
-                restaurant.imageSrc,
-                height: MediaQuery.sizeOf(context).height * 0.2,
-                width: double.infinity,
-                fit: BoxFit.fitWidth,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              restaurant.restaurantName,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
-                            ),
-                            // Horizontal black line
-                            Text('-' *
-                                (restaurant.restaurantName.length * 1.5)
-                                    .toInt()),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(restaurant.address),
-                            Row(
-                              children: [
-                                FutureBuilder<Map<String, dynamic>>(
-                                  future: getCurrentStatusWithColor(
-                                      restaurant.hours
-                                          .getTodayStartStop()
-                                          .startTime,
-                                      restaurant.hours
-                                          .getTodayStartStop()
-                                          .endTime),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    } else if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      var status = snapshot.data?['status'] ??
-                                          'Unknown status';
-                                      var color = snapshot.data?['color'] ??
-                                          Colors.black;
-                                      return Text(
-                                        status,
-                                        style: TextStyle(color: color),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      );
-                                    }
-                                  },
-                                ),
-                                const SizedBox(width: 7),
-                                Text(
-                                    '${restaurant.hours.getTodayStartStop().startTime} - ${restaurant.hours.getTodayStartStop().endTime}')
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                buildStarRating(restaurant.rating),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Text(restaurant.rating.toString()),
-                              ],
-                            ),
-                            Text(
-                                '${formatNumber(restaurant.reviewNum)} + ratings'),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text(distance), Text('Cuisine Type')],
-                    ),
-                  ],
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2), // changes position of shadow
                 ),
-              ),
-            ],
+              ],
+            ),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 24, // Size of the icon
+            ),
           ),
-          Positioned(
-            top: 20,
-            left: 20,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.all(10),
-                child: const Icon(Icons.arrow_back, color: Colors.black),
+        ),
+      ),
+      body: Column(
+        children: [
+          Image.asset(
+            restaurant.imageSrc,
+            height: MediaQuery.of(context).size.height * 0.3,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            restaurant.restaurantName,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
+                          // Horizontal black line
+                          Text('-' *
+                              (restaurant.restaurantName.length * 1.5).toInt()),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(restaurant.address),
+                          Row(
+                            children: [
+                              FutureBuilder<Map<String, dynamic>>(
+                                future: getCurrentStatusWithColor(
+                                    restaurant.hours
+                                        .getTodayStartStop()
+                                        .startTime,
+                                    restaurant.hours
+                                        .getTodayStartStop()
+                                        .endTime),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    var status = snapshot.data?['status'] ??
+                                        'Unknown status';
+                                    var color =
+                                        snapshot.data?['color'] ?? Colors.black;
+                                    return Text(
+                                      status,
+                                      style: TextStyle(color: color),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    );
+                                  }
+                                },
+                              ),
+                              const SizedBox(width: 7),
+                              Text(
+                                  '${restaurant.hours.getTodayStartStop().startTime} - ${restaurant.hours.getTodayStartStop().endTime}')
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              buildStarRating(restaurant.rating),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Text(restaurant.rating.toString()),
+                            ],
+                          ),
+                          Text(
+                              '${formatNumber(restaurant.reviewNum)} + ratings'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [Text(distance), Text(restaurant.cuisineType[0])],
+                  ),
+                ],
               ),
             ),
           ),

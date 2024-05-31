@@ -65,7 +65,6 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
       String url = await widget.gmaps.createHttpUrl(user.latitude,
           user.longitude, restaurant.latitude, restaurant.longitude);
       var decodedJson = jsonDecode(url);
-
       String distance = decodedJson['routes'][0]['legs'][0]['distance']['text'];
       return distance;
     }
@@ -176,6 +175,9 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
+                      const SizedBox(width: 7),
+                      Text(
+                          '${widget.restaurant.hours.getTodayStartStop().startTime} - ${widget.restaurant.hours.getTodayStartStop().endTime}'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

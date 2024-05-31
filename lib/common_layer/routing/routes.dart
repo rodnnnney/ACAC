@@ -14,7 +14,7 @@ final appRoutes = <String, WidgetBuilder>{
   MapScreen.id: (context) => MapScreen(),
   HomePage.id: (context) => HomePage(),
   AccountInfo.id: (context) => AccountInfo(),
-  cardViewerHomePage.id: (context) => cardViewerHomePage(
+  CardViewerHomePage.id: (context) => CardViewerHomePage(
         cuisineType: ModalRoute.of(context)!.settings.arguments as String,
       ),
 };
