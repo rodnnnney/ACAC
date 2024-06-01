@@ -2,17 +2,17 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 
 class Welcome extends StatelessWidget {
-  DateTime now = DateTime.now();
+  final DateTime now = DateTime.now();
   static const kWelcomeText = TextStyle(
       fontFamily: 'Comforts',
-      fontSize: 20,
-      fontWeight: FontWeight.w900,
+      fontSize: 18,
+      fontWeight: FontWeight.w800,
       color: Color(0xFF588157));
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 25,
       child: AnimatedTextKit(
         animatedTexts: [
           TypewriterAnimatedText(

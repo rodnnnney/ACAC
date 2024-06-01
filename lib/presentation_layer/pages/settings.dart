@@ -1,7 +1,10 @@
+import 'package:acacmobile/common_layer/widgets/app_bar.dart';
+import 'package:acacmobile/common_layer/widgets/confirm_quit.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:acacmobile/common_layer/widgets/app_bar.dart';
-import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountInfo extends ConsumerWidget {
@@ -11,6 +14,33 @@ class AccountInfo extends ConsumerWidget {
   String feedbackText = '';
   final TextEditingController _controller = TextEditingController();
   bool isSwitched = false;
+
+  String email = '';
+  String name = '';
+
+  Future<void> signOutCurrentUser() async {
+    final result = await Amplify.Auth.signOut();
+    if (result is CognitoCompleteSignOut) {
+      safePrint('Sign out completed successfully');
+    } else if (result is CognitoFailedSignOut) {
+      safePrint('Error signing user out: ${result.exception.message}');
+    }
+  }
+
+  Future<void> fetchUserInfo() async {
+    try {
+      final result = await Amplify.Auth.fetchUserAttributes();
+      for (final element in result) {
+        if (element.userAttributeKey.toString() == 'email') {
+          email = element.value.toString();
+        } else if (element.userAttributeKey.toString() == 'name') {
+          name = element.value.toString();
+        }
+      }
+    } on AuthException catch (e) {
+      safePrint('Error fetching user attributes: ${e.message}');
+    }
+  }
 
   Center text() {
     return Center(
@@ -37,7 +67,29 @@ class AccountInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // UserInfo user = Provider.of<UserInfo>(context);
+    return Scaffold(
+      body: FutureBuilder(
+        future: fetchUserInfo(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error'),
+              );
+            } else {
+              return buildLayout(context, ref);
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildLayout(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Account Settings'),
@@ -53,14 +105,17 @@ class AccountInfo extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Email',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text('Email@email.com')
+                          Text(
+                            email,
+                            overflow: TextOverflow.ellipsis,
+                          )
                         ],
                       ),
                       const Spacer(),
@@ -201,101 +256,45 @@ class AccountInfo extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  // ShadInputFormField(
-                  //   label: Text(
-                  //     'Feedback',
-                  //     style: TextStyle(
-                  //         color: ref.watch(darkLight).theme
-                  //             ? Colors.white
-                  //             : Colors.black),
-                  //   ),
-                  //   placeholder:
-                  //       const Text('Name a feature you wish this app had!'),
-                  //   controller: _controller,
-                  //   onChanged: (value) {
-                  //     feedbackText = value;
-                  //   },
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     // ShadButton(
-                  //     //   onPressed: () {
-                  //     //     if (feedbackText.isEmpty) {
-                  //     //       ShadToaster.of(context).show(
-                  //     //         const ShadToast.destructive(
-                  //     //           title: Text('Uh oh, somethings not right'),
-                  //     //           description: Text(
-                  //     //               'Please enter something in feedback box'),
-                  //     //         ),
-                  //     //       );
-                  //     //     } else {
-                  //     //    user.sendFeedBack(feedbackText, user.email).then(
-                  //     //             (value) => ShadToaster.of(context).show(
-                  //     //               ShadToast(
-                  //     //                 backgroundColor: const Color(0xffBEE7B8),
-                  //     //                 title: const Text('Message Sent!'),
-                  //     //                 description: const Text(
-                  //     //                     'Thank you for your feedback🫡'),
-                  //     //                 action: ShadButton.outline(
-                  //     //                     text: const Text(
-                  //     //                       'Close',
-                  //     //                       style:
-                  //     //                           TextStyle(color: Colors.black),
-                  //     //                     ),
-                  //     //                     onPressed: () {
-                  //     //                       ShadToaster.of(context).hide();
-                  //     //                     }),
-                  //     //               ),
-                  //     //             ),
-                  //     //           );
-                  //     //     }
-                  //     //     _controller.clear();
-                  //     //   },
-                  //     //   gradient: const LinearGradient(colors: [
-                  //     //     Colors.greenAccent,
-                  //     //     Colors.cyan,
-                  //     //   ]),
-                  //     //   shadows: [
-                  //     //     BoxShadow(
-                  //     //       color: Colors.blue.withOpacity(.4),
-                  //     //       spreadRadius: 4,
-                  //     //       blurRadius: 10,
-                  //     //       offset: const Offset(0, 2),
-                  //     //     ),
-                  //     //   ],
-                  //     //   text: const Text('Submit'),
-                  //     // ),
-                  //     // Row(
-                  //     //   children: [
-                  //     //     const Text('Send Anonymously'),
-                  //     //     Switch(
-                  //     //       value: isSwitched,
-                  //     //       onChanged: (value) {
-                  //     //         // setState(
-                  //     //         //       () {
-                  //     //         //     isSwitched = value;
-                  //     //         //   },
-                  //     //         // );
-                  //     //       },
-                  //     //     ),
-                  //     //   ],
-                  //     // ),
-                  //   ],
-                  // ),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ConfirmQuit(
+                                  destination: signOutCurrentUser,
+                                  title: 'Confirm Sign Out',
+                                  subtitle:
+                                      'Are you sure you want to sign out?',
+                                  actionButton: 'Sign Out',
+                                );
+                              });
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                  color: Colors.red,
+                                  width: 1.0), // Border color and width
+                            ),
+                          ),
+                        ),
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const Spacer(),
-            const Spacer(),
-            // ShadButton.destructive(
-            //   text: const Text('Logout'),
-            //   onPressed: () async {
-            //     // await user.signOut();
-            //     // Navigator.pushNamed(context, LoginScreen.id);
-            //   },
-            // ),
-            const Spacer(),
           ],
         ),
       ),
