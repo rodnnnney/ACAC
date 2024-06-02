@@ -17,18 +17,16 @@ import 'package:provider/provider.dart' as provider;
 
 import '../pages/maps.dart';
 
-class CardViewerHomePage extends ConsumerStatefulWidget {
-  static const String id = 'card_viewer';
+class SortedByRating extends ConsumerStatefulWidget {
+  static const String id = 'sorted_by_rating_list';
 
-  late final String cuisineType;
-
-  CardViewerHomePage({super.key, required this.cuisineType});
+  SortedByRating({super.key});
 
   @override
-  ConsumerState<CardViewerHomePage> createState() => CardViewerHomePageState();
+  ConsumerState<SortedByRating> createState() => CardViewerHomePageState();
 }
 
-class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
+class CardViewerHomePageState extends ConsumerState<SortedByRating> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
 
@@ -47,14 +45,12 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final restaurantProvider = ref.read(restaurant);
-    List<restaurantCard> filteredRestaurants = restaurantProvider
-        .where((card) => card.cuisineType.contains(widget.cuisineType))
-        .toList();
+    List<restaurantCard> sortedRestaurants =
+        List.from(ref.read(sortedRestaurantsProvider));
 
     return Scaffold(
       body: SafeArea(
-        child: filteredRestaurants.isEmpty
+        child: sortedRestaurants.isEmpty
             ? Center(
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,12 +63,12 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                       child: const Text('Go back'))
                 ],
               ))
-            : buildList(filteredRestaurants),
+            : buildList(sortedRestaurants.cast<restaurantCard>()),
       ),
     );
   }
 
-  Widget buildList(List<restaurantCard> filteredRestaurants) {
+  Widget buildList(List<restaurantCard> sortedRestaurants) {
     PolyInfo maps = provider.Provider.of<PolyInfo>(context);
     Restaurant data = provider.Provider.of<Restaurant>(context);
     NavInfo nav = provider.Provider.of<NavInfo>(context);
@@ -82,36 +78,35 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(widget.cuisineType),
+        //  title: Text(widget.cuisineType),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: filteredRestaurants.length == 1
-                  ? Text('${filteredRestaurants.length.toString()} item found')
-                  : Text(
-                      '${filteredRestaurants.length.toString()} items found')),
+              child: sortedRestaurants.length == 1
+                  ? Text('${sortedRestaurants.length.toString()} item found')
+                  : Text('${sortedRestaurants.length.toString()} items found')),
         ],
       ),
       body: ListView.builder(
-        itemCount: filteredRestaurants.length,
+        itemCount: sortedRestaurants.length,
         itemBuilder: (BuildContext context, int index) {
           String getHours() {
             DateTime now = DateTime.now();
             int weekday = now.weekday;
             if (weekday == 1) {
-              return ('${filteredRestaurants[index].hours.monday.startTime} - ${filteredRestaurants[index].hours.monday.endTime}');
+              return ('${sortedRestaurants[index].hours.monday.startTime} - ${sortedRestaurants[index].hours.monday.endTime}');
             } else if (weekday == 2) {
-              return ('${filteredRestaurants[index].hours.tuesday.startTime} - ${filteredRestaurants[index].hours.tuesday.endTime}');
+              return ('${sortedRestaurants[index].hours.tuesday.startTime} - ${sortedRestaurants[index].hours.tuesday.endTime}');
             } else if (weekday == 3) {
-              return ('${filteredRestaurants[index].hours.wednesday.startTime} - ${filteredRestaurants[index].hours.wednesday.endTime}');
+              return ('${sortedRestaurants[index].hours.wednesday.startTime} - ${sortedRestaurants[index].hours.wednesday.endTime}');
             } else if (weekday == 4) {
-              return ('${filteredRestaurants[index].hours.thursday.startTime} - ${filteredRestaurants[index].hours.thursday.endTime}');
+              return ('${sortedRestaurants[index].hours.thursday.startTime} - ${sortedRestaurants[index].hours.thursday.endTime}');
             } else if (weekday == 5) {
-              return ('${filteredRestaurants[index].hours.friday.startTime} - ${filteredRestaurants[index].hours.friday.endTime}');
+              return ('${sortedRestaurants[index].hours.friday.startTime} - ${sortedRestaurants[index].hours.friday.endTime}');
             } else if (weekday == 6) {
-              return ('${filteredRestaurants[index].hours.saturday.startTime} - ${filteredRestaurants[index].hours.saturday.endTime}');
+              return ('${sortedRestaurants[index].hours.saturday.startTime} - ${sortedRestaurants[index].hours.saturday.endTime}');
             } else if (weekday == 7) {
-              return ('${filteredRestaurants[index].hours.sunday.startTime} - ${filteredRestaurants[index].hours.sunday.endTime}');
+              return ('${sortedRestaurants[index].hours.sunday.startTime} - ${sortedRestaurants[index].hours.sunday.endTime}');
             } else {
               return 'Closed';
             }
@@ -121,8 +116,8 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
             String url = await maps.createHttpUrl(
                 userPosition.latitude,
                 userPosition.longitude,
-                filteredRestaurants[index].location.latitude,
-                filteredRestaurants[index].location.longitude);
+                sortedRestaurants[index].location.latitude,
+                sortedRestaurants[index].location.longitude);
             var decodedJson = jsonDecode(url);
             String distance =
                 decodedJson['routes'][0]['legs'][0]['distance']['text'];
@@ -139,7 +134,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => RestaurantAdditionalInfo(
-                      restaurant: filteredRestaurants[index],
+                      restaurant: sortedRestaurants[index],
                       distance: distance,
                     ),
                   ),
@@ -156,7 +151,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
-                        filteredRestaurants[index].imageSrc,
+                        sortedRestaurants[index].imageSrc,
                         width: double.infinity,
                         height: 130,
                         fit: BoxFit.cover,
@@ -171,7 +166,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                filteredRestaurants[index].restaurantName,
+                                sortedRestaurants[index].restaurantName,
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -185,7 +180,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(filteredRestaurants[index].address),
+                          Text(sortedRestaurants[index].address),
                           Row(
                             children: [
                               Text(
@@ -196,11 +191,11 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                               ),
                               FutureBuilder<Map<String, dynamic>>(
                                 future: getCurrentStatusWithColor(
-                                    filteredRestaurants[index]
+                                    sortedRestaurants[index]
                                         .hours
                                         .getTodayStartStop()
                                         .startTime,
-                                    filteredRestaurants[index]
+                                    sortedRestaurants[index]
                                         .hours
                                         .getTodayStartStop()
                                         .endTime),
@@ -247,18 +242,14 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                                 String url = await maps.createHttpUrl(
                                     user.latitude,
                                     user.longitude,
-                                    filteredRestaurants[index]
-                                        .location
-                                        .latitude,
-                                    filteredRestaurants[index]
+                                    sortedRestaurants[index].location.latitude,
+                                    sortedRestaurants[index]
                                         .location
                                         .longitude);
 
                                 maps.processPolylineData(url);
-                                maps.updateCameraBounds([
-                                  user,
-                                  filteredRestaurants[index].location
-                                ]);
+                                maps.updateCameraBounds(
+                                    [user, sortedRestaurants[index].location]);
                                 nav.updateRouteDetails(url);
                                 Navigator.pushNamed(context, MapScreen.id);
                               } catch (e) {}
@@ -276,7 +267,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                             child: Padding(
                               padding: const EdgeInsets.all(12),
                               child: Text(
-                                filteredRestaurants[index].rating.toString(),
+                                sortedRestaurants[index].rating.toString(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

@@ -55,14 +55,14 @@ dependencies:
   riverpod: ^2.5.1
   google_fonts: ^6.2.1
   cached_network_image: ^3.3.1
-  amplify_api: ^1.0.0
-  amplify_auth_cognito: ^1.0.0
-  amplify_authenticator: ^1.0.0
-  amplify_flutter: ^1.0.0
-  amplify_storage_s3: ^1.0.0
+  amplify_api: ^2.0.0
+  amplify_auth_cognito: ^2.0.0
+  amplify_authenticator: ^2.0.0
+  amplify_flutter: ^2.0.0
+  amplify_storage_s3: ^2.0.0
   flutter_secure_storage: ^9.2.2
-
-
+  mobile_scanner: ^5.1.1
+  pretty_qr_code: ^3.3.0
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +87,7 @@ flutter:
     - images/FriendsKTV/
     - images/PapaSpicy/
     - images/Chatime/
+    - images/Kinton/kt.jpeg
     - images/
     - assets/
 

@@ -2,8 +2,10 @@ import 'package:acacmobile/common_layer/widgets/app_bar.dart';
 import 'package:acacmobile/common_layer/widgets/welcome_text.dart';
 import 'package:acacmobile/domain_layer/local_db/sort_by_country.dart';
 import 'package:acacmobile/domain_layer/local_db/sort_by_food_type.dart';
+import 'package:acacmobile/presentation_layer/pages/scanner.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:acacmobile/presentation_layer/widgets/home_page_card.dart';
+import 'package:acacmobile/presentation_layer/widgets/sort_by_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -82,9 +84,13 @@ class HomePage extends ConsumerWidget {
 
                               //borderRadius: BorderRadius.circular(12),
                               ),
-                          child: const Icon(
-                            Icons.qr_code_scanner_rounded,
-                            size: 35,
+                          child: GestureDetector(
+                            onTap: () =>
+                                Navigator.pushNamed(context, Scanner.id),
+                            child: const Icon(
+                              Icons.qr_code_scanner_rounded,
+                              size: 35,
+                            ),
                           ),
                         )
                       ],
@@ -218,6 +224,63 @@ class HomePage extends ConsumerWidget {
                             },
                           ),
                         ),
+                        ShaderMask(
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            Color(0xff14342B),
+                            Color(0xff60935D),
+                            Color(0xffF3F9D2),
+                          ], stops: [
+                            0.1,
+                            0.9,
+                            1
+                          ]).createShader(bounds),
+                          child: const Text(
+                            'Popularity:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                            height: screenHeight * 0.2,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, SortedByRating.id);
+                              },
+                              child: Card(
+                                child: Container(
+                                  width: 120,
+                                  height: 130,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.asset(
+                                          'images/chinese2.png',
+                                          height: screenHeight * 0.15,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Rating',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )),
                       ],
                     )
                   ],
@@ -232,15 +295,4 @@ class HomePage extends ConsumerWidget {
       ),
     );
   }
-}
-
-class CustomScrollPhysics extends BouncingScrollPhysics {
-  const CustomScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
-
-  @override
-  SpringDescription get spring => SpringDescription(
-        mass: 80, // Mass of the spring (default is 0.5)
-        stiffness: 100, // Stiffness of the spring (default is 100)
-        damping: 1, // Damping (default is 1.0)
-      );
 }

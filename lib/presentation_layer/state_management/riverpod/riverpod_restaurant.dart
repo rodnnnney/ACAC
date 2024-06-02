@@ -9,7 +9,7 @@ List<restaurantCard> restaurantInfo = [
     restaurantName: 'Kinton Ramen',
     location: const LatLng(45.41913804744197, -75.6914954746089),
     address: '216 Elgin St #2',
-    imageSrc: 'images/Kinton/kinton.jpeg',
+    imageSrc: 'images/Kinton/kt.jpeg',
     imageLogo: 'images/Kinton/kintonlogo.png',
     hours: Time(
       monday: StartStop(startTime: '11:30 AM', endTime: '10:30 PM'),
@@ -382,4 +382,10 @@ List<restaurantCard> restaurantInfo = [
 
 final restaurant = Provider((ref) {
   return restaurantInfo;
+});
+
+final sortedRestaurantsProvider = Provider<List<restaurantCard>>((ref) {
+  var restaurants = List<restaurantCard>.from(restaurantInfo);
+  restaurants.sort((a, b) => b.rating.compareTo(a.rating));
+  return restaurants;
 });
