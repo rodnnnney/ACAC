@@ -1,6 +1,6 @@
 import 'package:acacmobile/presentation_layer/pages/home.dart';
 import 'package:acacmobile/presentation_layer/pages/maps.dart';
-import 'package:acacmobile/presentation_layer/pages/settings.dart';
+import 'package:acacmobile/presentation_layer/pages/scanner.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -44,26 +44,26 @@ class AppBarBottom extends ConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              updatePage(1, MapScreen.id);
+              updatePage(1, Scanner.id);
             },
             icon: Container(
               decoration: watchCounter.counter == 1 ? selected : null,
               padding: const EdgeInsets.all(5),
               child: Icon(
-                Icons.map,
+                Icons.qr_code_scanner_rounded,
                 color: watchCounter.counter == 1 ? Colors.white : Colors.grey,
               ),
             ),
           ),
           IconButton(
             onPressed: () {
-              updatePage(2, AccountInfo.id);
+              updatePage(2, MapScreen.id);
             },
             icon: Container(
               decoration: watchCounter.counter == 2 ? selected : null,
               padding: const EdgeInsets.all(5),
               child: Icon(
-                Icons.account_circle,
+                Icons.map,
                 color: watchCounter.counter == 2 ? Colors.white : Colors.grey,
               ),
             ),
