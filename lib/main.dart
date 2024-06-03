@@ -4,6 +4,7 @@ import 'package:acacmobile/presentation_layer/state_management/provider/polyline
 import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/user_info_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'amplifyconfiguration.dart';
 import 'common_layer/routing/routes.dart';
 import 'common_layer/theme/color_theme.dart';
+import 'models/ModelProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +28,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        provider.ChangeNotifierProvider<Restaurant>(
-            create: (context) => Restaurant()),
+        provider.ChangeNotifierProvider<RestaurantInfo>(
+            create: (context) => RestaurantInfo()),
         provider.ChangeNotifierProvider<PolyInfo>(
             create: (context) => PolyInfo()),
         provider.ChangeNotifierProvider<NavInfo>(
@@ -65,6 +67,8 @@ class MyApp extends ConsumerWidget {
 Future<void> _configureAmplify() async {
   await Amplify.addPlugins([
     AmplifyAuthCognito(),
+    AmplifyAPI(
+        options: APIPluginOptions(modelProvider: ModelProvider.instance)),
   ]);
   await Amplify.configure(amplifyconfig);
 }

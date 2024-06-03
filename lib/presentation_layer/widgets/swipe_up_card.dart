@@ -14,7 +14,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SwipeUpCard extends ConsumerStatefulWidget {
   final restaurantCard restaurant;
-  final Restaurant data;
+  final RestaurantInfo data;
   final PolyInfo gmaps;
   final NavInfo nav;
 

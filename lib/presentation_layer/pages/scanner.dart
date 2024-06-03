@@ -1,14 +1,69 @@
-import 'package:acacmobile/presentation_layer/pages/home.dart';
+import 'package:acacmobile/domain_layer/controller/restaurant_list_controller.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class Scanner extends StatelessWidget {
+class Scanner extends ConsumerWidget {
   static String id = 'scanner_screen';
 
-  const Scanner({super.key});
+  Scanner({super.key});
+
+  String email = '';
+  String name = '';
+
+  Future<void> fetchUserInfo() async {
+    try {
+      final result = await Amplify.Auth.fetchUserAttributes();
+      for (final element in result) {
+        if (element.userAttributeKey.toString() == 'email') {
+          email = element.value.toString();
+        } else if (element.userAttributeKey.toString() == 'name') {
+          name = element.value.toString();
+        }
+      }
+    } on AuthException catch (e) {
+      safePrint('Error fetching user attributes: ${e.message}');
+    }
+  }
+
+  Future<void> sendData(WidgetRef ref, String restaurantName) async {
+    try {
+      await ref.watch(restaurantListControllerProvider.notifier).addRestaurant(
+          user: name,
+          restaurantName: restaurantName,
+          email: email,
+          date: DateTime.now().toString());
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: FutureBuilder(
+        future: fetchUserInfo(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error'),
+              );
+            } else {
+              return buildScanner(context, ref);
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildScanner(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scanner Page'),
@@ -16,15 +71,17 @@ class Scanner extends StatelessWidget {
       body: MobileScanner(
         controller: MobileScannerController(
             detectionSpeed: DetectionSpeed.noDuplicates),
-        onDetect: (capture) {
+        onDetect: (capture) async {
           final List<Barcode> barcodes = capture.barcodes;
-          var data = capture.raw;
           for (final barcode in barcodes) {
-            if (barcode.rawValue == 'ISB5K3X1ZOHNSREWQVPEVSUABC6HGAGOGWDI') {
-              Navigator.pushNamed(context, HomePage.id);
-            } // TODO design some qr codes for each restaurant
-          } // TODO pass in user's name and other info about restaurant.
-        }, // TODO should not be too hard to implement
+            print(barcode.rawValue);
+            switch (barcode.rawValue) {
+              case 'kinton_ramen':
+                await sendData(ref, 'kinton_ramen');
+                break; //TODO Add the rest from Notion doc
+            }
+          }
+        },
       ),
     );
   }

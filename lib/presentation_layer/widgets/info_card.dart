@@ -16,7 +16,7 @@ class infoCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
           top: screenSize.height * 0.70, left: screenSize.width * 0.05),
-      child: Consumer3<Restaurant, PolyInfo, NavInfo>(
+      child: Consumer3<RestaurantInfo, PolyInfo, NavInfo>(
         builder: (context, data, maps, nav, child) {
           return Scaffold(
             backgroundColor: Colors.transparent,

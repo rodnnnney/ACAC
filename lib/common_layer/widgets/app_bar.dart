@@ -4,9 +4,6 @@ import 'package:acacmobile/presentation_layer/pages/settings.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pocketbase/pocketbase.dart';
-
-final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
 
 class AppBarBottom extends ConsumerWidget {
   final String id;
@@ -33,7 +30,7 @@ class AppBarBottom extends ConsumerWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               updatePage(0, HomePage.id);
             },
             icon: Container(

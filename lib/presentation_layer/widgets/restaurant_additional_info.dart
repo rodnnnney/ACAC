@@ -29,7 +29,7 @@ class RestaurantAdditionalInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
     NavInfo nav = legacy_provider.Provider.of<NavInfo>(context);
-    Restaurant data = legacy_provider.Provider.of<Restaurant>(context);
+    RestaurantInfo data = legacy_provider.Provider.of<RestaurantInfo>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

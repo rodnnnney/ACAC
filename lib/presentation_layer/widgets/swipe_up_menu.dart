@@ -28,7 +28,7 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
   @override
   Widget build(BuildContext context) {
     final restaurantProvider = ref.watch(restaurant);
-    final data = legacy.Provider.of<Restaurant>(context);
+    final data = legacy.Provider.of<RestaurantInfo>(context);
     final maps = legacy.Provider.of<PolyInfo>(context);
     final nav = legacy.Provider.of<NavInfo>(context);
     final double screenHeight = MediaQuery.sizeOf(context).height;

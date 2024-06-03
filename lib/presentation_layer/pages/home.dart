@@ -2,6 +2,7 @@ import 'package:acacmobile/common_layer/widgets/app_bar.dart';
 import 'package:acacmobile/common_layer/widgets/welcome_text.dart';
 import 'package:acacmobile/domain_layer/local_db/sort_by_country.dart';
 import 'package:acacmobile/domain_layer/local_db/sort_by_food_type.dart';
+import 'package:acacmobile/presentation_layer/pages/qr_code_gen.dart';
 import 'package:acacmobile/presentation_layer/pages/scanner.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:acacmobile/presentation_layer/widgets/home_page_card.dart';
@@ -37,8 +38,8 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 20),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, bottom: 5, top: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,21 +79,30 @@ class HomePage extends ConsumerWidget {
                           },
                           loading: () => const Text('....'),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
 
-                              //borderRadius: BorderRadius.circular(12),
+                                  //borderRadius: BorderRadius.circular(12),
+                                  ),
+                              child: GestureDetector(
+                                onTap: () =>
+                                    Navigator.pushNamed(context, Scanner.id),
+                                child: const Icon(
+                                  Icons.qr_code_scanner_rounded,
+                                  size: 35,
+                                ),
                               ),
-                          child: GestureDetector(
-                            onTap: () =>
-                                Navigator.pushNamed(context, Scanner.id),
-                            child: const Icon(
-                              Icons.qr_code_scanner_rounded,
-                              size: 35,
                             ),
-                          ),
-                        )
+                            IconButton(
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, QrCodeGen.id),
+                              icon: Icon(Icons.account_circle),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                     const SizedBox(

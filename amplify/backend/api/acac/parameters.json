@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "acac",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authacac5cd98dd9",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2024-06-02T21:02:32.835Z"
+}

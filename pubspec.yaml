@@ -63,6 +63,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   mobile_scanner: ^5.1.1
   pretty_qr_code: ^3.3.0
+  timezone: ^0.9.3
 
 dev_dependencies:
   flutter_test:

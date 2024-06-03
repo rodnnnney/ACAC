@@ -70,7 +70,7 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
 
   Widget buildList(List<restaurantCard> sortedRestaurants) {
     PolyInfo maps = provider.Provider.of<PolyInfo>(context);
-    Restaurant data = provider.Provider.of<Restaurant>(context);
+    RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
     NavInfo nav = provider.Provider.of<NavInfo>(context);
     return Scaffold(
       appBar: AppBar(
