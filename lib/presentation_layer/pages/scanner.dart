@@ -1,3 +1,4 @@
+import 'package:acacmobile/common_layer/widgets/app_bar.dart';
 import 'package:acacmobile/domain_layer/controller/restaurant_list_controller.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +83,9 @@ class Scanner extends ConsumerWidget {
             }
           }
         },
+      ),
+      bottomNavigationBar: AppBarBottom(
+        id: id,
       ),
     );
   }

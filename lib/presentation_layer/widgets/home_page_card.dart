@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class HomeCard extends StatelessWidget {
@@ -27,8 +28,8 @@ class HomeCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  displayIMG,
+                child: CachedNetworkImage(
+                  imageUrl: displayIMG,
                   height: screenHeight * 0.15,
                   fit: BoxFit.contain,
                 ),

@@ -59,7 +59,7 @@ dependencies:
   amplify_auth_cognito: ^2.0.0
   amplify_authenticator: ^2.0.0
   amplify_flutter: ^2.0.0
-  amplify_storage_s3: ^2.0.0
+  amplify_storage_s3: ^2.1.0
   flutter_secure_storage: ^9.2.2
   mobile_scanner: ^5.1.1
   pretty_qr_code: ^3.3.0
@@ -84,13 +84,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/Kinton/
-    - images/FriendsKTV/
-    - images/PapaSpicy/
-    - images/Chatime/
-    - images/Kinton/kt.jpeg
-    - images/
-    - assets/
+
 
 
   # To add assets to your application, add an assets section, like this:

@@ -6,6 +6,7 @@ import 'package:acacmobile/presentation_layer/pages/settings.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:acacmobile/presentation_layer/widgets/home_page_card.dart';
 import 'package:acacmobile/presentation_layer/widgets/sort_by_rating.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -21,9 +22,9 @@ class HomePage extends ConsumerWidget {
   }
 
   final List<String> images = [
-    'images/china.webp',
-    'images/tofu.webp',
-    'images/japan.avif',
+    'https://acacpicturesgenerealbucket.s3.amazonaws.com/china.webp',
+    'https://acacpicturesgenerealbucket.s3.amazonaws.com/tofu.webp',
+    'https://acacpicturesgenerealbucket.s3.amazonaws.com/japan.avif',
   ];
 
   @override
@@ -140,10 +141,10 @@ class HomePage extends ConsumerWidget {
                                 itemBuilder: (context, index) {
                                   return ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
-                                    child: Image.asset(
-                                      images[index],
+                                    child: CachedNetworkImage(
                                       fit: BoxFit.cover,
                                       width: double.infinity,
+                                      imageUrl: images[index],
                                     ),
                                   );
                                 })),
@@ -208,7 +209,7 @@ class HomePage extends ConsumerWidget {
                             itemCount: sortByFoodType.length,
                             itemBuilder: (BuildContext context, int index) {
                               return HomeCard(
-                                  displayIMG: sortByCountry[index].displayIMG,
+                                  displayIMG: sortByFoodType[index].displayIMG,
                                   text: sortByFoodType[index].text,
                                   routeName: sortByFoodType[index].routeName);
                             },
@@ -247,10 +248,11 @@ class HomePage extends ConsumerWidget {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
-                                        child: Image.asset(
-                                          'images/chinese2.png',
+                                        child: CachedNetworkImage(
                                           height: screenHeight * 0.15,
                                           fit: BoxFit.contain,
+                                          imageUrl:
+                                              'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
                                         ),
                                       ),
                                       const Padding(

@@ -8,6 +8,7 @@ import 'package:acacmobile/presentation_layer/state_management/provider/polyline
 import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/userLocation.dart';
 import 'package:acacmobile/presentation_layer/widgets/restaurant_additional_info.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -91,8 +92,8 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    widget.restaurant.imageSrc,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.restaurant.imageSrc,
                     width: double.infinity,
                     height: 130,
                     fit: BoxFit.cover,

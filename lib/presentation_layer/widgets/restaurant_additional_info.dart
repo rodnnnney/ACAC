@@ -5,6 +5,7 @@ import 'package:acacmobile/presentation_layer/pages/maps.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -64,8 +65,8 @@ class RestaurantAdditionalInfo extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Image.asset(
-            restaurant.imageSrc,
+          CachedNetworkImage(
+            imageUrl: restaurant.imageSrc,
             height: MediaQuery.of(context).size.height * 0.3,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -186,7 +187,8 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                           CircleAvatar(
                             minRadius: 18,
                             maxRadius: 24,
-                            backgroundImage: AssetImage(restaurant.imageLogo),
+                            backgroundImage: CachedNetworkImageProvider(
+                                restaurant.imageLogo),
                           ),
                           const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,19 +281,26 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                                             ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(12),
-                                              child: Image.asset(
-                                                restaurant
+                                              child: CachedNetworkImage(
+                                                imageUrl: restaurant
                                                     .topRatedItemsImgSrc[index],
                                                 height: 120,
                                                 fit: BoxFit.fitHeight,
                                               ),
                                             ),
-                                            Text(
-                                              restaurant
-                                                  .topRatedItemsName[index],
-                                              style: const TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              child: Text(
+                                                restaurant
+                                                    .topRatedItemsName[index],
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
                                             ),
                                           ],
                                         ),

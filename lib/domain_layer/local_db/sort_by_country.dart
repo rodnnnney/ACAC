@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 final List<HomeCard> sortByCountry = [
   HomeCard(
-    displayIMG: 'images/chinese2.png',
+    displayIMG:
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
     text: 'chinese',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
@@ -15,7 +16,7 @@ final List<HomeCard> sortByCountry = [
     },
   ),
   HomeCard(
-    displayIMG: 'images/viet.webp',
+    displayIMG: 'https://acacpicturesgenerealbucket.s3.amazonaws.com/viet.webp',
     text: 'vietnamese',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
@@ -26,7 +27,8 @@ final List<HomeCard> sortByCountry = [
     },
   ),
   HomeCard(
-    displayIMG: 'images/japan.avif',
+    displayIMG:
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/japan.avif',
     text: 'japanese',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
@@ -37,7 +39,8 @@ final List<HomeCard> sortByCountry = [
     },
   ),
   HomeCard(
-    displayIMG: 'images/korean.jpeg',
+    displayIMG:
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/korean.jpeg',
     text: 'korean',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
