@@ -1,6 +1,6 @@
 import 'package:acacmobile/common_layer/widgets/app_bar.dart';
 import 'package:acacmobile/common_layer/widgets/confirm_quit.dart';
-import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -12,7 +12,8 @@ class AccountInfo extends ConsumerWidget {
   AccountInfo({super.key});
 
   String feedbackText = '';
-  final TextEditingController _controller = TextEditingController();
+
+  //final TextEditingController _controller = TextEditingController();
   bool isSwitched = false;
 
   String email = '';
@@ -214,7 +215,7 @@ class AccountInfo extends ConsumerWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                border: ref.watch(darkLight).theme
+                                border: ref.watch(darkLight.notifier).theme
                                     ? null
                                     : Border.all(color: Colors.black, width: 1),
                               ),
@@ -231,7 +232,7 @@ class AccountInfo extends ConsumerWidget {
                                 padding:
                                     WidgetStateProperty.all(EdgeInsets.zero)),
                             onPressed: () {
-                              ref.read(darkLight).toggleThemeOn();
+                              ref.read(darkLight.notifier).toggleThemeOn();
                             },
                             child: Container(
                               decoration: BoxDecoration(

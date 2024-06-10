@@ -3,7 +3,7 @@ import 'package:acacmobile/presentation_layer/state_management/provider/navigati
 import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/user_info_provider.dart';
-import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';

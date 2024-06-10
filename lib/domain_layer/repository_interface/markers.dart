@@ -1,10 +1,12 @@
 import 'dart:ui' as ui;
 
 import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart' as old;
 
 import 'location.dart';
 
@@ -12,7 +14,7 @@ class Markers {
   late final LatLng userLocation = const LatLng(0, 0);
   late GoogleMapController controller;
   UserLocation location = UserLocation();
-
+  final container = ProviderContainer();
   final Set<Marker> markerList = {};
   Set<Marker> get marker => markerList;
   void getUserLocation() {}
@@ -24,59 +26,23 @@ class Markers {
   }
 
   void initializeMarkers(BuildContext context) {
-    markerList.add(
-      Marker(
-        markerId: const MarkerId('Kinton'),
-        position: const LatLng(45.41913804744197, -75.6914954746089),
-        onTap: () {
-          goTo(context, const LatLng(45.41913804744197, -75.6914954746089));
-        },
-      ),
-    );
-    markerList.add(
-      Marker(
-        markerId: const MarkerId('KTV'),
-        position: const LatLng(45.36855573032455, -75.70277367823537),
-        onTap: () {
-          goTo(context, const LatLng(45.36855573032455, -75.70277367823537));
-        },
-      ),
-    );
-    markerList.add(
-      Marker(
-        markerId: const MarkerId('PapaSpicy'),
-        position: const LatLng(45.4278039812124, -75.69032978995092),
-        onTap: () {
-          goTo(context, const LatLng(45.4278039812124, -75.69032978995092));
-        },
-      ),
-    );
-    markerList.add(
-      Marker(
-        infoWindow: const InfoWindow(title: 'ChaTime', snippet: 'Bubble Tea'),
-        markerId: const MarkerId('ChaTime(Somerset)'),
-        position: const LatLng(45.411220513918316, -75.70696356085315),
-        // icon: await getBitmapDescriptorFromIcon(
-        //     await getMarkerFromIcon(Icons.location_on)),
-        onTap: () {
-          goTo(context, const LatLng(45.411220513918316, -75.70696356085315));
-          const Positioned(
-            top: 100,
-            left: 50,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Text('HELLO'),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+    final restaurantInfo = container.read(restaurant);
+    for (var rest in restaurantInfo) {
+      markerList.add(
+        Marker(
+          infoWindow: InfoWindow(
+              title: rest.restaurantName, snippet: rest.restaurantName),
+          markerId: MarkerId(rest.restaurantName),
+          position: rest.location,
+          // icon: await getBitmapDescriptorFromIcon(
+          //     await getMarkerFromIcon(Icons.location_on)),
+        ),
+      );
+    }
   }
 
   void goTo(BuildContext context, LatLng location) {
-    Provider.of<PolyInfo>(context, listen: false).goToNewLatLng(location);
+    old.Provider.of<PolyInfo>(context, listen: false).goToNewLatLng(location);
   }
 
   // List<Cards> getList(BuildContext context) {

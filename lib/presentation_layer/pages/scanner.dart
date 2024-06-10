@@ -79,7 +79,43 @@ class Scanner extends ConsumerWidget {
             switch (barcode.rawValue) {
               case 'kinton_ramen':
                 await sendData(ref, 'kinton_ramen');
-                break; //TODO Add the rest from Notion doc
+                break;
+              case 'Friends&KTV':
+                await sendData(ref, 'Friends&KTV');
+                break;
+              case 'Chatime':
+                await sendData(ref, 'Chatime');
+                break;
+              case 'Dakogi_Elgin':
+                await sendData(ref, 'Dakogi_Elgin');
+                break;
+              case 'Dakogi_Marketplace':
+                await sendData(ref, 'Dakogi_Marketplace');
+                break;
+              case 'Gongfu_Bao':
+                await sendData(ref, 'Gongfu_Bao');
+                break;
+              case 'Hot_Star_Chicken':
+                await sendData(ref, 'Hot_Star_Chicken');
+                break;
+              case 'La_Noodle':
+                await sendData(ref, 'La_Noodle');
+                break;
+              case 'Oriental_house':
+                await sendData(ref, 'Oriental_house');
+                break;
+              case 'Pho_Lady':
+                await sendData(ref, 'Pho_Lady');
+                break;
+              case 'Pomelo_Hat':
+                await sendData(ref, 'Pomelo_Hat');
+                break;
+              case 'Shuyi_Tealicious':
+                await sendData(ref, 'Shuyi_Tealicious');
+                break;
+              case 'Fuwa_Fuwa':
+                await sendData(ref, 'Fuwa_Fuwa');
+                break;
             }
           }
         },

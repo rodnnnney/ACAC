@@ -1,12 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pocketbase/pocketbase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final pb = PocketBase('https://acac2-thrumming-wind-3122.fly.dev');
-
-class RiverpodTest extends ChangeNotifier {
-  RiverpodTest({required this.counter});
+class DarkLightToggle extends ChangeNotifier {
+  DarkLightToggle({required this.counter});
   int counter;
 
   void setCounter(int newCounter) {
@@ -21,9 +18,15 @@ class DarkLight extends ChangeNotifier {
   bool theme;
   static const String _key = 'isDarkMode';
 
-  void _saveTheme(bool isDarkMode) async {
+  Future<void> _saveTheme(bool isDarkMode) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool(_key, isDarkMode);
+  }
+
+  Future<void> loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    theme = prefs.getBool(_key) ?? false;
+    notifyListeners();
   }
 
   void toggleThemeOff() {
@@ -39,14 +42,16 @@ class DarkLight extends ChangeNotifier {
   }
 }
 
-final userPageCounter = ChangeNotifierProvider<RiverpodTest>(
+final userPageCounter = ChangeNotifierProvider<DarkLightToggle>(
   (ref) {
-    return RiverpodTest(counter: 0);
+    return DarkLightToggle(counter: 0);
   },
 );
 
 final darkLight = ChangeNotifierProvider<DarkLight>(
   (ref) {
-    return DarkLight(theme: false);
+    final darkLight = DarkLight(theme: false);
+    darkLight.loadTheme();
+    return darkLight;
   },
 );

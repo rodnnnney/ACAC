@@ -3,7 +3,7 @@ import 'package:acacmobile/domain_layer/repository_interface/location.dart';
 import 'package:acacmobile/domain_layer/repository_interface/markers.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_test.dart';
+import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:acacmobile/presentation_layer/widgets/info_card.dart';
 import 'package:acacmobile/presentation_layer/widgets/swipe_up_menu.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +92,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               child: InkWell(
                 onTap: () => Navigator.of(context).pop(),
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(50),
