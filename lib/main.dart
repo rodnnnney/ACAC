@@ -1,4 +1,5 @@
 import 'package:acacmobile/presentation_layer/pages/home.dart';
+import 'package:acacmobile/presentation_layer/pages/user_auth/sign_in_custom.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
@@ -52,6 +53,43 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colorTheme = ColorTheme(context);
     return Authenticator(
+      authenticatorBuilder: (BuildContext context, AuthenticatorState state) {
+        switch (state.currentStep) {
+          case AuthenticatorStep.signIn:
+            return SignInCustom(
+              state: state,
+            );
+
+          case AuthenticatorStep.loading:
+          // TODO: Handle this case.
+          case AuthenticatorStep.onboarding:
+          // TODO: Handle this case.
+          case AuthenticatorStep.signUp:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmSignUp:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmSignInCustomAuth:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmSignInMfa:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmSignInNewPassword:
+          // TODO: Handle this case.
+          case AuthenticatorStep.continueSignInWithMfaSelection:
+          // TODO: Handle this case.
+          case AuthenticatorStep.continueSignInWithTotpSetup:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmSignInWithTotpMfaCode:
+          // TODO: Handle this case.
+          case AuthenticatorStep.resetPassword:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmResetPassword:
+          // TODO: Handle this case.
+          case AuthenticatorStep.verifyUser:
+          // TODO: Handle this case.
+          case AuthenticatorStep.confirmVerifyUser:
+          // TODO: Handle this case.
+        }
+      },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         builder: Authenticator.builder(),

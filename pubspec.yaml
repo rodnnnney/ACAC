@@ -64,6 +64,7 @@ dependencies:
   mobile_scanner: ^5.1.1
   pretty_qr_code: ^3.3.0
   timezone: ^0.9.3
+  delightful_toast: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,7 @@ flutter:
 
   assets:
     - 'assets/'
+    - 'images/'
 
 
 

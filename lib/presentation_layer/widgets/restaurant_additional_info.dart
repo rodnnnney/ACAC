@@ -1,4 +1,4 @@
-import 'package:acacmobile/common_layer/widgets/start_builder.dart';
+import 'package:acacmobile/common_layer/widgets/star_builder.dart';
 import 'package:acacmobile/domain_layer/repository_interface/cards.dart';
 import 'package:acacmobile/domain_layer/repository_interface/time_formatter.dart';
 import 'package:acacmobile/presentation_layer/pages/maps.dart';
