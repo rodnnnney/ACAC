@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-acac-dev-87365-authRole",
+      "UnauthRoleArn": "arn:aws:iam::471112828473:role/amplify-acac-dev-87365-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::471112828473:role/amplify-acac-dev-87365-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-acac-dev-87365-deployment",
+      "UnauthRoleName": "amplify-acac-dev-87365-unauthRole",
+      "StackName": "amplify-acac-dev-87365",
+      "StackId": "arn:aws:cloudformation:us-east-1:471112828473:stack/amplify-acac-dev-87365/ffca1280-1fa6-11ef-bfde-0eb9d448d7e1",
+      "AmplifyAppId": "dz09z7o424jck"
+    },
+    "categories": {
+      "auth": {
+        "acac5cd98dd9": {}
+      },
+      "api": {
+        "acac": {}
+      },
+      "storage": {
+        "s30b1091fa": {}
+      }
+    }
+  }
+}
