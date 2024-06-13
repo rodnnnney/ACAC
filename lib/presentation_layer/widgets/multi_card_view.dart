@@ -10,6 +10,7 @@ import 'package:acacmobile/presentation_layer/state_management/provider/polyline
 import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
 import 'package:acacmobile/presentation_layer/widgets/restaurant_additional_info.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -155,8 +156,8 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        filteredRestaurants[index].imageSrc,
+                      child: CachedNetworkImage(
+                        imageUrl: filteredRestaurants[index].imageSrc,
                         width: double.infinity,
                         height: 130,
                         fit: BoxFit.cover,

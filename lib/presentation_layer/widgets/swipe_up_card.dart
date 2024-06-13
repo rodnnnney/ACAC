@@ -72,15 +72,17 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RestaurantAdditionalInfo(
-              restaurant: widget.restaurant,
-              distance: distance,
-            ),
-          ),
-        );
+        distance.isNotEmpty
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RestaurantAdditionalInfo(
+                    restaurant: widget.restaurant,
+                    distance: distance,
+                  ),
+                ),
+              )
+            : () {};
       },
       child: Card(
         elevation: 1,

@@ -5,22 +5,40 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class Scanner extends ConsumerWidget {
+class Scanner extends ConsumerStatefulWidget {
   static String id = 'scanner_screen';
 
   Scanner({super.key});
 
+  @override
+  _ScannerState createState() => _ScannerState();
+}
+
+class _ScannerState extends ConsumerState<Scanner> {
   String email = '';
   String name = '';
+  late MobileScannerController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        MobileScannerController(detectionSpeed: DetectionSpeed.noDuplicates);
+    fetchUserInfo();
+  }
 
   Future<void> fetchUserInfo() async {
     try {
       final result = await Amplify.Auth.fetchUserAttributes();
       for (final element in result) {
         if (element.userAttributeKey.toString() == 'email') {
-          email = element.value.toString();
+          setState(() {
+            email = element.value.toString();
+          });
         } else if (element.userAttributeKey.toString() == 'name') {
-          name = element.value.toString();
+          setState(() {
+            name = element.value.toString();
+          });
         }
       }
     } on AuthException catch (e) {
@@ -41,37 +59,23 @@ class Scanner extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: fetchUserInfo(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error'),
-              );
-            } else {
-              return buildScanner(context, ref);
-            }
-          }
-        },
-      ),
+      body: email.isEmpty && name.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : buildScanner(context, ref),
     );
   }
 
+//TODO Scanner returns exclamation mark when opened and closed
   Widget buildScanner(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Scanner Page'),
       ),
       body: MobileScanner(
-        controller: MobileScannerController(
-            detectionSpeed: DetectionSpeed.noDuplicates),
+        controller: controller,
         onDetect: (capture) async {
           final List<Barcode> barcodes = capture.barcodes;
           for (final barcode in barcodes) {
@@ -121,8 +125,14 @@ class Scanner extends ConsumerWidget {
         },
       ),
       bottomNavigationBar: AppBarBottom(
-        id: id,
+        id: Scanner.id,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

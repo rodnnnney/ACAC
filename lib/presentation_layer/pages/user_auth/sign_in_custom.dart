@@ -122,7 +122,7 @@ class _SignInCustomState extends State<SignInCustom> {
                   height: 10,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
                       AnimatedTextKit(

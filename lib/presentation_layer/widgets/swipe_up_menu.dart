@@ -49,22 +49,35 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
                 ),
               ),
             ),
-            body: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of cards in a row
-                crossAxisSpacing: 10, // Horizontal space between cards
-                mainAxisSpacing: 10, // Vertical space between cards
-                childAspectRatio:
-                    (screenHeight * 0.00081316), // Aspect ratio of the cards
-              ),
-              itemCount: restaurantProvider.length,
-              itemBuilder: (context, index) {
-                return SwipeUpCard(
-                  restaurant: restaurantProvider[index],
-                  data: data,
-                  gmaps: maps,
-                  nav: nav,
-                );
+            body: FutureBuilder<LatLng>(
+              future: getLocation(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text('Location not found'));
+                } else {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Number of cards in a row
+                      crossAxisSpacing: 10, // Horizontal space between cards
+                      mainAxisSpacing: 10, // Vertical space between cards
+                      childAspectRatio: (screenHeight *
+                          0.00081316), // Aspect ratio of the cards
+                    ),
+                    itemCount: restaurantProvider.length,
+                    itemBuilder: (context, index) {
+                      return SwipeUpCard(
+                        restaurant: restaurantProvider[index],
+                        data: data,
+                        gmaps: maps,
+                        nav: nav,
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
