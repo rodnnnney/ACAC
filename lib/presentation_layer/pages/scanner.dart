@@ -1,5 +1,5 @@
-import 'package:acacmobile/common_layer/widgets/app_bar.dart';
-import 'package:acacmobile/domain_layer/controller/restaurant_list_controller.dart';
+import 'package:ACAC/common_layer/widgets/app_bar.dart';
+import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

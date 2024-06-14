@@ -1,5 +1,5 @@
-import 'package:acacmobile/domain_layer/service/restaurant_api_service.dart';
-import 'package:acacmobile/models/Restaurant.dart';
+import 'package:ACAC/domain_layer/service/restaurant_api_service.dart';
+import 'package:ACAC/models/Restaurant.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref) {

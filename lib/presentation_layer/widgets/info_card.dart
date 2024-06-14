@@ -1,6 +1,6 @@
-import 'package:acacmobile/presentation_layer/state_management/provider/navigation_info_provider.dart';
-import 'package:acacmobile/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:acacmobile/presentation_layer/state_management/provider/restaurant_provider.dart';
+import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
+import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

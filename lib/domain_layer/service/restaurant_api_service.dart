@@ -1,4 +1,4 @@
-import 'package:acacmobile/models/Restaurant.dart';
+import 'package:ACAC/models/Restaurant.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:acacmobile/domain_layer/data/restaurant_repository.dart';
-import 'package:acacmobile/models/ModelProvider.dart';
+import 'package:ACAC/domain_layer/data/restaurant_repository.dart';
+import 'package:ACAC/models/ModelProvider.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

@@ -1,6 +1,6 @@
-import 'package:acacmobile/common_layer/widgets/app_bar.dart';
-import 'package:acacmobile/common_layer/widgets/confirm_quit.dart';
-import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
+import 'package:ACAC/common_layer/widgets/app_bar.dart';
+import 'package:ACAC/common_layer/widgets/confirm_quit.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

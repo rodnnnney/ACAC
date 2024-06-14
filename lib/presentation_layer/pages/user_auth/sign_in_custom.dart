@@ -1,4 +1,4 @@
-import 'package:acacmobile/common_layer/widgets/response_pop_up.dart';
+import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';

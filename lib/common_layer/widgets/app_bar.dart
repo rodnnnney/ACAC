@@ -1,7 +1,7 @@
-import 'package:acacmobile/presentation_layer/pages/home.dart';
-import 'package:acacmobile/presentation_layer/pages/maps.dart';
-import 'package:acacmobile/presentation_layer/pages/scanner.dart';
-import 'package:acacmobile/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
+import 'package:ACAC/presentation_layer/pages/home.dart';
+import 'package:ACAC/presentation_layer/pages/maps.dart';
+import 'package:ACAC/presentation_layer/pages/scanner.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
