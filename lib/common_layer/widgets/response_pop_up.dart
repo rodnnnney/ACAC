@@ -4,14 +4,14 @@ import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 
 class ResponsePopUp extends StatelessWidget {
-  final String issue;
+  final String response;
   final DelightSnackbarPosition location;
   final IconData icon;
   final Color color;
 
   const ResponsePopUp(
       {Key? key,
-      required this.issue,
+      required this.response,
       required this.location,
       required this.icon,
       required this.color})
@@ -30,7 +30,7 @@ class ResponsePopUp extends StatelessWidget {
           leading: Icon(icon, color: Colors.white),
           color: color,
           title: Text(
-            issue,
+            response,
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 15,

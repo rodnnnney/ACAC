@@ -59,7 +59,7 @@ Future<void> signInUser(
                 color: Colors.red,
                 icon: Icons.error_outline,
                 location: DelightSnackbarPosition.top,
-                issue: 'No account found')
+                response: 'No account found')
             .showToast(context);
         Navigator.pop(context);
       }
@@ -69,7 +69,7 @@ Future<void> signInUser(
                 color: Colors.red,
                 icon: Icons.error_outline,
                 location: DelightSnackbarPosition.top,
-                issue: 'Invalid Sign Credentials')
+                response: 'Invalid Sign Credentials')
             .showToast(context);
         Navigator.pop(context);
       }
@@ -79,7 +79,7 @@ Future<void> signInUser(
                 color: Colors.red,
                 icon: Icons.error_outline,
                 location: DelightSnackbarPosition.top,
-                issue: 'An unknown error has occurred :(')
+                response: 'An unknown error has occurred :(')
             .showToast(context);
         Navigator.pop(context);
       }
@@ -257,7 +257,7 @@ class _SignInCustomState extends State<SignInCustom> {
                                     color: Colors.red,
                                     icon: Icons.error_outline,
                                     location: DelightSnackbarPosition.top,
-                                    issue: 'All fields need to be filled')
+                                    response: 'All fields need to be filled')
                                 .showToast(context);
                           }
                         },

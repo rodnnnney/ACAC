@@ -1,3 +1,5 @@
+import 'package:ACAC/common_layer/widgets/app_bar.dart';
+import 'package:ACAC/presentation_layer/pages/scanner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +12,9 @@ class DiscountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -44,6 +48,9 @@ class DiscountCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: AppBarBottom(
+        id: QRViewExample.id,
       ),
     );
   }
