@@ -11,42 +11,18 @@ final List<HomeCard> sortByFoodType = [
       Navigator.pushNamed(
         context,
         CardViewerHomePage.id,
-        arguments: 'Ramen',
+        arguments: 'Noodle',
       );
     },
   ),
   HomeCard(
-    displayIMG:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/korean.jpeg',
+    displayIMG: 'https://acacpicturesgenerealbucket.s3.amazonaws.com/boba.png',
     text: 'Bubble Tea',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
         context,
         CardViewerHomePage.id,
         arguments: 'Bubble Tea',
-      );
-    },
-  ),
-  HomeCard(
-    displayIMG:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
-    text: 'Noodles',
-    routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
-        context,
-        CardViewerHomePage.id,
-        arguments: 'Noodle',
-      );
-    },
-  ),
-  HomeCard(
-    displayIMG: 'https://acacpicturesgenerealbucket.s3.amazonaws.com/viet.webp',
-    text: 'Pho',
-    routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
-        context,
-        CardViewerHomePage.id,
-        arguments: 'Pho',
       );
     },
   ),

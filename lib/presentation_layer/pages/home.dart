@@ -1,7 +1,9 @@
+import 'package:ACAC/common_layer/consts/globals.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
+import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
@@ -12,14 +14,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
   static String id = 'home_screen';
-
-  String cutAndLowercase(String name) {
-    int spaceIndex = name.indexOf(' ');
-    if (spaceIndex == -1) {
-      return name.toLowerCase();
-    }
-    return name.substring(0, spaceIndex).toLowerCase();
-  }
 
   final List<String> images = [
     'https://acacpicturesgenerealbucket.s3.amazonaws.com/china.webp',
@@ -54,19 +48,19 @@ class HomePage extends ConsumerWidget {
                               return ShaderMask(
                                 shaderCallback: (bounds) =>
                                     const LinearGradient(colors: [
-                                  Color(0xff14342B),
-                                  Color(0xff60935D),
-                                  Colors.white
+                                  GlobalTheme.kDarkGreen,
+                                  GlobalTheme.kGreen,
+                                  GlobalTheme.kWhite
                                 ], stops: [
                                   0.05,
                                   0.97,
-                                  1
+                                  1.0
                                 ]).createShader(bounds),
                                 child: Text(
                                   name,
                                   style: const TextStyle(
                                       fontSize: 18,
-                                      color: Colors.white,
+                                      color: GlobalTheme.kWhite,
                                       fontWeight: FontWeight.bold),
                                 ),
                               );
@@ -79,15 +73,25 @@ class HomePage extends ConsumerWidget {
                           },
                           loading: () => const Text('....'),
                         ),
-                        IconButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, AccountInfo.id),
-                          icon: Icon(Icons.account_circle),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, AccountInfo.id),
+                              icon: const Icon(Icons.account_circle),
+                            ),
+                            IconButton(
+                              onPressed: () => Navigator.pushNamed(
+                                  context, DiscountCard.id,
+                                  arguments: 'Rodney'),
+                              icon: const Icon(Icons.card_giftcard_outlined),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: GlobalTheme.spacing,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,33 +103,37 @@ class HomePage extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ShaderMask(
-                              shaderCallback: (bounds) =>
-                                  const LinearGradient(colors: [
-                                Color(0xff14342B),
-                                Color(0xff60935D),
-                              ], stops: [
-                                0.1,
-                                0.9,
-                              ]).createShader(bounds),
+                              shaderCallback: (bounds) => const LinearGradient(
+                                  colors: [
+                                    GlobalTheme.kDarkGreen,
+                                    GlobalTheme.kGreen,
+                                    GlobalTheme.kWhite
+                                  ],
+                                  stops: [
+                                    0.1,
+                                    0.5,
+                                    1.0
+                                  ]).createShader(bounds),
                               child: const Text(
                                 'featured',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: GlobalTheme.kWhite,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
                             ShaderMask(
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [
-                                  Color(0xff036D19),
-                                  Color(0xff7EA172),
-                                  Color(0xff60935D),
+                                  GlobalTheme.kDarkGreen,
+                                  GlobalTheme.kGreen,
+                                  GlobalTheme.kWhite
                                 ],
+                                stops: [0.1, 0.5, 1.0],
                               ).createShader(bounds),
                               child: Text(
                                 'items found: ${images.length}',
                                 style: const TextStyle(
-                                    color: Colors.white,
+                                    color: GlobalTheme.kWhite,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -134,38 +142,41 @@ class HomePage extends ConsumerWidget {
                         const SizedBox(
                           height: 5,
                         ),
-                        Container(
-                            height: screenHeight * 0.19,
-                            child: PageView.builder(
-                                itemCount: images.length,
-                                itemBuilder: (context, index) {
-                                  return ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      imageUrl: images[index],
-                                    ),
-                                  );
-                                })),
+                        SizedBox(
+                          height: screenHeight * 0.19,
+                          child: PageView.builder(
+                            itemCount: images.length,
+                            itemBuilder: (context, index) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  imageUrl: images[index],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
                         ShaderMask(
-                          shaderCallback: (bounds) =>
-                              const LinearGradient(colors: [
-                            Color(0xff14342B),
-                            Color(0xff60935D),
-                            Color(0xffF3F9D2),
-                          ], stops: [
-                            0.1,
-                            0.9,
-                            1
-                          ]).createShader(bounds),
+                          shaderCallback: (bounds) => const LinearGradient(
+                              colors: [
+                                GlobalTheme.kDarkGreen,
+                                GlobalTheme.kGreen,
+                                GlobalTheme.kWhite
+                              ],
+                              stops: [
+                                0.0,
+                                0.5,
+                                1.0
+                              ]).createShader(bounds),
                           child: const Text(
                             'Country:',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: GlobalTheme.kWhite,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -184,20 +195,21 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         ShaderMask(
-                          shaderCallback: (bounds) =>
-                              const LinearGradient(colors: [
-                            Color(0xff14342B),
-                            Color(0xff60935D),
-                            Color(0xffF3F9D2),
-                          ], stops: [
-                            0.1,
-                            0.9,
-                            1
-                          ]).createShader(bounds),
+                          shaderCallback: (bounds) => const LinearGradient(
+                              colors: [
+                                GlobalTheme.kDarkGreen,
+                                GlobalTheme.kGreen,
+                                GlobalTheme.kWhite
+                              ],
+                              stops: [
+                                0.0,
+                                0.5,
+                                1.0
+                              ]).createShader(bounds),
                           child: const Text(
                             'Food Type:',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: GlobalTheme.kWhite,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -216,20 +228,21 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         ShaderMask(
-                          shaderCallback: (bounds) =>
-                              const LinearGradient(colors: [
-                            Color(0xff14342B),
-                            Color(0xff60935D),
-                            Color(0xffF3F9D2),
-                          ], stops: [
-                            0.1,
-                            0.9,
-                            1
-                          ]).createShader(bounds),
+                          shaderCallback: (bounds) => const LinearGradient(
+                              colors: [
+                                GlobalTheme.kDarkGreen,
+                                GlobalTheme.kGreen,
+                                GlobalTheme.kWhite
+                              ],
+                              stops: [
+                                0.0,
+                                0.5,
+                                1.0
+                              ]).createShader(bounds),
                           child: const Text(
                             'Popularity:',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: GlobalTheme.kWhite,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

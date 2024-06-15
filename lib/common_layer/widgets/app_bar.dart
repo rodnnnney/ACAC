@@ -44,7 +44,8 @@ class AppBarBottom extends ConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              updatePage(1, Scanner.id);
+              //   updatePage(1, Scanner.id);
+              updatePage(1, QRViewExample.id);
             },
             icon: Container(
               decoration: watchCounter.counter == 1 ? selected : null,

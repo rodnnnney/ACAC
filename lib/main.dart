@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
-
 import 'amplifyconfiguration.dart';
 import 'common_layer/routing/routes.dart';
 import 'common_layer/theme/color_theme.dart';
@@ -59,7 +58,6 @@ class MyApp extends ConsumerWidget {
             return SignInCustom(
               state: state,
             );
-
           case AuthenticatorStep.loading:
           // TODO: Handle this case.
           case AuthenticatorStep.onboarding:

@@ -65,6 +65,7 @@ dependencies:
   pretty_qr_code: ^3.3.0
   timezone: ^0.9.3
   delightful_toast: ^1.1.0
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +88,7 @@ flutter:
   assets:
     - 'assets/'
     - 'images/'
+    - 'images/card1.JPG'
 
 
 
