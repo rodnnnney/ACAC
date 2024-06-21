@@ -19,9 +19,16 @@ class Markers {
   Set<Marker> get marker => markerList;
   void getUserLocation() {}
 
-  void initializeUserLocation(LatLng userLocation) {
+  void initializeUserLocation(LatLng userLocation) async {
     markerList.add(
-      Marker(markerId: const MarkerId('User'), position: userLocation),
+      Marker(
+        markerId: const MarkerId('User'),
+        position: userLocation,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        infoWindow: const InfoWindow(
+            title: 'Current location!',
+            snippet: 'This is where you are right now!'),
+      ),
     );
   }
 
@@ -45,15 +52,10 @@ class Markers {
     old.Provider.of<PolyInfo>(context, listen: false).goToNewLatLng(location);
   }
 
-  // List<Cards> getList(BuildContext context) {
-  //   return Provider.of<Restaurant>(context).restaurantInfo;
-  // }
-
   Future<ui.Image> getMarkerFromIcon(IconData iconData,
       {Color color = Colors.black, double size = 100}) async {
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
-    //final Paint paint = Paint()..color = color;
     final TextPainter textPainter =
         TextPainter(textDirection: TextDirection.ltr);
 

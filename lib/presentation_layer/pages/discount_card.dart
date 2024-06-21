@@ -1,6 +1,5 @@
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/presentation_layer/pages/scanner.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DiscountCard extends StatelessWidget {
@@ -40,7 +39,8 @@ class DiscountCard extends StatelessWidget {
                     top: MediaQuery.sizeOf(context).height * 0.05,
                     child: Text(
                       name,
-                      style: const TextStyle(fontSize: 20),
+                      style: const TextStyle(
+                          fontSize: 20, color: Color(0xff364037)),
                     ),
                   )
                 ],

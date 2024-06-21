@@ -6,6 +6,7 @@ import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/userLocation.dart';
 import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -61,6 +62,7 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
   @override
   Widget build(BuildContext context) {
     final userLocationAsyncValue = ref.watch(userLocationProvider);
+    final watchCounter = ref.watch(userPageCounter);
 
     Future<String> getDistance(LatLng user, LatLng restaurant) async {
       String url = await widget.gmaps.createHttpUrl(user.latitude,
@@ -125,7 +127,11 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                             } else if (snap.hasData) {
                               distance = snap.data!;
                               return Text(snap.data ?? '',
-                                  style: TextStyle(fontSize: fSize));
+                                  style: TextStyle(
+                                      fontSize: fSize,
+                                      color: watchCounter.counter == 0
+                                          ? Colors.white
+                                          : Colors.black));
                             } else {
                               return Text('Unknown error',
                                   style: TextStyle(fontSize: fSize));

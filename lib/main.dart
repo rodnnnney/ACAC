@@ -1,4 +1,5 @@
 import 'package:ACAC/presentation_layer/pages/home.dart';
+import 'package:ACAC/presentation_layer/pages/user_auth/firstTimeSignIn.dart';
 import 'package:ACAC/presentation_layer/pages/user_auth/sign_in_custom.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
+
 import 'amplifyconfiguration.dart';
 import 'common_layer/routing/routes.dart';
 import 'common_layer/theme/color_theme.dart';
@@ -55,37 +57,22 @@ class MyApp extends ConsumerWidget {
       authenticatorBuilder: (BuildContext context, AuthenticatorState state) {
         switch (state.currentStep) {
           case AuthenticatorStep.signIn:
-            return SignInCustom(
-              state: state,
-            );
-          case AuthenticatorStep.loading:
-          // TODO: Handle this case.
-          case AuthenticatorStep.onboarding:
-          // TODO: Handle this case.
-          case AuthenticatorStep.signUp:
-          // TODO: Handle this case.
-          case AuthenticatorStep.confirmSignUp:
-          // TODO: Handle this case.
-          case AuthenticatorStep.confirmSignInCustomAuth:
-          // TODO: Handle this case.
-          case AuthenticatorStep.confirmSignInMfa:
-          // TODO: Handle this case.
+            return SignInCustom(state: state);
           case AuthenticatorStep.confirmSignInNewPassword:
-          // TODO: Handle this case.
+            return FirstTimeSignIn();
+          case AuthenticatorStep.loading:
+          case AuthenticatorStep.onboarding:
+          case AuthenticatorStep.signUp:
+          case AuthenticatorStep.confirmSignUp:
+          case AuthenticatorStep.confirmSignInCustomAuth:
+          case AuthenticatorStep.confirmSignInMfa:
           case AuthenticatorStep.continueSignInWithMfaSelection:
-          // TODO: Handle this case.
           case AuthenticatorStep.continueSignInWithTotpSetup:
-          // TODO: Handle this case.
           case AuthenticatorStep.confirmSignInWithTotpMfaCode:
-          // TODO: Handle this case.
           case AuthenticatorStep.resetPassword:
-          // TODO: Handle this case.
           case AuthenticatorStep.confirmResetPassword:
-          // TODO: Handle this case.
           case AuthenticatorStep.verifyUser:
-          // TODO: Handle this case.
           case AuthenticatorStep.confirmVerifyUser:
-          // TODO: Handle this case.
         }
       },
       child: MaterialApp(

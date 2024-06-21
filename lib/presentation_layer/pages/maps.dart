@@ -39,7 +39,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       userPosition = userLocation;
     });
     markerManager.initializeUserLocation(userPosition);
-    markerManager.initializeMarkers(context);
+    if (context.mounted) {
+      markerManager.initializeMarkers(context);
+    }
   }
 
   @override

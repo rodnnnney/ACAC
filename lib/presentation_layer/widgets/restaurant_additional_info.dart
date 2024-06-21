@@ -131,37 +131,40 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              buildStarRating(restaurant.rating),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              Text(restaurant.rating.toString()),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              final url = Uri.parse(restaurant.gMapsLink);
-                              try {
-                                if (await canLaunchUrl(url)) {
-                                  await launchUrl(url);
-                                } else {
-                                  print('Could not launch URL');
-                                }
-                              } catch (e) {
-                                print('Error: $e');
-                              }
-                            },
-                            child: Text(
-                              '${formatNumber(restaurant.reviewNum)} + ratings',
-                              style: const TextStyle(
-                                  decoration: TextDecoration.underline),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                buildStarRating(restaurant.rating),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(restaurant.rating.toString()),
+                              ],
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () async {
+                                final url = Uri.parse(restaurant.gMapsLink);
+                                try {
+                                  if (await canLaunchUrl(url)) {
+                                    await launchUrl(url);
+                                  } else {
+                                    print('Could not launch URL');
+                                  }
+                                } catch (e) {
+                                  print('Error: $e');
+                                }
+                              },
+                              child: Text(
+                                '${formatNumber(restaurant.reviewNum)} + ratings',
+                                style: const TextStyle(
+                                    decoration: TextDecoration.underline),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -179,7 +182,7 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                   Card(
                     elevation: 2,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,30 +242,31 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                       ? SizedBox(
                           height: 150,
                           child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 3,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  child: SizedBox(
-                                    width: 150,
-                                    height: 150,
-                                    child: Column(
-                                      children: [
-                                        ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Text('Nothing Found')),
-                                        const Text(
-                                          'Nothing found',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: SizedBox(
+                                  width: 150,
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: const Text('Nothing Found')),
+                                      const Text(
+                                        'Nothing found',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
                                   ),
-                                );
-                              }),
+                                ),
+                              );
+                            },
+                          ),
                         )
                       : SizedBox(
                           height: 150,
@@ -310,14 +314,14 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                                       top: 10,
                                       left: 10,
                                       child: Container(
-                                        padding: EdgeInsets.all(3),
+                                        padding: const EdgeInsets.all(3),
                                         decoration: BoxDecoration(
                                             color: Colors.green,
                                             borderRadius:
                                                 BorderRadius.circular(12)),
                                         child: Text(
                                           '${index + 1}# Most Popular!',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 10,
                                               color: Colors.white),
                                         ),
@@ -352,8 +356,9 @@ class RestaurantAdditionalInfo extends StatelessWidget {
                             maps.updateCameraBounds(
                                 [user, restaurant.location]);
                             nav.updateRouteDetails(url);
-
-                            Navigator.pushNamed(context, MapScreen.id);
+                            if (context.mounted) {
+                              Navigator.pushNamed(context, MapScreen.id);
+                            }
                           } catch (e) {
                             print(e);
                           }

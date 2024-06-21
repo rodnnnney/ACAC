@@ -1,3 +1,4 @@
+import 'package:ACAC/common_layer/widgets/loading.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
@@ -19,38 +20,35 @@ late TextEditingController usernameController;
 late TextEditingController passwordController;
 double round = 7;
 bool obscureText = true;
+Loading loading = Loading();
 
-void showLoadingDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return const Dialog(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text("Loading..."),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-Future<void> signInUser(
-    String username, String password, BuildContext context) async {
+Future<void> signInUser(String username, String password, BuildContext context,
+    AuthenticatorState state) async {
   try {
-    showLoadingDialog(context);
-    await Amplify.Auth.signIn(
+    loading.showLoadingDialog(context);
+    await Amplify.Auth.signOut();
+
+    SignInResult result = await Amplify.Auth.signIn(
       username: username,
       password: password,
     );
-    Navigator.pop(context);
+
+    debugPrint(result.nextStep.toString());
+    switch (result.nextStep.signInStep) {
+      case AuthSignInStep.resetPassword:
+      case AuthSignInStep.confirmSignInWithCustomChallenge:
+      case AuthSignInStep.confirmSignUp:
+      case AuthSignInStep.done:
+      case AuthSignInStep.continueSignInWithMfaSelection:
+      case AuthSignInStep.continueSignInWithTotpSetup:
+      case AuthSignInStep.confirmSignInWithSmsMfaCode:
+      case AuthSignInStep.confirmSignInWithTotpMfaCode:
+      case AuthSignInStep.confirmSignInWithNewPassword:
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+        state.changeStep(AuthenticatorStep.confirmSignInNewPassword);
+    }
   } on AuthException catch (e) {
     debugPrint(e.toString());
     if (e is UserNotFoundException) {
@@ -102,7 +100,6 @@ class _SignInCustomState extends State<SignInCustom> {
     super.dispose();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -229,7 +226,8 @@ class _SignInCustomState extends State<SignInCustom> {
                             backgroundColor: WidgetStateColor.transparent,
                             padding: WidgetStateProperty.all(EdgeInsets.zero)),
                         onPressed: () => widget.state.changeStep(
-                          AuthenticatorStep.resetPassword,
+                          AuthenticatorStep.confirmSignInNewPassword,
+                          //TODO SOMETHING ELSE
                         ),
                         child: RichText(
                           text: const TextSpan(
@@ -251,7 +249,7 @@ class _SignInCustomState extends State<SignInCustom> {
                           if (usernameController.text.isNotEmpty &&
                               passwordController.text.isNotEmpty) {
                             await signInUser(usernameController.text,
-                                passwordController.text, context);
+                                passwordController.text, context, widget.state);
                           } else {
                             const ResponsePopUp(
                                     color: Colors.red,

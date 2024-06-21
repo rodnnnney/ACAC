@@ -3,7 +3,6 @@ import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
@@ -65,11 +64,11 @@ class HomePage extends ConsumerWidget {
                                 ),
                               );
                             } else {
-                              return const Text('Name not available');
+                              return Text(name ?? '');
                             }
                           },
                           error: (error, stack) {
-                            return const Text('Name not found :(');
+                            return const Text('');
                           },
                           loading: () => const Text('....'),
                         ),
@@ -80,12 +79,12 @@ class HomePage extends ConsumerWidget {
                                   Navigator.pushNamed(context, AccountInfo.id),
                               icon: const Icon(Icons.account_circle),
                             ),
-                            IconButton(
-                              onPressed: () => Navigator.pushNamed(
-                                  context, DiscountCard.id,
-                                  arguments: 'Rodney'),
-                              icon: const Icon(Icons.card_giftcard_outlined),
-                            ),
+                            // IconButton(
+                            //   onPressed: () => Navigator.pushNamed(
+                            //       context, DiscountCard.id,
+                            //       arguments: 'Rodney'),
+                            //   icon: const Icon(Icons.card_giftcard_outlined),
+                            // ),
                           ],
                         ),
                       ],

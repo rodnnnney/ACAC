@@ -1,11 +1,11 @@
 import 'dart:io';
+
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -73,7 +73,8 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   void handleScan() {
     controller?.dispose();
     HapticFeedback.heavyImpact();
-    Navigator.pushNamed(context, DiscountCard.id, arguments: name);
+    Navigator.pushNamed(context, DiscountCard.id,
+        arguments: name.isEmpty ? email : name);
     setState(() {
       const ResponsePopUp(
         response: 'QR scanned successfully',

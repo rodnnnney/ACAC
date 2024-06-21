@@ -1,6 +1,3 @@
-import 'package:ACAC/domain_layer/use_cases/Login.dart';
-import 'package:ACAC/domain_layer/use_cases/sign_up.dart';
-import 'package:ACAC/domain_layer/use_cases/welcome.dart';
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/pages/maps.dart';
@@ -12,9 +9,6 @@ import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
 import 'package:flutter/cupertino.dart';
 
 final appRoutes = <String, WidgetBuilder>{
-  WelcomeScreen.id: (context) => const WelcomeScreen(),
-  LoginScreen.id: (context) => const LoginScreen(),
-  RegistrationScreen.id: (context) => RegistrationScreen(),
   MapScreen.id: (context) => MapScreen(),
   HomePage.id: (context) => HomePage(),
   AccountInfo.id: (context) => AccountInfo(),
@@ -24,8 +18,9 @@ final appRoutes = <String, WidgetBuilder>{
   // Scanner.id: (context) => Scanner(),
   SortedByRating.id: (context) => SortedByRating(),
   QrCodeGen.id: (context) => const QrCodeGen(),
-  DiscountCard.id: (context) => DiscountCard(
-        name: '',
-      ),
+  DiscountCard.id: (context) {
+    final name = ModalRoute.of(context)!.settings.arguments as String?;
+    return DiscountCard(name: name!);
+  },
   QRViewExample.id: (context) => QRViewExample()
 };
