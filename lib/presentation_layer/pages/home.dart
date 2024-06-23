@@ -74,7 +74,7 @@ class HomePage extends ConsumerWidget {
                         //   },
                         //   loading: () => const Text('....'),
                         // ),
-                        Text(''),
+                        const Text(''),
                         Row(
                           children: [
                             GestureDetector(
