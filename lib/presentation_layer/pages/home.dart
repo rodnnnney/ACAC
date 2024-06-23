@@ -5,7 +5,6 @@ import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
 import 'package:ACAC/presentation_layer/pages/history.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -24,7 +23,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfoAsyncValue = ref.watch(userInfoProvider);
+    //final userInfoAsyncValue = ref.watch(userInfoProvider);
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
@@ -43,38 +42,39 @@ class HomePage extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        userInfoAsyncValue.when(
-                          data: (Map<String, String> userinfo) {
-                            final name = userinfo['name'];
-                            if (name != null) {
-                              return ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    const LinearGradient(colors: [
-                                  GlobalTheme.kDarkGreen,
-                                  GlobalTheme.kGreen,
-                                  GlobalTheme.kWhite
-                                ], stops: [
-                                  0.05,
-                                  0.97,
-                                  1.0
-                                ]).createShader(bounds),
-                                child: Text(
-                                  name,
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      color: GlobalTheme.kWhite,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              );
-                            } else {
-                              return Text(name ?? '');
-                            }
-                          },
-                          error: (error, stack) {
-                            return const Text('');
-                          },
-                          loading: () => const Text('....'),
-                        ),
+                        // userInfoAsyncValue.when(
+                        //   data: (Map<String, String> userinfo) {
+                        //     final name = userinfo['name'];
+                        //     if (name != null) {
+                        //       return ShaderMask(
+                        //         shaderCallback: (bounds) =>
+                        //             const LinearGradient(colors: [
+                        //           GlobalTheme.kDarkGreen,
+                        //           GlobalTheme.kGreen,
+                        //           GlobalTheme.kWhite
+                        //         ], stops: [
+                        //           0.05,
+                        //           0.97,
+                        //           1.0
+                        //         ]).createShader(bounds),
+                        //         child: Text(
+                        //           name,
+                        //           style: const TextStyle(
+                        //               fontSize: 18,
+                        //               color: GlobalTheme.kWhite,
+                        //               fontWeight: FontWeight.bold),
+                        //         ),
+                        //       );
+                        //     } else {
+                        //       return Text(name ?? '');
+                        //     }
+                        //   },
+                        //   error: (error, stack) {
+                        //     return const Text('');
+                        //   },
+                        //   loading: () => const Text('....'),
+                        // ),
+                        Text(''),
                         Row(
                           children: [
                             GestureDetector(
