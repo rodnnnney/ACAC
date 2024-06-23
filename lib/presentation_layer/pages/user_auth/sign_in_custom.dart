@@ -39,6 +39,10 @@ Future<void> signInUser(String username, String password, BuildContext context,
       case AuthSignInStep.confirmSignInWithCustomChallenge:
       case AuthSignInStep.confirmSignUp:
       case AuthSignInStep.done:
+        await Amplify.Auth.signIn(
+          username: username,
+          password: password,
+        );
       case AuthSignInStep.continueSignInWithMfaSelection:
       case AuthSignInStep.continueSignInWithTotpSetup:
       case AuthSignInStep.confirmSignInWithSmsMfaCode:

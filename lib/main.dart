@@ -4,7 +4,6 @@ import 'package:ACAC/presentation_layer/pages/user_auth/sign_in_custom.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:ACAC/presentation_layer/state_management/provider/user_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -12,6 +11,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
@@ -22,6 +22,7 @@ import 'common_layer/theme/color_theme.dart';
 import 'models/ModelProvider.dart';
 
 void main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await _configureAmplify();
@@ -37,8 +38,6 @@ void main() async {
             create: (context) => PolyInfo()),
         provider.ChangeNotifierProvider<NavInfo>(
             create: (context) => NavInfo()),
-        provider.ChangeNotifierProvider<UserInfo>(
-            create: (context) => UserInfo()),
       ],
       child: const ProviderScope(
         child: MyApp(),

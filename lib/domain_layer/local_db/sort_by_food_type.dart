@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 final List<HomeCard> sortByFoodType = [
   HomeCard(
     displayIMG:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/japan.avif',
-    text: 'Ramen',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/ai_gen/openart-image_hspOGA67_1719107433110_raw.png',
+    text: 'Noodle-Based',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
         context,
@@ -16,7 +16,8 @@ final List<HomeCard> sortByFoodType = [
     },
   ),
   HomeCard(
-    displayIMG: 'https://acacpicturesgenerealbucket.s3.amazonaws.com/boba.png',
+    displayIMG:
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/ai_gen/openart-image_RqgEtvnk_1719107599308_raw.png',
     text: 'Bubble Tea',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(

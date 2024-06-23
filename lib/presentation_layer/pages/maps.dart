@@ -14,6 +14,7 @@ import 'package:provider/provider.dart' as legacy_provider;
 
 class MapScreen extends ConsumerStatefulWidget {
   static String id = 'Map_Screen';
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -22,7 +23,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Markers markerManager = Markers();
   bool isLocationLoaded = false;
   UserLocation location = UserLocation();
-  LatLng userPosition = const LatLng(0, 0);
+  late LatLng userPosition;
   LatLng? restPosition;
   GoogleMapController? _controller;
 
@@ -33,20 +34,25 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future<void> _initializeLocation() async {
-    LatLng userLocation = await location.find();
-    setState(() {
-      isLocationLoaded = true;
-      userPosition = userLocation;
-    });
-    markerManager.initializeUserLocation(userPosition);
-    if (context.mounted) {
-      markerManager.initializeMarkers(context);
+    try {
+      LatLng userLocation = await location.find();
+      setState(() {
+        isLocationLoaded = true;
+        userPosition = userLocation;
+      });
+      markerManager.initializeUserLocation(userPosition);
+      if (context.mounted) {
+        markerManager.initializeMarkers(context);
+      }
+      print('Location and markers initialized');
+    } catch (e) {
+      print('Error initializing location: $e');
+      // Handle the error appropriately
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    //final userLocation1 = ref.read(userLocationProvider1);
     return Scaffold(
       body: isLocationLoaded
           ? buildMap()

@@ -1,4 +1,5 @@
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
+import 'package:ACAC/presentation_layer/pages/history.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/pages/qr_code_gen.dart';
@@ -22,5 +23,6 @@ final appRoutes = <String, WidgetBuilder>{
     final name = ModalRoute.of(context)!.settings.arguments as String?;
     return DiscountCard(name: name!);
   },
-  QRViewExample.id: (context) => QRViewExample()
+  QRViewExample.id: (context) => QRViewExample(),
+  History.id: (context) => History(),
 };

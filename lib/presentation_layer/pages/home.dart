@@ -3,12 +3,14 @@ import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
+import 'package:ACAC/presentation_layer/pages/history.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_user.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
@@ -27,6 +29,7 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -74,17 +77,52 @@ class HomePage extends ConsumerWidget {
                         ),
                         Row(
                           children: [
-                            IconButton(
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, AccountInfo.id),
-                              icon: const Icon(Icons.account_circle),
+                            GestureDetector(
+                              onTap: () {
+                                HapticFeedback.heavyImpact();
+                                Navigator.pushNamed(context, AccountInfo.id);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(1),
+                                decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        GlobalTheme.kDarkGreen,
+                                        GlobalTheme.kGreen,
+                                        Color(0xff98C48D)
+                                      ],
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30))),
+                                child: const Icon(
+                                  Icons.account_circle,
+                                  color: GlobalTheme.kWhite,
+                                  size: 30,
+                                ),
+                              ),
                             ),
-                            // IconButton(
-                            //   onPressed: () => Navigator.pushNamed(
-                            //       context, DiscountCard.id,
-                            //       arguments: 'Rodney'),
-                            //   icon: const Icon(Icons.card_giftcard_outlined),
-                            // ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                HapticFeedback.heavyImpact();
+                                Navigator.pushNamed(context, History.id);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        GlobalTheme.kGreen,
+                                        Color(0xff98C48D),
+                                        GlobalTheme.kDarkGreen,
+                                      ],
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30))),
+                                child: const Icon(Icons.receipt,
+                                    color: GlobalTheme.kWhite),
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -114,7 +152,7 @@ class HomePage extends ConsumerWidget {
                                     1.0
                                   ]).createShader(bounds),
                               child: const Text(
-                                'featured',
+                                'Featured',
                                 style: TextStyle(
                                     color: GlobalTheme.kWhite,
                                     fontWeight: FontWeight.bold),
@@ -130,7 +168,7 @@ class HomePage extends ConsumerWidget {
                                 stops: [0.1, 0.5, 1.0],
                               ).createShader(bounds),
                               child: Text(
-                                'items found: ${images.length}',
+                                'Items Found: ${images.length}',
                                 style: const TextStyle(
                                     color: GlobalTheme.kWhite,
                                     fontWeight: FontWeight.bold),
@@ -246,45 +284,49 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(
-                            height: screenHeight * 0.2,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, SortedByRating.id);
-                              },
-                              child: Card(
-                                child: Container(
-                                  width: 120,
-                                  height: 130,
-                                  padding: const EdgeInsets.all(5),
-                                  child: Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: CachedNetworkImage(
-                                          height: screenHeight * 0.15,
-                                          fit: BoxFit.contain,
-                                          imageUrl:
-                                              'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
-                                        ),
+                          height: screenHeight * 0.2,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, SortedByRating.id);
+                            },
+                            child: Card(
+                              child: Container(
+                                width: 120,
+                                height: 130,
+                                padding: const EdgeInsets.all(5),
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: CachedNetworkImage(
+                                        height: screenHeight * 0.15,
+                                        fit: BoxFit.contain,
+                                        imageUrl:
+                                            'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
                                       ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Rating',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ],
-                                        ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Rating',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        )
                       ],
                     )
                   ],

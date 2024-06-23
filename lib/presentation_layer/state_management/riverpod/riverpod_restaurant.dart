@@ -38,9 +38,10 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Kinton Ramen',
   ),
   restaurantCard(
-    restaurantName: 'Friends&KTV ',
+    restaurantName: 'Friends&KTV',
     location: const LatLng(45.36865077062187, -75.70277557461156),
     address: '1430 Prince of Wales',
     imageLogo:
@@ -72,47 +73,48 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Friends&KTV',
   ),
   restaurantCard(
-    restaurantName: 'Chatime',
-    location: const LatLng(45.411220513918316, -75.70696356085315),
-    address: '695 Somerset St',
-    imageSrc:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat.jpeg',
-    imageLogo:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chatime.jpeg',
-    hours: Time(
-      monday: StartStop(startTime: '11:00 AM', endTime: '1:00 AM'),
-      tuesday: StartStop(startTime: '12:00 PM', endTime: '1:00 AM'),
-      wednesday: StartStop(startTime: '12:00 PM', endTime: '1:00 AM'),
-      thursday: StartStop(startTime: '12:00 PM', endTime: '1:00 AM'),
-      friday: StartStop(startTime: '12:00 PM', endTime: '2:00 AM'),
-      saturday: StartStop(startTime: '11:00 AM', endTime: '2:00 AM'),
-      sunday: StartStop(startTime: '11:00 AM', endTime: '1:00 AM'),
-    ),
-    rating: 4.4,
-    cuisineType: ['Bubble Tea', 'Desert'],
-    reviewNum: 123,
-    discounts: ['10% off drinks'],
-    phoneNumber: '(613)366-4006',
-    discountPercent: 10,
-    topRatedItemsImgSrc: [
-      'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat1.png',
-      'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat2.png',
-      'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat3.png'
-    ],
-    topRatedItemsPrice: [],
-    topRatedItemsName: [
-      'Pearl Milk Tea',
-      'Brown Sugar Pearl',
-      'Handcrafted Taro'
-    ],
-    gMapsLink:
-        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
-    websiteLink: 'https://www.kintonramen.com/menu/',
-  ),
+      restaurantName: 'Chatime',
+      location: const LatLng(45.411220513918316, -75.70696356085315),
+      address: '695 Somerset St',
+      imageSrc:
+          'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat.jpeg',
+      imageLogo:
+          'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chatime.jpeg',
+      hours: Time(
+        monday: StartStop(startTime: '11:00 AM', endTime: '1:00 AM'),
+        tuesday: StartStop(startTime: '12:00 PM', endTime: '1:00 AM'),
+        wednesday: StartStop(startTime: '12:00 PM', endTime: '1:00 AM'),
+        thursday: StartStop(startTime: '12:00 PM', endTime: '1:00 AM'),
+        friday: StartStop(startTime: '12:00 PM', endTime: '2:00 AM'),
+        saturday: StartStop(startTime: '11:00 AM', endTime: '2:00 AM'),
+        sunday: StartStop(startTime: '11:00 AM', endTime: '1:00 AM'),
+      ),
+      rating: 4.4,
+      cuisineType: ['Bubble Tea', 'Desert'],
+      reviewNum: 123,
+      discounts: ['10% off drinks'],
+      phoneNumber: '(613)366-4006',
+      discountPercent: 10,
+      topRatedItemsImgSrc: [
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat1.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat2.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat3.png'
+      ],
+      topRatedItemsPrice: [],
+      topRatedItemsName: [
+        'Pearl Milk Tea',
+        'Brown Sugar Pearl',
+        'Handcrafted Taro'
+      ],
+      gMapsLink:
+          'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+      websiteLink: 'https://www.kintonramen.com/menu/',
+      awsMatch: 'Chatime'),
   restaurantCard(
-    restaurantName: 'Dakogi',
+    restaurantName: 'Dakogi Elgin',
     location: const LatLng(45.4278039812124, -75.69032978995092),
     address: '280 Elgin St',
     imageSrc:
@@ -148,45 +150,46 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Dakogi_Elgin',
   ),
   restaurantCard(
-    restaurantName: 'Dakogi',
-    location: const LatLng(45.411220513918316, -75.70696356085315),
-    address: '80 Marketplace Ave',
-    imageSrc:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dakpic.webp',
-    imageLogo:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/daklogo.png',
-    hours: Time(
-      monday: StartStop(startTime: 'Closed', endTime: '9:00 PM'),
-      tuesday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
-      wednesday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
-      thursday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
-      friday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
-      saturday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
-      sunday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
-    ),
-    rating: 3.8,
-    cuisineType: ['Korean', 'Fried Chicken'],
-    reviewNum: 299,
-    discounts: ['10% off', 'Free Fries with purchases \$40+'],
-    phoneNumber: '(613)823-8233',
-    discountPercent: 10,
-    topRatedItemsPrice: [],
-    topRatedItemsImgSrc: [
-      'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak1.png',
-      'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak2.png',
-      'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak3.png'
-    ],
-    topRatedItemsName: [
-      'Half and Half',
-      'Spicy Chicken feet',
-      'Yang Nyeom Chicken'
-    ],
-    gMapsLink:
-        'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
-    websiteLink: 'https://www.kintonramen.com/menu/',
-  ),
+      restaurantName: 'Dakogi MP',
+      location: const LatLng(45.411220513918316, -75.70696356085315),
+      address: '80 Marketplace Ave',
+      imageSrc:
+          'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dakpic.webp',
+      imageLogo:
+          'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/daklogo.png',
+      hours: Time(
+        monday: StartStop(startTime: 'Closed', endTime: '9:00 PM'),
+        tuesday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
+        wednesday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
+        thursday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
+        friday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
+        saturday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
+        sunday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
+      ),
+      rating: 3.8,
+      cuisineType: ['Korean', 'Fried Chicken'],
+      reviewNum: 299,
+      discounts: ['10% off', 'Free Fries with purchases \$40+'],
+      phoneNumber: '(613)823-8233',
+      discountPercent: 10,
+      topRatedItemsPrice: [],
+      topRatedItemsImgSrc: [
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak1.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak2.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak3.png'
+      ],
+      topRatedItemsName: [
+        'Half and Half',
+        'Spicy Chicken feet',
+        'Yang Nyeom Chicken'
+      ],
+      gMapsLink:
+          'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
+      websiteLink: 'https://www.kintonramen.com/menu/',
+      awsMatch: 'Dakogi_Marketplace'),
   restaurantCard(
     restaurantName: 'Gongfu Bao',
     location: const LatLng(45.41573106777921, -75.69463575934863),
@@ -225,6 +228,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Gongfu_Bao',
   ),
   restaurantCard(
     restaurantName: 'Hot Star Chicken',
@@ -263,6 +267,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Hot_Star_Chicken',
   ),
   restaurantCard(
     restaurantName: 'La Noodle',
@@ -297,6 +302,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'La_Noodle',
   ),
   restaurantCard(
     restaurantName: 'Oriental house',
@@ -337,6 +343,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Oriental_house',
   ),
   restaurantCard(
     restaurantName: 'Pho Lady',
@@ -375,6 +382,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Pho_Lady',
   ),
   restaurantCard(
     restaurantName: 'Pomelo Hat',
@@ -413,6 +421,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Pomelo_Hat',
   ),
   restaurantCard(
     restaurantName: 'Shuyi Tealicious',
@@ -451,6 +460,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Shuyi_Tealicious',
   ),
   restaurantCard(
     restaurantName: 'Fuwa Fuwa',
@@ -489,6 +499,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
+    awsMatch: 'Fuwa_Fuwa',
   ),
 ];
 

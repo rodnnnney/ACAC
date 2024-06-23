@@ -8,6 +8,7 @@ import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
 import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -278,10 +279,12 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                               padding: const EdgeInsets.all(12),
                               child: Text(
                                 filteredRestaurants[index].rating.toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: ref.watch(darkLight).theme
+                                        ? Colors.black
+                                        : Colors.white),
                               ),
                             ),
                           )

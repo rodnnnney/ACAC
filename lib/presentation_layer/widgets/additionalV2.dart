@@ -1,7 +1,6 @@
 import 'package:ACAC/common_layer/widgets/star_builder.dart';
 import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
-import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
@@ -12,19 +11,22 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 import 'package:url_launcher/url_launcher.dart';
 
-class RestaurantAdditionalInfo extends StatefulWidget {
-  const RestaurantAdditionalInfo(
-      {super.key, required this.restaurant, required this.distance});
+class AdditionalV2 extends StatefulWidget {
+  const AdditionalV2(
+      {super.key,
+      required this.restaurant,
+      required this.distance,
+      required this.user});
 
   final restaurantCard restaurant;
   final String distance;
+  final LatLng user;
 
   @override
-  State<RestaurantAdditionalInfo> createState() =>
-      _RestaurantAdditionalInfoState();
+  State<AdditionalV2> createState() => _AdditionalV2State();
 }
 
-class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
+class _AdditionalV2State extends State<AdditionalV2> {
   String formatNumber(int number) {
     final formatter = NumberFormat('#,###');
     return formatter.format(number);
@@ -339,41 +341,6 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                               }),
                         ),
                   const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      TextButton(
-                        style: const ButtonStyle(
-                          padding: WidgetStatePropertyAll(
-                              EdgeInsets.symmetric(horizontal: 12)),
-                          backgroundColor:
-                              WidgetStatePropertyAll<Color>(Colors.green),
-                          foregroundColor:
-                              WidgetStatePropertyAll<Color>(Colors.white),
-                        ),
-                        onPressed: () async {
-                          try {
-                            LatLng user = await data.getLocation();
-                            String url = await maps.createHttpUrl(
-                              user.latitude,
-                              user.longitude,
-                              widget.restaurant.location.latitude,
-                              widget.restaurant.location.longitude,
-                            );
-                            maps.processPolylineData(url);
-                            maps.updateCameraBounds(
-                                [user, widget.restaurant.location]);
-                            nav.updateRouteDetails(url);
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, MapScreen.id);
-                            }
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                        child: const Text('Find on Map'),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),

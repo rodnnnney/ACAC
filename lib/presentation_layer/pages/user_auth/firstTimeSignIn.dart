@@ -5,6 +5,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FirstTimeSignIn extends StatefulWidget {
   static String id = 'First_Time';
@@ -175,6 +176,7 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: InkWell(
                         onTap: () async {
+                          HapticFeedback.heavyImpact();
                           if (newPassword.text == newPassword2.text) {
                             if (newPassword.text.length >= 8) {
                               loading.showLoadingDialog(context);

@@ -8,6 +8,7 @@ class restaurantCard {
   late String address;
   late String imageSrc;
   late String imageLogo;
+  late String awsMatch;
   late Time hours;
   late double rating;
   late List<String> cuisineType;
@@ -27,6 +28,7 @@ class restaurantCard {
       required this.address,
       required this.imageSrc,
       required this.imageLogo,
+      required this.awsMatch,
       required this.hours,
       required this.rating,
       required this.reviewNum,
