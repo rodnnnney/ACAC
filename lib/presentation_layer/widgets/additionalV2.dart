@@ -1,14 +1,10 @@
 import 'package:ACAC/common_layer/widgets/star_builder.dart';
 import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
-import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
-import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart' as legacy_provider;
 import 'package:url_launcher/url_launcher.dart';
 
 class AdditionalV2 extends StatefulWidget {
@@ -34,9 +30,6 @@ class _AdditionalV2State extends State<AdditionalV2> {
 
   @override
   Widget build(BuildContext context) {
-    PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
-    NavInfo nav = legacy_provider.Provider.of<NavInfo>(context);
-    RestaurantInfo data = legacy_provider.Provider.of<RestaurantInfo>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -159,7 +152,7 @@ class _AdditionalV2State extends State<AdditionalV2> {
                                   if (await canLaunchUrl(url)) {
                                     await launchUrl(url);
                                   } else {
-                                    print('Could not launch URL');
+                                    //  print('Could not launch URL');
                                   }
                                 } catch (e) {
                                   print('Error: $e');

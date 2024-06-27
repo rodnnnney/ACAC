@@ -25,7 +25,7 @@ final userLocationProvider = FutureProvider<LatLng>(
       );
       return LatLng(position.latitude, position.longitude);
     } catch (e) {
-      print('An error occurred: $e');
+      //print('An error occurred: $e');
       return const LatLng(0, 0);
     }
   },

@@ -107,7 +107,7 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                   left: 10,
                   bottom: 10,
                   child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12)),

@@ -20,7 +20,7 @@ import '../pages/maps.dart';
 class SortedByRating extends ConsumerStatefulWidget {
   static const String id = 'sorted_by_rating_list';
 
-  SortedByRating({super.key});
+  const SortedByRating({super.key});
 
   @override
   ConsumerState<SortedByRating> createState() => CardViewerHomePageState();
@@ -75,7 +75,7 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
         //  title: Text(widget.cuisineType),

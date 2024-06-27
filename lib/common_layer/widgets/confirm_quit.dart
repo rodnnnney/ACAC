@@ -44,7 +44,7 @@ class ConfirmQuit extends ConsumerWidget {
                 backgroundColor:
                     ref.watch(darkLight).theme ? Colors.grey : Colors.white,
                 foregroundColor: Colors.black,
-                side: BorderSide(color: Colors.black, width: 1)),
+                side: const BorderSide(color: Colors.black, width: 1)),
             onPressed: () {
               Navigator.pop(context);
             },

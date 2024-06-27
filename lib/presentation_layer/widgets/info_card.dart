@@ -4,10 +4,10 @@ import 'package:ACAC/presentation_layer/state_management/provider/restaurant_pro
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class infoCard extends StatelessWidget {
+class InfoCard extends StatelessWidget {
   double? travelTime;
 
-  infoCard(this.travelTime, {super.key});
+  InfoCard(this.travelTime, {super.key});
 
   @override
   Widget build(BuildContext context) {

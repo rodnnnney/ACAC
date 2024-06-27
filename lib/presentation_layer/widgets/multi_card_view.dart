@@ -262,7 +262,9 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                                   filteredRestaurants[index].location
                                 ]);
                                 nav.updateRouteDetails(url);
-                                Navigator.pushNamed(context, MapScreen.id);
+                                if (context.mounted) {
+                                  Navigator.pushNamed(context, MapScreen.id);
+                                }
                               } catch (e) {}
                             },
                             child: const Text('Find on Map'),

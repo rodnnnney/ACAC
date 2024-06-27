@@ -17,7 +17,7 @@ final appRoutes = <String, WidgetBuilder>{
         cuisineType: ModalRoute.of(context)!.settings.arguments as String,
       ),
   // Scanner.id: (context) => Scanner(),
-  SortedByRating.id: (context) => SortedByRating(),
+  SortedByRating.id: (context) => const SortedByRating(),
   QrCodeGen.id: (context) => const QrCodeGen(),
   DiscountCard.id: (context) {
     final name = ModalRoute.of(context)!.settings.arguments as String?;

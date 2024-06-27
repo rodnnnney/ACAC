@@ -92,7 +92,7 @@ flutter:
     - 'assets/'
     - 'images/'
     - 'images/card1.JPG'
-    - .env
+
 
 
 

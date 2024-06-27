@@ -45,7 +45,7 @@ class AccountInfo extends ConsumerWidget {
 
   Center text() {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: 50,
         child: DefaultTextStyle(

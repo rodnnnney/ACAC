@@ -5,7 +5,7 @@ class NavButton extends StatelessWidget {
   final VoidCallback onPress; // Corrected the callback type
   final Text displayText; // Keeping it as Text widget
 
-  NavButton(this.color, this.displayText, this.onPress);
+  NavButton(this.color, this.displayText, this.onPress, {super.key});
 
   @override
   Widget build(BuildContext context) {

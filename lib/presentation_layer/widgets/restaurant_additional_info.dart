@@ -156,11 +156,9 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                                 try {
                                   if (await canLaunchUrl(url)) {
                                     await launchUrl(url);
-                                  } else {
-                                    print('Could not launch URL');
-                                  }
+                                  } else {}
                                 } catch (e) {
-                                  print('Error: $e');
+                                  //print(e);
                                 }
                               },
                               child: Text(
@@ -367,7 +365,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                               Navigator.pushNamed(context, MapScreen.id);
                             }
                           } catch (e) {
-                            print(e);
+                            //  print(e);
                           }
                         },
                         child: const Text('Find on Map'),

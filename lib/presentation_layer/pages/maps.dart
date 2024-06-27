@@ -93,7 +93,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,
           ),
-          infoCard(nav.travelTime),
+          InfoCard(nav.travelTime),
           Positioned(
               top: 65,
               left: 20,
