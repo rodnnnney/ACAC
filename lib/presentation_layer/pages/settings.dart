@@ -1,9 +1,11 @@
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/confirm_quit.dart';
+import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -124,7 +126,14 @@ class AccountInfo extends ConsumerWidget {
                         style: ButtonStyle(
                           elevation: WidgetStateProperty.all(0),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          const ResponsePopUp(
+                            response: 'Coming Soon...😂',
+                            location: DelightSnackbarPosition.top,
+                            icon: Icons.error_outline,
+                            color: Colors.redAccent,
+                          ).showToast(context);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -163,7 +172,14 @@ class AccountInfo extends ConsumerWidget {
                         style: ButtonStyle(
                           elevation: WidgetStateProperty.all(0),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          const ResponsePopUp(
+                            response: 'Coming Soon...😂',
+                            location: DelightSnackbarPosition.top,
+                            icon: Icons.error_outline,
+                            color: Colors.redAccent,
+                          ).showToast(context);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),

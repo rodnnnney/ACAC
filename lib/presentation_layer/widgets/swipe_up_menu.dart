@@ -60,6 +60,7 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
                   return const Center(child: Text('Location not found'));
                 } else {
                   return GridView.builder(
+                    physics: const ClampingScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Number of cards in a row
                       crossAxisSpacing: 10, // Horizontal space between cards

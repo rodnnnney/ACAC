@@ -27,6 +27,7 @@ class History extends ConsumerStatefulWidget {
 }
 
 late String distance;
+UserLocation location = UserLocation();
 
 // Function to format date string
 String formatDateString(String dateTimeString) {
@@ -45,8 +46,6 @@ restaurantCard getInfo(List<restaurantCard> infoList, String checkName) {
   throw Error();
 }
 
-UserLocation location = UserLocation();
-
 // Function to fetch user's current location
 Future<LatLng> getLocation() async {
   return await location.find();
@@ -56,11 +55,9 @@ Future<LatLng> getLocation() async {
 class _HistoryState extends ConsumerState<History> {
   @override
   Widget build(BuildContext context) {
-    final maps = legacy.Provider.of<PolyInfo>(context); // Legacy provider usage
-    var pastRestaurants = ref
-        .watch(restaurantListControllerProvider); // Riverpod state management
-    final restaurantProvider =
-        ref.watch(restaurant); // Riverpod state management
+    final maps = legacy.Provider.of<PolyInfo>(context);
+    var pastRestaurants = ref.watch(restaurantListControllerProvider);
+    final restaurantProvider = ref.watch(restaurant);
 
     // Function to fetch distance between user and restaurant
     Future<String> getDistance(LatLng user, LatLng restaurant) async {
@@ -86,7 +83,16 @@ class _HistoryState extends ConsumerState<History> {
                 child: pastRestaurants.when(
                   data: (restaurants) {
                     if (restaurants.isEmpty) {
-                      return const Center(child: Text('It\'s empty'));
+                      return const Scaffold(
+                          body: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('No history so far!'),
+                            Text('Scanned restaurants will show up here!')
+                          ],
+                        ),
+                      ));
                     } else {
                       // Sorting restaurants by createdAt in descending order
                       restaurants.sort(
