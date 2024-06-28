@@ -43,6 +43,7 @@ PODS:
     - MLKitBarcodeScanning (~> 5.0.0)
   - GoogleMLKit/MLKitCore (6.0.0):
     - MLKitCommon (~> 11.0.0)
+  - GooglePlaces (8.5.0)
   - GoogleSignIn (7.1.0):
     - AppAuth (< 2.0, >= 1.7.3)
     - GTMAppAuth (< 5.0, >= 4.1.1)
@@ -67,10 +68,10 @@ PODS:
   - GTMAppAuth (4.1.1):
     - AppAuth/Core (~> 1.7)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
-  - GTMSessionFetcher (3.4.1):
-    - GTMSessionFetcher/Full (= 3.4.1)
-  - GTMSessionFetcher/Core (3.4.1)
-  - GTMSessionFetcher/Full (3.4.1):
+  - GTMSessionFetcher (3.5.0):
+    - GTMSessionFetcher/Full (= 3.5.0)
+  - GTMSessionFetcher/Core (3.5.0)
+  - GTMSessionFetcher/Full (3.5.0):
     - GTMSessionFetcher/Core
   - location (0.0.1):
     - Flutter
@@ -128,6 +129,8 @@ DEPENDENCIES:
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
+  - GoogleMaps
+  - GooglePlaces
   - location (from `.symlinks/plugins/location/ios`)
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -143,6 +146,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleMaps
     - GoogleMLKit
+    - GooglePlaces
     - GoogleSignIn
     - GoogleToolboxForMac
     - GoogleUtilities
@@ -207,12 +211,13 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
   GoogleMLKit: 97ac7af399057e99182ee8edfa8249e3226a4065
+  GooglePlaces: 426efb69051e7b460e16300ba63598687d10fa1a
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
-  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   MLImage: 1824212150da33ef225fbd3dc49f184cf611046c
   MLKitBarcodeScanning: 10ca0845a6d15f2f6e911f682a1998b68b973e8b
@@ -229,6 +234,6 @@ SPEC CHECKSUMS:
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: b109a95a7f51f46bdeba7ead98d72f650de1461c
+PODFILE CHECKSUM: 530e101051da2d5ca4f1a6f907e2f0d2c2d570e2
 
 COCOAPODS: 1.15.2

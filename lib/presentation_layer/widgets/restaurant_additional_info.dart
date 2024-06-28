@@ -137,7 +137,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(right: 20),
                         child: Column(
                           children: [
                             Row(
