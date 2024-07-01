@@ -26,7 +26,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Japanese', 'Noodle'],
     reviewNum: 1294,
     discounts: ['10% off dine in'],
-    phoneNumber: '(613)565-8138',
+    phoneNumber: '+1613 565 8138',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/kinton/ramen1.webp',
@@ -61,7 +61,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Chinese'],
     reviewNum: 73,
     discounts: ['10% off dine in'],
-    phoneNumber: '(613)695-6868',
+    phoneNumber: '+1613 695 6868',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/friendsktv/ktv1.png',
@@ -96,7 +96,7 @@ List<restaurantCard> restaurantInfo = [
       cuisineType: ['Bubble Tea', 'Desert'],
       reviewNum: 123,
       discounts: ['10% off drinks'],
-      phoneNumber: '(613)366-4006',
+      phoneNumber: '+1613 366 4006',
       discountPercent: 10,
       topRatedItemsImgSrc: [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/chatime/chat1.png',
@@ -134,7 +134,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Korean', 'Fried Chicken'],
     reviewNum: 720,
     discounts: ['10% off', 'Free Fries with purchases \$40+'],
-    phoneNumber: '(613)695-1300',
+    phoneNumber: '+1613 565 2232',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/dak1.png',
@@ -161,7 +161,7 @@ List<restaurantCard> restaurantInfo = [
       imageLogo:
           'https://acacpicturesgenerealbucket.s3.amazonaws.com/dakogi/daklogo.png',
       hours: Time(
-        monday: StartStop(startTime: 'Closed', endTime: '9:00 PM'),
+        monday: StartStop(startTime: 'Closed', endTime: 'Closed'),
         tuesday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
         wednesday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
         thursday: StartStop(startTime: '11:30 AM', endTime: '9:00 PM'),
@@ -173,7 +173,7 @@ List<restaurantCard> restaurantInfo = [
       cuisineType: ['Korean', 'Fried Chicken'],
       reviewNum: 299,
       discounts: ['10% off', 'Free Fries with purchases \$40+'],
-      phoneNumber: '(613)823-8233',
+      phoneNumber: '+1613 823 8233',
       discountPercent: 10,
       topRatedItemsPrice: [],
       topRatedItemsImgSrc: [
@@ -212,7 +212,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Chinese', 'Bao'],
     reviewNum: 968,
     discounts: ['10% off', 'Free Item with \$20+ Purchase'],
-    phoneNumber: '',
+    phoneNumber: '+1613 454 5963',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/gongfubao/bao1.webp',
@@ -251,7 +251,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Korean', 'Fried Chicken'],
     reviewNum: 109,
     discounts: ['10% off'],
-    phoneNumber: '(613)680-2500',
+    phoneNumber: '+1613 680 2500',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/hotstarchicken/hot3.png',
@@ -290,7 +290,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Chinese', 'Noodle'],
     reviewNum: 132,
     discounts: ['10% off'],
-    phoneNumber: '(613)686-1350',
+    phoneNumber: '+1613 686 1350',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/lanoodle/la1.png',
@@ -327,7 +327,7 @@ List<restaurantCard> restaurantInfo = [
     ],
     reviewNum: 244,
     discounts: ['10% off dine-in'],
-    phoneNumber: '(613)563-2694',
+    phoneNumber: '+1613 563 2694',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/orientalhouse/oriental1.png',
@@ -366,7 +366,7 @@ List<restaurantCard> restaurantInfo = [
     cuisineType: ['Vietnamese', 'Noodle'],
     reviewNum: 66,
     discounts: ['10% off', 'Free Item with \$40+ Purchase'],
-    phoneNumber: '',
+    phoneNumber: '+1613 983 1288',
     discountPercent: 10,
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/pholady/pholay1.jpeg',
@@ -445,7 +445,7 @@ List<restaurantCard> restaurantInfo = [
     reviewNum: 61,
     discounts: ['10% off drinks'],
     discountPercent: 10,
-    phoneNumber: '(343)598-0866',
+    phoneNumber: '+1343 598 0866',
     topRatedItemsImgSrc: [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/shuyi/shuy1.webp',
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/shuyi/shuyi2.webp',

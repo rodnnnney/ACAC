@@ -14,37 +14,33 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.sizeOf(context).height;
     return GestureDetector(
       onTap: () {
         routeName(context, text);
       },
       child: Card(
-        child: Container(
+        child: SizedBox(
           width: 120,
           height: 130,
-          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: CachedNetworkImage(
                   imageUrl: displayIMG,
-                  height: screenHeight * 0.15,
+                  height: 100,
                   fit: BoxFit.contain,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    Text(
-                      text,
-                      style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text,
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                ],
               ),
             ],
           ),

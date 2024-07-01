@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'discount_card.dart';
+
 class HomePage extends ConsumerWidget {
   static String id = 'home_screen';
 
@@ -77,6 +79,12 @@ class HomePage extends ConsumerWidget {
                         const Text(''),
                         Row(
                           children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, DiscountCard.id,
+                                      arguments: 'hello');
+                                },
+                                icon: const Icon(Icons.card_giftcard_outlined)),
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.heavyImpact();
@@ -140,17 +148,11 @@ class HomePage extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ShaderMask(
-                              shaderCallback: (bounds) => const LinearGradient(
-                                  colors: [
-                                    GlobalTheme.kDarkGreen,
-                                    GlobalTheme.kGreen,
-                                    GlobalTheme.kWhite
-                                  ],
-                                  stops: [
-                                    0.1,
-                                    0.5,
-                                    1.0
-                                  ]).createShader(bounds),
+                              shaderCallback: (bounds) =>
+                                  const LinearGradient(colors: [
+                                GlobalTheme.kDarkGreen,
+                                GlobalTheme.kGreen,
+                              ]).createShader(bounds),
                               child: const Text(
                                 'Featured',
                                 style: TextStyle(
@@ -163,9 +165,7 @@ class HomePage extends ConsumerWidget {
                                 colors: [
                                   GlobalTheme.kDarkGreen,
                                   GlobalTheme.kGreen,
-                                  GlobalTheme.kWhite
                                 ],
-                                stops: [0.1, 0.5, 1.0],
                               ).createShader(bounds),
                               child: Text(
                                 'Items Found: ${images.length}',
@@ -199,17 +199,11 @@ class HomePage extends ConsumerWidget {
                           height: 20,
                         ),
                         ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                GlobalTheme.kDarkGreen,
-                                GlobalTheme.kGreen,
-                                GlobalTheme.kWhite
-                              ],
-                              stops: [
-                                0.0,
-                                0.5,
-                                1.0
-                              ]).createShader(bounds),
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            GlobalTheme.kDarkGreen,
+                            GlobalTheme.kGreen,
+                          ]).createShader(bounds),
                           child: const Text(
                             'Country:',
                             style: TextStyle(
@@ -218,7 +212,7 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(
-                          height: screenHeight * 0.2,
+                          height: 130,
                           // Set appropriate height for GridView
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -232,17 +226,14 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                GlobalTheme.kDarkGreen,
-                                GlobalTheme.kGreen,
-                                GlobalTheme.kWhite
-                              ],
-                              stops: [
-                                0.0,
-                                0.5,
-                                1.0
-                              ]).createShader(bounds),
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            GlobalTheme.kDarkGreen,
+                            GlobalTheme.kGreen,
+                          ], stops: [
+                            0.0,
+                            0.5,
+                          ]).createShader(bounds),
                           child: const Text(
                             'Food Type:',
                             style: TextStyle(
@@ -251,7 +242,7 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(
-                          height: screenHeight * 0.2,
+                          height: 130,
                           // Set appropriate height for GridView
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -265,17 +256,14 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                GlobalTheme.kDarkGreen,
-                                GlobalTheme.kGreen,
-                                GlobalTheme.kWhite
-                              ],
-                              stops: [
-                                0.0,
-                                0.5,
-                                1.0
-                              ]).createShader(bounds),
+                          shaderCallback: (bounds) =>
+                              const LinearGradient(colors: [
+                            GlobalTheme.kDarkGreen,
+                            GlobalTheme.kGreen,
+                          ], stops: [
+                            0.0,
+                            0.5,
+                          ]).createShader(bounds),
                           child: const Text(
                             'Popularity:',
                             style: TextStyle(
@@ -284,39 +272,37 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(
-                          height: screenHeight * 0.2,
+                          height: 130,
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(context, SortedByRating.id);
                             },
                             child: Card(
-                              child: Container(
+                              child: SizedBox(
                                 width: 120,
                                 height: 130,
-                                padding: const EdgeInsets.all(5),
                                 child: Column(
                                   children: [
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: CachedNetworkImage(
-                                        height: screenHeight * 0.15,
+                                        height: 100,
                                         fit: BoxFit.contain,
                                         imageUrl:
                                             'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
                                       ),
                                     ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Rating',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
+                                    const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Rating',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

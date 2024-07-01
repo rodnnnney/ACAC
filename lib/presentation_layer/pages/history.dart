@@ -29,10 +29,11 @@ class History extends ConsumerStatefulWidget {
 late String distance;
 UserLocation location = UserLocation();
 
-// Function to format date string
+// Function to format date string (-4 cuz aws uses utc)
 String formatDateString(String dateTimeString) {
   DateTime dateTime = DateTime.parse(dateTimeString);
-  String formattedDate = DateFormat('MMMM d, yyyy').format(dateTime);
+  DateTime adjustedDateTime = dateTime.subtract(const Duration(hours: 4));
+  String formattedDate = DateFormat('MMMM d, yyyy').format(adjustedDateTime);
   return formattedDate;
 }
 

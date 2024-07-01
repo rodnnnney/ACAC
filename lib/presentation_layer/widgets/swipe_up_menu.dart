@@ -65,8 +65,8 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
                       crossAxisCount: 2, // Number of cards in a row
                       crossAxisSpacing: 10, // Horizontal space between cards
                       mainAxisSpacing: 10, // Vertical space between cards
-                      childAspectRatio: (screenHeight *
-                          0.00081316), // Aspect ratio of the cards
+                      childAspectRatio: 2 / 3, //(screenHeight * 0.00091316), //
+                      // Aspect ratio of the cards
                     ),
                     itemCount: restaurantProvider.length,
                     itemBuilder: (context, index) {

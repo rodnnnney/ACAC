@@ -18,6 +18,7 @@ class DiscountCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -26,25 +27,27 @@ class DiscountCard extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Stack(
+              Column(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(12),
-                    ),
-                    child: Image.asset("images/card1.JPG"),
+                  Row(
+                    children: [const Text('Email:'), Text(name)],
                   ),
-                  Positioned(
-                    left: MediaQuery.sizeOf(context).width * 0.12,
-                    top: MediaQuery.sizeOf(context).height * 0.05,
-                    child: Text(
-                      name,
-                      style: const TextStyle(
-                          fontSize: 20, color: Color(0xff364037)),
+                  const SizedBox(height: 10),
+                  const Row(
+                    children: [Text('Expiry Date:'), Text('12/12/2024')],
+                  ),
+                  const SizedBox(height: 10),
+                  const Center(
+                    child: Column(
+                      children: [
+                        Text('Questions or Concerns?'),
+                        Text('Reach out ACAC on instagram'),
+                        Text("asiancanadianscarleton@gmail.com")
+                      ],
                     ),
                   )
                 ],
-              ),
+              )
             ],
           ),
         ),

@@ -30,6 +30,15 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
     return formatter.format(number);
   }
 
+  void makePhoneCall(String phoneNumber) async {
+    String digitsOnly = phoneNumber.replaceAll(' ', '');
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: digitsOnly,
+    );
+    await launchUrl(launchUri);
+  }
+
   @override
   Widget build(BuildContext context) {
     PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
@@ -76,77 +85,80 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
             fit: BoxFit.cover,
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.restaurant.restaurantName,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          ),
-                          // Horizontal black line
-                          Text('-' *
-                              (widget.restaurant.restaurantName.length * 1.5)
-                                  .toInt()),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(widget.restaurant.address),
-                          Row(
-                            children: [
-                              FutureBuilder<Map<String, dynamic>>(
-                                future: getCurrentStatusWithColor(
-                                    widget.restaurant.hours
-                                        .getTodayStartStop()
-                                        .startTime,
-                                    widget.restaurant.hours
-                                        .getTodayStartStop()
-                                        .endTime),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else {
-                                    var status = snapshot.data?['status'] ??
-                                        'Unknown status';
-                                    var color =
-                                        snapshot.data?['color'] ?? Colors.black;
-                                    return Text(
-                                      status,
-                                      style: TextStyle(color: color),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    );
-                                  }
-                                },
-                              ),
-                              const SizedBox(width: 7),
-                              Text(
-                                  '${widget.restaurant.hours.getTodayStartStop().startTime} - ${widget.restaurant.hours.getTodayStartStop().endTime}')
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Column(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              widget.restaurant.restaurantName,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(widget.restaurant.address),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Row(
                               children: [
+                                Text(
+                                    '${widget.restaurant.hours.getTodayStartStop().startTime} - ${widget.restaurant.hours.getTodayStartStop().endTime}'),
+                                const SizedBox(width: 7),
+                                FutureBuilder<Map<String, dynamic>>(
+                                  future: getCurrentStatusWithColor(
+                                      widget.restaurant.hours
+                                          .getTodayStartStop()
+                                          .startTime,
+                                      widget.restaurant.hours
+                                          .getTodayStartStop()
+                                          .endTime),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else {
+                                      var status = snapshot.data?['status'] ??
+                                          'Unknown status';
+                                      var color = snapshot.data?['color'] ??
+                                          Colors.black;
+                                      return Text(
+                                        status,
+                                        style: TextStyle(color: color),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  widget.restaurant.rating.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
                                 buildStarRating(widget.restaurant.rating),
                                 const SizedBox(
                                   width: 3,
                                 ),
-                                Text(widget.restaurant.rating.toString()),
                               ],
                             ),
                             GestureDetector(
@@ -169,210 +181,251 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.distance,
-                      ),
-                      Text(widget.restaurant.cuisineType[0])
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Card(
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            minRadius: 18,
-                            maxRadius: 24,
-                            backgroundImage: CachedNetworkImageProvider(
-                                widget.restaurant.imageLogo),
-                          ),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'ACAC Discount',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                              Text('Valid until 12/12/2024')
-                            ],
-                          ),
-                          Container(
-                            width: 0.5,
-                            height: 48,
-                            color: Colors.black,
-                          ),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '10%',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xffE68437)),
-                              ),
-                              Text(
-                                'OFF',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Color(0xffE68437),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Row(
-                    children: [
-                      Text('Most Popular'),
-                    ],
-                  ),
-                  widget.restaurant.topRatedItemsName.isEmpty
-                      ? SizedBox(
-                          height: 150,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: Column(
-                                    children: [
-                                      ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: const Text('Nothing Found')),
-                                      const Text(
-                                        'Nothing found',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.distance,
+                        ),
+                        Text(widget.restaurant.cuisineType[0])
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              minRadius: 18,
+                              maxRadius: 24,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  widget.restaurant.imageLogo),
+                            ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ACAC Discount',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('Valid until 12/12/2024')
+                              ],
+                            ),
+                            Container(
+                              width: 0.5,
+                              height: 48,
+                              color: Colors.black,
+                            ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '10%',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xffE68437)),
+                                ),
+                                Text(
+                                  'OFF',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Color(0xffE68437),
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        )
-                      : SizedBox(
-                          height: 150,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount:
-                                  widget.restaurant.topRatedItemsName.length,
-                              itemBuilder: (context, index) {
-                                return Stack(
-                                  children: [
-                                    Card(
-                                      child: SizedBox(
-                                        width: 150,
-                                        height: 150,
-                                        child: Column(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: CachedNetworkImage(
-                                                imageUrl: widget.restaurant
-                                                    .topRatedItemsImgSrc[index],
-                                                height: 120,
-                                                fit: BoxFit.fitHeight,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8),
-                                              child: Text(
-                                                widget.restaurant
-                                                    .topRatedItemsName[index],
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 10,
-                                      left: 10,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(3),
-                                        decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius:
-                                                BorderRadius.circular(12)),
-                                        child: Text(
-                                          '${index + 1}# Most Popular!',
-                                          style: const TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              }),
+                              ],
+                            )
+                          ],
                         ),
-                  const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      TextButton(
-                        style: const ButtonStyle(
-                          padding: WidgetStatePropertyAll(
-                              EdgeInsets.symmetric(horizontal: 12)),
-                          backgroundColor:
-                              WidgetStatePropertyAll<Color>(Colors.green),
-                          foregroundColor:
-                              WidgetStatePropertyAll<Color>(Colors.white),
-                        ),
-                        onPressed: () async {
-                          try {
-                            LatLng user = await data.getLocation();
-                            String url = await maps.createHttpUrl(
-                              user.latitude,
-                              user.longitude,
-                              widget.restaurant.location.latitude,
-                              widget.restaurant.location.longitude,
-                            );
-                            maps.processPolylineData(url);
-                            maps.updateCameraBounds(
-                                [user, widget.restaurant.location]);
-                            nav.updateRouteDetails(url);
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, MapScreen.id);
-                            }
-                          } catch (e) {
-                            //  print(e);
-                          }
-                        },
-                        child: const Text('Find on Map'),
                       ),
-                    ],
-                  )
-                ],
+                    ),
+                    const SizedBox(height: 20),
+                    const Row(
+                      children: [
+                        Text('Most Popular'),
+                      ],
+                    ),
+                    widget.restaurant.topRatedItemsName.isEmpty
+                        ? SizedBox(
+                            height: 150,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 3,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  child: SizedBox(
+                                    width: 150,
+                                    height: 150,
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: const Text('Nothing Found')),
+                                        const Text(
+                                          'Nothing found',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : SizedBox(
+                            height: 150,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    widget.restaurant.topRatedItemsName.length,
+                                itemBuilder: (context, index) {
+                                  return Stack(
+                                    children: [
+                                      Card(
+                                        child: SizedBox(
+                                          width: 150,
+                                          height: 150,
+                                          child: Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: widget.restaurant
+                                                          .topRatedItemsImgSrc[
+                                                      index],
+                                                  height: 120,
+                                                  fit: BoxFit.fitHeight,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                child: Text(
+                                                  widget.restaurant
+                                                      .topRatedItemsName[index],
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 10,
+                                        left: 10,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          child: Text(
+                                            '${index + 1}# Most Popular!',
+                                            style: const TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                }),
+                          ),
+                    const SizedBox(height: 15),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            style: const ButtonStyle(
+                              padding: WidgetStatePropertyAll(
+                                  EdgeInsets.symmetric(horizontal: 12)),
+                              backgroundColor:
+                                  WidgetStatePropertyAll<Color>(Colors.green),
+                              foregroundColor:
+                                  WidgetStatePropertyAll<Color>(Colors.white),
+                            ),
+                            onPressed: () async {
+                              if (context.mounted) {
+                                Navigator.pushNamed(context, MapScreen.id);
+                              }
+                              try {
+                                LatLng user = await data.getLocation();
+                                String url = await maps.createHttpUrl(
+                                  user.latitude,
+                                  user.longitude,
+                                  widget.restaurant.location.latitude,
+                                  widget.restaurant.location.longitude,
+                                );
+                                maps.processPolylineData(url);
+                                maps.updateCameraBounds(
+                                    [user, widget.restaurant.location]);
+                                nav.updateRouteDetails(url);
+                              } catch (e) {
+                                //  print(e);
+                              }
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Find on Map'),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(Icons.location_on)
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            style: const ButtonStyle(
+                              padding: WidgetStatePropertyAll(
+                                  EdgeInsets.symmetric(horizontal: 12)),
+                              backgroundColor:
+                                  WidgetStatePropertyAll<Color>(Colors.black),
+                              foregroundColor:
+                                  WidgetStatePropertyAll<Color>(Colors.white),
+                            ),
+                            onPressed: () async {
+                              makePhoneCall(widget.restaurant.phoneNumber);
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Call'),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(Icons.phone)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

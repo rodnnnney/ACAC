@@ -87,15 +87,20 @@ class _AdditionalV2State extends State<AdditionalV2> {
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           ),
                           // Horizontal black line
-                          Text('-' *
-                              (widget.restaurant.restaurantName.length * 1.5)
-                                  .toInt()),
+
                           const SizedBox(
-                            height: 5,
+                            height: 10,
                           ),
                           Text(widget.restaurant.address),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             children: [
+                              Text(
+                                  '${widget.restaurant.hours.getTodayStartStop().startTime} - '
+                                  '${widget.restaurant.hours.getTodayStartStop().endTime}'),
+                              const SizedBox(width: 7),
                               FutureBuilder<Map<String, dynamic>>(
                                 future: getCurrentStatusWithColor(
                                     widget.restaurant.hours
@@ -124,9 +129,6 @@ class _AdditionalV2State extends State<AdditionalV2> {
                                   }
                                 },
                               ),
-                              const SizedBox(width: 7),
-                              Text(
-                                  '${widget.restaurant.hours.getTodayStartStop().startTime} - ${widget.restaurant.hours.getTodayStartStop().endTime}')
                             ],
                           ),
                         ],
@@ -135,34 +137,41 @@ class _AdditionalV2State extends State<AdditionalV2> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Row(
+                            Column(
                               children: [
-                                buildStarRating(widget.restaurant.rating),
-                                const SizedBox(
-                                  width: 3,
+                                Column(
+                                  children: [
+                                    Text(
+                                      widget.restaurant.rating.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    buildStarRating(widget.restaurant.rating),
+                                    const SizedBox(
+                                      width: 3,
+                                    ),
+                                  ],
                                 ),
-                                Text(widget.restaurant.rating.toString()),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final url =
+                                        Uri.parse(widget.restaurant.gMapsLink);
+                                    try {
+                                      if (await canLaunchUrl(url)) {
+                                        await launchUrl(url);
+                                      } else {}
+                                    } catch (e) {
+                                      //print(e);
+                                    }
+                                  },
+                                  child: Text(
+                                    '${formatNumber(widget.restaurant.reviewNum)} + ratings',
+                                    style: const TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                ),
                               ],
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                final url =
-                                    Uri.parse(widget.restaurant.gMapsLink);
-                                try {
-                                  if (await canLaunchUrl(url)) {
-                                    await launchUrl(url);
-                                  } else {
-                                    //  print('Could not launch URL');
-                                  }
-                                } catch (e) {
-                                  print('Error: $e');
-                                }
-                              },
-                              child: Text(
-                                '${formatNumber(widget.restaurant.reviewNum)} + ratings',
-                                style: const TextStyle(
-                                    decoration: TextDecoration.underline),
-                              ),
                             ),
                           ],
                         ),

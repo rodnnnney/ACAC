@@ -187,53 +187,60 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                         maxLines: 1,
                       ),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          TextButton(
-                            style: const ButtonStyle(
-                              padding: WidgetStatePropertyAll(
-                                  EdgeInsets.symmetric(horizontal: 8)),
-                              backgroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.green),
-                              foregroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.white),
-                            ),
-                            onPressed: () async {
-                              try {
-                                LatLng user = await widget.data.getLocation();
-                                String url = await widget.gmaps.createHttpUrl(
-                                  user.latitude,
-                                  user.longitude,
-                                  widget.restaurant.location.latitude,
-                                  widget.restaurant.location.longitude,
-                                );
-                                widget.gmaps.processPolylineData(url);
-                                widget.gmaps.updateCameraBounds(
-                                    [user, widget.restaurant.location]);
-                                widget.nav.updateRouteDetails(url);
-                                if (mounted) {
-                                  Navigator.pop(context);
+                          Flexible(
+                            flex: 2,
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                padding: WidgetStatePropertyAll(
+                                    EdgeInsets.symmetric(horizontal: 6)),
+                                backgroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.green),
+                                foregroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.white),
+                              ),
+                              onPressed: () async {
+                                try {
+                                  LatLng user = await widget.data.getLocation();
+                                  String url = await widget.gmaps.createHttpUrl(
+                                    user.latitude,
+                                    user.longitude,
+                                    widget.restaurant.location.latitude,
+                                    widget.restaurant.location.longitude,
+                                  );
+                                  widget.gmaps.processPolylineData(url);
+                                  widget.gmaps.updateCameraBounds(
+                                      [user, widget.restaurant.location]);
+                                  widget.nav.updateRouteDetails(url);
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                } catch (e) {
+                                  debugPrint(e.toString());
                                 }
-                              } catch (e) {
-                                print(e);
-                              }
-                            },
-                            child: const Text('Find on Map'),
+                              },
+                              child: const Text('Find on Map'),
+                            ),
                           ),
                           const SizedBox(width: 5),
-                          Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFFE8E8E8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                widget.restaurant.rating.toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFE8E8E8),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  widget.restaurant.rating.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
