@@ -60,7 +60,7 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   }
 
   Future<void> sendData(WidgetRef ref, String restaurantName) async {
-    handleScan();
+    handleScan(restaurantName);
     try {
       await ref.watch(restaurantListControllerProvider.notifier).addRestaurant(
           user: name,
@@ -70,11 +70,19 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
     } catch (e) {}
   }
 
-  void handleScan() {
+  void handleScan(String restName) {
     controller?.dispose();
     HapticFeedback.heavyImpact();
-    Navigator.pushNamed(context, DiscountCard.id,
-        arguments: name.isEmpty ? email : name);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DiscountCard(
+          name: email,
+          restName: restName,
+        ),
+      ),
+    );
+
     setState(() {
       const ResponsePopUp(
         response: 'QR scanned successfully',
@@ -100,13 +108,12 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
     if (scanData.code != null) {
       switch (scanData.code) {
         case 'kinton_ramen':
-          await sendData(ref, 'Kinton Ramen');
+          await sendData(ref, 'Kinton_Ramen');
           break;
         case 'Friends&KTV':
           await sendData(ref, 'Friends&KTV');
           break;
         case 'Chatime':
-          handleScan();
           await sendData(ref, 'Chatime');
           break;
         case 'Dakogi_Elgin':

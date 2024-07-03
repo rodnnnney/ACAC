@@ -24,52 +24,57 @@ class AppBarBottom extends ConsumerWidget {
       ref.read(userPageCounter).setCounter(index);
     }
 
-    return BottomAppBar(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          IconButton(
-            onPressed: () async {
-              updatePage(0, HomePage.id);
-            },
-            icon: Container(
-              decoration: watchCounter.counter == 0 ? selected : null,
-              padding: const EdgeInsets.all(5),
-              child: Icon(
-                Icons.home,
-                color: watchCounter.counter == 0 ? Colors.white : Colors.grey,
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+      child: BottomAppBar(
+        elevation: 1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            IconButton(
+              onPressed: () async {
+                updatePage(0, HomePage.id);
+              },
+              icon: Container(
+                decoration: watchCounter.counter == 0 ? selected : null,
+                padding: const EdgeInsets.all(5),
+                child: Icon(
+                  Icons.home,
+                  color: watchCounter.counter == 0 ? Colors.white : Colors.grey,
+                ),
               ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              //   updatePage(1, Scanner.id);
-              updatePage(1, QRViewExample.id);
-            },
-            icon: Container(
-              decoration: watchCounter.counter == 1 ? selected : null,
-              padding: const EdgeInsets.all(5),
-              child: Icon(
-                Icons.qr_code_scanner_rounded,
-                color: watchCounter.counter == 1 ? Colors.white : Colors.grey,
+            IconButton(
+              onPressed: () {
+                //   updatePage(1, Scanner.id);
+                updatePage(1, QRViewExample.id);
+              },
+              icon: Container(
+                decoration: watchCounter.counter == 1 ? selected : null,
+                padding: const EdgeInsets.all(5),
+                child: Icon(
+                  Icons.qr_code_scanner_rounded,
+                  color: watchCounter.counter == 1 ? Colors.white : Colors.grey,
+                ),
               ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              updatePage(2, MapScreen.id);
-            },
-            icon: Container(
-              decoration: watchCounter.counter == 2 ? selected : null,
-              padding: const EdgeInsets.all(5),
-              child: Icon(
-                Icons.map,
-                color: watchCounter.counter == 2 ? Colors.white : Colors.grey,
+            IconButton(
+              onPressed: () {
+                updatePage(2, MapScreen.id);
+              },
+              icon: Container(
+                decoration: watchCounter.counter == 2 ? selected : null,
+                padding: const EdgeInsets.all(5),
+                child: Icon(
+                  Icons.map,
+                  color: watchCounter.counter == 2 ? Colors.white : Colors.grey,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

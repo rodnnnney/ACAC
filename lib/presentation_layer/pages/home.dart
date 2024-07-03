@@ -81,8 +81,15 @@ class HomePage extends ConsumerWidget {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, DiscountCard.id,
-                                      arguments: 'hello');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DiscountCard(
+                                        name: 'rodney',
+                                        restName: 'Kinton_Ramen',
+                                      ),
+                                    ),
+                                  );
                                 },
                                 icon: const Icon(Icons.card_giftcard_outlined)),
                             GestureDetector(

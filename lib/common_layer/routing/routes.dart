@@ -1,4 +1,3 @@
-import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/history.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/pages/maps.dart';
@@ -19,10 +18,6 @@ final appRoutes = <String, WidgetBuilder>{
   // Scanner.id: (context) => Scanner(),
   SortedByRating.id: (context) => const SortedByRating(),
   QrCodeGen.id: (context) => const QrCodeGen(),
-  DiscountCard.id: (context) {
-    final name = ModalRoute.of(context)!.settings.arguments as String?;
-    return DiscountCard(name: name!);
-  },
   QRViewExample.id: (context) => QRViewExample(),
   History.id: (context) => History(),
 };

@@ -7,7 +7,7 @@ import 'package:ACAC/domain_layer/repository_interface/location.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
-import 'package:ACAC/presentation_layer/widgets/additionalV2.dart';
+import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -189,15 +189,11 @@ class _HistoryState extends ConsumerState<History> {
                                                       snapshot.data!,
                                                       card.location);
                                                   if (context.mounted) {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AdditionalV2(
-                                                          restaurant: card,
-                                                          distance: distance,
-                                                          user: snapshot.data!,
-                                                        ),
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RestaurantAdditionalInfo(
+                                                        restaurant: card,
+                                                        distance: distance,
                                                       ),
                                                     );
                                                   }

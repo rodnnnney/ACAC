@@ -38,7 +38,7 @@ List<restaurantCard> restaurantInfo = [
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',
-    awsMatch: 'Kinton Ramen',
+    awsMatch: 'Kinton_Ramen',
   ),
   restaurantCard(
     restaurantName: 'Friends&KTV',
@@ -298,7 +298,12 @@ List<restaurantCard> restaurantInfo = [
       'https://acacpicturesgenerealbucket.s3.amazonaws.com/lanoodle/la3.png'
     ],
     topRatedItemsPrice: [],
-    topRatedItemsName: ['1', '2', '3'],
+    topRatedItemsName: [
+      'Braised Beef Noodle',
+      'Dandan Noodle',
+      'Trad Beef '
+          'Noodle'
+    ],
     gMapsLink:
         'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
     websiteLink: 'https://www.kintonramen.com/menu/',

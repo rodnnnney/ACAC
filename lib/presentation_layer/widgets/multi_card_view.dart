@@ -3,12 +3,13 @@ import 'dart:convert';
 
 import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
+import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
+import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
 import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,8 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
-
-import '../pages/maps.dart';
 
 class CardViewerHomePage extends ConsumerStatefulWidget {
   static const String id = 'card_viewer';
@@ -33,6 +32,7 @@ class CardViewerHomePage extends ConsumerStatefulWidget {
 class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
+  LaunchLink phoneCall = LaunchLink();
 
   @override
   void initState() {
@@ -81,7 +81,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(widget.cuisineType),
@@ -232,61 +232,94 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 13),
+                      padding: const EdgeInsets.only(
+                          bottom: 13, right: 15, left: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextButton(
-                            style: const ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.green),
-                              foregroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.white),
-                            ),
-                            onPressed: () async {
-                              try {
-                                LatLng user = await data.getLocation();
-                                String url = await maps.createHttpUrl(
-                                    user.latitude,
-                                    user.longitude,
-                                    filteredRestaurants[index]
-                                        .location
-                                        .latitude,
-                                    filteredRestaurants[index]
-                                        .location
-                                        .longitude);
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                backgroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.green),
+                                foregroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.white),
+                              ),
+                              onPressed: () async {
+                                try {
+                                  LatLng user = await data.getLocation();
+                                  String url = await maps.createHttpUrl(
+                                      user.latitude,
+                                      user.longitude,
+                                      filteredRestaurants[index]
+                                          .location
+                                          .latitude,
+                                      filteredRestaurants[index]
+                                          .location
+                                          .longitude);
 
-                                maps.processPolylineData(url);
-                                maps.updateCameraBounds([
-                                  user,
-                                  filteredRestaurants[index].location
-                                ]);
-                                nav.updateRouteDetails(url);
-                                if (context.mounted) {
-                                  Navigator.pushNamed(context, MapScreen.id);
-                                }
-                              } catch (e) {}
-                            },
-                            child: const Text('Find on Map'),
-                          ),
-                          const SizedBox(
-                            width: 22,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFFE8E8E8),
+                                  maps.processPolylineData(url);
+                                  maps.updateCameraBounds([
+                                    user,
+                                    filteredRestaurants[index].location
+                                  ]);
+                                  nav.updateRouteDetails(url);
+                                  if (context.mounted) {
+                                    Navigator.pushNamed(context, MapScreen.id);
+                                  }
+                                } catch (e) {}
+                              },
+                              child: const Text('Find on Map'),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                filteredRestaurants[index].rating.toString(),
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: ref.watch(darkLight).theme
-                                        ? Colors.black
-                                        : Colors.white),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                padding: WidgetStatePropertyAll(
+                                    EdgeInsets.symmetric(horizontal: 12)),
+                                backgroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.black),
+                                foregroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.white),
+                              ),
+                              onPressed: () async {
+                                phoneCall.makePhoneCall(
+                                    filteredRestaurants[index].phoneNumber);
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Call'),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(Icons.phone)
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFE8E8E8),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(
+                                    filteredRestaurants[index]
+                                        .rating
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
                               ),
                             ),
                           )

@@ -27,4 +27,16 @@ final List<HomeCard> sortByFoodType = [
       );
     },
   ),
+  HomeCard(
+    displayIMG:
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/ai_gen/openart-image_RqgEtvnk_1719107599308_raw.png',
+    text: 'Vegan',
+    routeName: (BuildContext context, String cuisineType) {
+      Navigator.pushNamed(
+        context,
+        CardViewerHomePage.id,
+        arguments: '',
+      );
+    },
+  ),
 ];

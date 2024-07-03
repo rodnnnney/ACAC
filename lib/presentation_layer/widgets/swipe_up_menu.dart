@@ -2,6 +2,7 @@ import 'package:ACAC/domain_layer/repository_interface/location.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
 import 'package:ACAC/presentation_layer/widgets/swipe_up_card.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +42,12 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: const Center(
+              title: Center(
                 child: Icon(
                   Icons.remove,
                   size: 35,
-                  color: Colors.black,
+                  color:
+                      ref.watch(darkLight).theme ? Colors.white : Colors.black,
                 ),
               ),
             ),
@@ -61,7 +63,8 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
                 } else {
                   return GridView.builder(
                     physics: const ClampingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Number of cards in a row
                       crossAxisSpacing: 10, // Horizontal space between cards
                       mainAxisSpacing: 10, // Vertical space between cards

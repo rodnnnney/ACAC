@@ -86,7 +86,6 @@ flutter:
   assets:
     - 'assets/'
     - 'images/'
-    - 'images/card1.JPG'
 
 
 

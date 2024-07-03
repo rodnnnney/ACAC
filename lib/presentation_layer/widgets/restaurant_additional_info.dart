@@ -1,5 +1,6 @@
 import 'package:ACAC/common_layer/widgets/star_builder.dart';
 import 'package:ACAC/domain_layer/repository_interface/cards.dart';
+import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
@@ -8,7 +9,6 @@ import 'package:ACAC/presentation_layer/state_management/provider/restaurant_pro
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,19 +25,7 @@ class RestaurantAdditionalInfo extends StatefulWidget {
 }
 
 class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
-  String formatNumber(int number) {
-    final formatter = NumberFormat('#,###');
-    return formatter.format(number);
-  }
-
-  void makePhoneCall(String phoneNumber) async {
-    String digitsOnly = phoneNumber.replaceAll(' ', '');
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: digitsOnly,
-    );
-    await launchUrl(launchUri);
-  }
+  LaunchLink phoneCall = LaunchLink();
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +162,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                                 }
                               },
                               child: Text(
-                                '${formatNumber(widget.restaurant.reviewNum)} + ratings',
+                                '${phoneCall.formatNumber(widget.restaurant.reviewNum)} + ratings',
                                 style: const TextStyle(
                                     decoration: TextDecoration.underline),
                               ),
@@ -408,7 +396,8 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                                   WidgetStatePropertyAll<Color>(Colors.white),
                             ),
                             onPressed: () async {
-                              makePhoneCall(widget.restaurant.phoneNumber);
+                              phoneCall
+                                  .makePhoneCall(widget.restaurant.phoneNumber);
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
