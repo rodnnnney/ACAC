@@ -63,11 +63,13 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
     handleScan(restaurantName);
     try {
       await ref.watch(restaurantListControllerProvider.notifier).addRestaurant(
-          user: name,
-          restaurantName: restaurantName,
-          email: email,
-          date: DateTime.now().toString());
-    } catch (e) {}
+            user: name,
+            restaurantName: restaurantName,
+            email: email,
+          );
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   void handleScan(String restName) {

@@ -1,6 +1,7 @@
 import 'package:ACAC/common_layer/consts/globals.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
+import 'package:ACAC/domain_layer/controller/user_list_controller.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
 import 'package:ACAC/presentation_layer/pages/history.dart';
@@ -80,7 +81,14 @@ class HomePage extends ConsumerWidget {
                         Row(
                           children: [
                             IconButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  await ref
+                                      .read(userListControllerProvider.notifier)
+                                      .addUser(
+                                          firstName: 'Rodney',
+                                          email: 'rodneyshenn@gmail.com');
+
+                                  print('successfully added user');
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -154,19 +162,27 @@ class HomePage extends ConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ShaderMask(
-                              shaderCallback: (bounds) =>
-                                  const LinearGradient(colors: [
-                                GlobalTheme.kDarkGreen,
-                                GlobalTheme.kGreen,
-                              ]).createShader(bounds),
-                              child: const Text(
-                                'Featured',
-                                style: TextStyle(
-                                    color: GlobalTheme.kWhite,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                            Text(
+                              'Featured',
+                              style: TextStyle(
+                                  color: Colors.green, //GlobalTheme
+                                  // .kWhite,
+                                  fontWeight: FontWeight.bold),
                             ),
+                            // ShaderMask(
+                            //   shaderCallback: (bounds) =>
+                            //       const LinearGradient(colors: [
+                            //     GlobalTheme.kDarkGreen,
+                            //     GlobalTheme.kGreen,
+                            //   ]).createShader(bounds),
+                            //   child: const Text(
+                            //     'Featured',
+                            //     style: TextStyle(
+                            //         color: Colors.lightGreen, //GlobalTheme
+                            //         // .kWhite,
+                            //         fontWeight: FontWeight.bold),
+                            //   ),
+                            // ),
                             ShaderMask(
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [

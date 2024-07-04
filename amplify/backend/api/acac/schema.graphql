@@ -7,6 +7,10 @@ type Restaurant @model @auth(rules: [{ allow: owner}]) {
     user: String!
     restaurant: String!
     email: AWSEmail!
-    date: AWSDateTime!
 }
 
+type User @model @auth(rules: [{ allow: owner}]) {
+    id: ID!
+    firstName: String!
+    email: AWSEmail!
+}

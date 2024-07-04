@@ -23,12 +23,11 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 import 'ModelProvider.dart';
 
-/** This is an auto generated class representing the Restaurant type in your schema. */
-class Restaurant extends amplify_core.Model {
-  static const classType = const _RestaurantModelType();
+/** This is an auto generated class representing the User type in your schema. */
+class User extends amplify_core.Model {
+  static const classType = const _UserModelType();
   final String id;
-  final String? _user;
-  final String? _restaurant;
+  final String? _firstName;
   final String? _email;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
@@ -41,26 +40,13 @@ class Restaurant extends amplify_core.Model {
   @override
   String getId() => id;
 
-  RestaurantModelIdentifier get modelIdentifier {
-    return RestaurantModelIdentifier(id: id);
+  UserModelIdentifier get modelIdentifier {
+    return UserModelIdentifier(id: id);
   }
 
-  String get user {
+  String get firstName {
     try {
-      return _user!;
-    } catch (e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages
-              .codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion: amplify_core.AmplifyExceptionMessages
-              .codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString());
-    }
-  }
-
-  String get restaurant {
-    try {
-      return _restaurant!;
+      return _firstName!;
     } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages
@@ -92,28 +78,21 @@ class Restaurant extends amplify_core.Model {
     return _updatedAt;
   }
 
-  const Restaurant._internal(
+  const User._internal(
       {required this.id,
-      required user,
-      required restaurant,
+      required firstName,
       required email,
       createdAt,
       updatedAt})
-      : _user = user,
-        _restaurant = restaurant,
+      : _firstName = firstName,
         _email = email,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
-  factory Restaurant(
-      {String? id,
-      required String user,
-      required String restaurant,
-      required String email}) {
-    return Restaurant._internal(
+  factory User({String? id, required String firstName, required String email}) {
+    return User._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
-        user: user,
-        restaurant: restaurant,
+        firstName: firstName,
         email: email);
   }
 
@@ -124,10 +103,9 @@ class Restaurant extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Restaurant &&
+    return other is User &&
         id == other.id &&
-        _user == other._user &&
-        _restaurant == other._restaurant &&
+        _firstName == other._firstName &&
         _email == other._email;
   }
 
@@ -138,10 +116,9 @@ class Restaurant extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
 
-    buffer.write("Restaurant {");
+    buffer.write("User {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("user=" + "$_user" + ", ");
-    buffer.write("restaurant=" + "$_restaurant" + ", ");
+    buffer.write("firstName=" + "$_firstName" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("createdAt=" +
         (_createdAt != null ? _createdAt!.format() : "null") +
@@ -153,29 +130,24 @@ class Restaurant extends amplify_core.Model {
     return buffer.toString();
   }
 
-  Restaurant copyWith({String? user, String? restaurant, String? email}) {
-    return Restaurant._internal(
+  User copyWith({String? firstName, String? email}) {
+    return User._internal(
         id: id,
-        user: user ?? this.user,
-        restaurant: restaurant ?? this.restaurant,
+        firstName: firstName ?? this.firstName,
         email: email ?? this.email);
   }
 
-  Restaurant copyWithModelFieldValues(
-      {ModelFieldValue<String>? user,
-      ModelFieldValue<String>? restaurant,
-      ModelFieldValue<String>? email}) {
-    return Restaurant._internal(
+  User copyWithModelFieldValues(
+      {ModelFieldValue<String>? firstName, ModelFieldValue<String>? email}) {
+    return User._internal(
         id: id,
-        user: user == null ? this.user : user.value,
-        restaurant: restaurant == null ? this.restaurant : restaurant.value,
+        firstName: firstName == null ? this.firstName : firstName.value,
         email: email == null ? this.email : email.value);
   }
 
-  Restaurant.fromJson(Map<String, dynamic> json)
+  User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        _user = json['user'],
-        _restaurant = json['restaurant'],
+        _firstName = json['firstName'],
         _email = json['email'],
         _createdAt = json['createdAt'] != null
             ? amplify_core.TemporalDateTime.fromString(json['createdAt'])
@@ -186,8 +158,7 @@ class Restaurant extends amplify_core.Model {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'user': _user,
-        'restaurant': _restaurant,
+        'firstName': _firstName,
         'email': _email,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
@@ -195,24 +166,22 @@ class Restaurant extends amplify_core.Model {
 
   Map<String, Object?> toMap() => {
         'id': id,
-        'user': _user,
-        'restaurant': _restaurant,
+        'firstName': _firstName,
         'email': _email,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
       };
 
-  static final amplify_core.QueryModelIdentifier<RestaurantModelIdentifier>
+  static final amplify_core.QueryModelIdentifier<UserModelIdentifier>
       MODEL_IDENTIFIER =
-      amplify_core.QueryModelIdentifier<RestaurantModelIdentifier>();
+      amplify_core.QueryModelIdentifier<UserModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final USER = amplify_core.QueryField(fieldName: "user");
-  static final RESTAURANT = amplify_core.QueryField(fieldName: "restaurant");
+  static final FIRSTNAME = amplify_core.QueryField(fieldName: "firstName");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static var schema = amplify_core.Model.defineSchema(
       define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Restaurant";
-    modelSchemaDefinition.pluralName = "Restaurants";
+    modelSchemaDefinition.name = "User";
+    modelSchemaDefinition.pluralName = "Users";
 
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -231,19 +200,13 @@ class Restaurant extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: Restaurant.USER,
+        key: User.FIRSTNAME,
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: Restaurant.RESTAURANT,
-        isRequired: true,
-        ofType: amplify_core.ModelFieldType(
-            amplify_core.ModelFieldTypeEnum.string)));
-
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: Restaurant.EMAIL,
+        key: User.EMAIL,
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
@@ -266,30 +229,29 @@ class Restaurant extends amplify_core.Model {
   });
 }
 
-class _RestaurantModelType extends amplify_core.ModelType<Restaurant> {
-  const _RestaurantModelType();
+class _UserModelType extends amplify_core.ModelType<User> {
+  const _UserModelType();
 
   @override
-  Restaurant fromJson(Map<String, dynamic> jsonData) {
-    return Restaurant.fromJson(jsonData);
+  User fromJson(Map<String, dynamic> jsonData) {
+    return User.fromJson(jsonData);
   }
 
   @override
   String modelName() {
-    return 'Restaurant';
+    return 'User';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Restaurant] in your schema.
+ * of [User] in your schema.
  */
-class RestaurantModelIdentifier
-    implements amplify_core.ModelIdentifier<Restaurant> {
+class UserModelIdentifier implements amplify_core.ModelIdentifier<User> {
   final String id;
 
-  /** Create an instance of RestaurantModelIdentifier using [id] the primary key. */
-  const RestaurantModelIdentifier({required this.id});
+  /** Create an instance of UserModelIdentifier using [id] the primary key. */
+  const UserModelIdentifier({required this.id});
 
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{'id': id});
@@ -304,7 +266,7 @@ class RestaurantModelIdentifier
   String serializeAsString() => serializeAsMap().values.join('#');
 
   @override
-  String toString() => 'RestaurantModelIdentifier(id: $id)';
+  String toString() => 'UserModelIdentifier(id: $id)';
 
   @override
   bool operator ==(Object other) {
@@ -312,7 +274,7 @@ class RestaurantModelIdentifier
       return true;
     }
 
-    return other is RestaurantModelIdentifier && id == other.id;
+    return other is UserModelIdentifier && id == other.id;
   }
 
   @override
