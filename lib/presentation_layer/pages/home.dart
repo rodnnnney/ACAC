@@ -3,7 +3,6 @@ import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'discount_card.dart';
 import 'history.dart';
 
 class HomePage extends ConsumerWidget {

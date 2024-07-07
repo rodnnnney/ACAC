@@ -67,20 +67,14 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
     loading.showLoadingDialog(context);
     try {
       var currentUser = await Amplify.Auth.getCurrentUser();
-      var users = await ref.read(userAPIServiceProvider).getUsers();
-      for (var user in users) {
-        if (user.id == currentUser.userId) {
-          await ref
-              .watch(restaurantListControllerProvider.notifier)
-              .addRestaurant(
-                restaurantName: restaurantName,
-                email: email,
-                userFirstName: user.firstName,
-                userLastName: user.lastName,
-              );
-          handleScan(restaurantName, user.firstName, user.lastName);
-        }
-      }
+      var user =
+          await ref.read(userAPIServiceProvider).getUser(currentUser.userId);
+      await ref.watch(restaurantListControllerProvider.notifier).addRestaurant(
+          restaurantName: restaurantName,
+          email: email,
+          userFirstName: user.firstName,
+          userLastName: user.lastName);
+      handleScan(restaurantName, user.firstName, user.lastName);
     } catch (e) {
       debugPrint(e.toString());
     }
