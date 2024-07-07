@@ -7,7 +7,14 @@
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authacac5cd98dd9"
     },
-    "additionalAuthTypes": [],
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 365,
+        "apiKeyExpirationDate": "2025-07-06T21:41:26.192Z",
+        "keyDescription": "public read access for names"
+      }
+    ],
     "conflictResolution": {}
   }
 }

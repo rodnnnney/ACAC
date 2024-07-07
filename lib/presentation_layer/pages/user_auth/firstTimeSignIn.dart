@@ -7,30 +7,34 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FirstTimeSignIn extends StatefulWidget {
+class FirstTimeSignIn extends ConsumerStatefulWidget {
   static String id = 'First_Time';
 
   FirstTimeSignIn({super.key});
 
   @override
-  State<FirstTimeSignIn> createState() => _FirstTimeSignInState();
+  ConsumerState<FirstTimeSignIn> createState() => _FirstTimeSignInState();
 }
 
-class _FirstTimeSignInState extends State<FirstTimeSignIn> {
+class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
   late TextEditingController newPassword;
   late TextEditingController newPassword2;
   late TextEditingController firstName;
+  late TextEditingController lastName;
   String email = '';
   bool obscureText = true;
   Loading loading = Loading();
   Apis apis = Apis();
+  bool isLoading = false;
 
   @override
   void initState() {
     newPassword = TextEditingController();
     newPassword2 = TextEditingController();
     firstName = TextEditingController();
+    lastName = TextEditingController();
     super.initState();
   }
 
@@ -39,6 +43,7 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
     newPassword.dispose();
     newPassword2.dispose();
     firstName.dispose();
+    lastName.dispose();
     super.dispose();
   }
 
@@ -73,27 +78,64 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      TextFormField(
-                        controller: firstName,
-                        decoration: InputDecoration(
-                          labelText: 'What\'s your name?',
-                          labelStyle: const TextStyle(
-                            color: Color(0xff2E2E2E),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: firstName,
+                              autofocus: true,
+                              textCapitalization: TextCapitalization.words,
+                              decoration: InputDecoration(
+                                labelText: 'First Name',
+                                labelStyle: const TextStyle(
+                                  color: Color(0xff2E2E2E),
+                                ),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      GlobalTheme.roundedRadius),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.black, width: 2),
+                                  borderRadius: BorderRadius.circular(
+                                      GlobalTheme.roundedRadius),
+                                ),
+                              ),
+                            ),
                           ),
-                          floatingLabelBehavior: FloatingLabelBehavior.auto,
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TextFormField(
+                              controller: lastName,
+                              autofocus: true,
+                              textCapitalization: TextCapitalization.words,
+                              decoration: InputDecoration(
+                                labelText: 'Last Name',
+                                labelStyle: const TextStyle(
+                                  color: Color(0xff2E2E2E),
+                                ),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      GlobalTheme.roundedRadius),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.black, width: 2),
+                                  borderRadius: BorderRadius.circular(
+                                      GlobalTheme.roundedRadius),
+                                ),
+                              ),
+                            ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Colors.black, width: 2),
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
-                          ),
-                        ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                       Padding(
@@ -195,12 +237,14 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TextButton(
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateColor.transparent,
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.transparent),
                           padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
                         onPressed: () {},
@@ -212,7 +256,7 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
                       child: InkWell(
                         onTap: () async {
                           HapticFeedback.heavyImpact();
-                          if (firstName.text.isEmpty) {
+                          if (firstName.text.isEmpty || lastName.text.isEmpty) {
                             return const ResponsePopUp(
                               color: Colors.red,
                               icon: Icons.error_outline,
@@ -226,7 +270,6 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
                                 confirmationValue: newPassword.text,
                               );
                               var data = await Amplify.Auth.getCurrentUser();
-
                               final result =
                                   await Amplify.Auth.fetchUserAttributes();
                               for (final element in result) {
@@ -235,14 +278,8 @@ class _FirstTimeSignInState extends State<FirstTimeSignIn> {
                                   email = element.value.toString();
                                 }
                               }
-                              await apis.cognito2DynamoDBB(
-                                  firstName.text, email, data.userId);
-                              print('successfully added ${firstName.text}, '
-                                  '${email}, ${data.userId}');
-
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                              }
+                              await apis.cognito2DynamoDBB(firstName.text,
+                                  lastName.text, email, data.userId);
                             } else {
                               return const ResponsePopUp(
                                 color: Colors.red,

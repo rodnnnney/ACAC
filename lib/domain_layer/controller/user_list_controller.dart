@@ -8,27 +8,33 @@ part 'user_list_controller.g.dart';
 
 @riverpod
 class UserListController extends _$UserListController {
-  Future<List<User>> _fetchUser() async {
+  Future<List<User>> fetchUsers() async {
     final userRepository = ref.read(userRepositoryProvider);
-    final restaurant = await userRepository.getUsers();
-    return restaurant;
+    final user = await userRepository.getUsers();
+    return user;
   }
 
   @override
   FutureOr<List<User>> build() async {
-    return _fetchUser();
+    return fetchUsers();
+  }
+
+  Future<User> fetchUser(String userId) async {
+    final userRepository = ref.watch(userRepositoryProvider);
+    return userRepository.getUser(userId);
   }
 
   Future<void> addUser({
     required String firstName,
+    required String lastName,
     required String email,
   }) async {
-    final user = User(firstName: firstName, email: email);
+    final user = User(firstName: firstName, lastName: lastName, email: email);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final userRepository = ref.read(userRepositoryProvider);
       await userRepository.addUser(user);
-      return _fetchUser();
+      return fetchUsers();
     });
   }
 
@@ -39,7 +45,7 @@ class UserListController extends _$UserListController {
       final itemsRepository = ref.read(userRepositoryProvider);
       await itemsRepository.deleteUser(user);
 
-      return _fetchUser();
+      return fetchUsers();
     });
   }
 }

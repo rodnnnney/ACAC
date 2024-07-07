@@ -1,25 +1,24 @@
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/confirm_quit.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
+import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountInfo extends ConsumerWidget {
   static String id = 'Account_screen';
   AccountInfo({super.key});
-
   String feedbackText = '';
-
-  //final TextEditingController _controller = TextEditingController();
   bool isSwitched = false;
-
   String email = '';
   String name = '';
+  LaunchLink launchLink = LaunchLink();
 
   Future<void> signOutCurrentUser() async {
     final result = await Amplify.Auth.signOut();
@@ -115,16 +114,20 @@ class AccountInfo extends ConsumerWidget {
                             'Email',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            email,
-                            overflow: TextOverflow.ellipsis,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width *
+                                0.6, // Adjust the width as needed
+                            child: Text(
+                              email,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           )
                         ],
                       ),
                       const Spacer(),
                       TextButton(
                         style: ButtonStyle(
-                          elevation: WidgetStateProperty.all(0),
+                          elevation: MaterialStateProperty.all(0),
                         ),
                         onPressed: () {
                           const ResponsePopUp(
@@ -137,18 +140,21 @@ class AccountInfo extends ConsumerWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            border: ref.watch(darkLight).theme
-                                ? Border.all(color: Colors.white, width: 1)
-                                : Border.all(color: Colors.black, width: 1),
-                            //borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: ref.watch(darkLight).theme
+                                  ? Colors.white
+                                  : Colors.black,
+                              width: 1,
+                            ),
                           ),
                           padding: const EdgeInsets.all(10),
                           child: Text(
                             'Change',
                             style: TextStyle(
-                                color: ref.watch(darkLight).theme
-                                    ? Colors.white
-                                    : Colors.black),
+                              color: ref.watch(darkLight).theme
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -186,7 +192,6 @@ class AccountInfo extends ConsumerWidget {
                             border: ref.watch(darkLight).theme
                                 ? Border.all(color: Colors.white, width: 1)
                                 : Border.all(color: Colors.black, width: 1),
-                            //borderRadius: BorderRadius.circular(8),
                           ),
                           padding: const EdgeInsets.all(10),
                           child: Text(
@@ -309,6 +314,47 @@ class AccountInfo extends ConsumerWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Questions or Concerns?',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const Text('Reach out below(Tap) : '),
+                        const SizedBox(height: 10),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  HapticFeedback.heavyImpact();
+                                  launchLink.launchURL(
+                                      'https://www.instagram.com/asiancanadians_carleton/');
+                                },
+                                child: Image.asset(
+                                  'images/ig2.png',
+                                  width: 50,
+                                ),
+                              ),
+                              const SizedBox(width: 30),
+                              GestureDetector(
+                                onTap: () {
+                                  HapticFeedback.heavyImpact();
+                                  launchLink.launchEmail(
+                                      'asiancanadianscarleton@gmail.com');
+                                },
+                                child: Image.asset(
+                                  'images/gmail.png',
+                                  width: 50,
+                                ),
+                              )
+                            ])
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),

@@ -27,7 +27,8 @@ import 'ModelProvider.dart';
 class Restaurant extends amplify_core.Model {
   static const classType = const _RestaurantModelType();
   final String id;
-  final String? _user;
+  final String? _firstName;
+  final String? _lastName;
   final String? _restaurant;
   final String? _email;
   final amplify_core.TemporalDateTime? _createdAt;
@@ -45,9 +46,22 @@ class Restaurant extends amplify_core.Model {
     return RestaurantModelIdentifier(id: id);
   }
 
-  String get user {
+  String get firstName {
     try {
-      return _user!;
+      return _firstName!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
+  }
+
+  String get lastName {
+    try {
+      return _lastName!;
     } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages
@@ -94,12 +108,14 @@ class Restaurant extends amplify_core.Model {
 
   const Restaurant._internal(
       {required this.id,
-      required user,
+      required firstName,
+      required lastName,
       required restaurant,
       required email,
       createdAt,
       updatedAt})
-      : _user = user,
+      : _firstName = firstName,
+        _lastName = lastName,
         _restaurant = restaurant,
         _email = email,
         _createdAt = createdAt,
@@ -107,12 +123,14 @@ class Restaurant extends amplify_core.Model {
 
   factory Restaurant(
       {String? id,
-      required String user,
+      required String firstName,
+      required String lastName,
       required String restaurant,
       required String email}) {
     return Restaurant._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
-        user: user,
+        firstName: firstName,
+        lastName: lastName,
         restaurant: restaurant,
         email: email);
   }
@@ -126,7 +144,8 @@ class Restaurant extends amplify_core.Model {
     if (identical(other, this)) return true;
     return other is Restaurant &&
         id == other.id &&
-        _user == other._user &&
+        _firstName == other._firstName &&
+        _lastName == other._lastName &&
         _restaurant == other._restaurant &&
         _email == other._email;
   }
@@ -140,7 +159,8 @@ class Restaurant extends amplify_core.Model {
 
     buffer.write("Restaurant {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("user=" + "$_user" + ", ");
+    buffer.write("firstName=" + "$_firstName" + ", ");
+    buffer.write("lastName=" + "$_lastName" + ", ");
     buffer.write("restaurant=" + "$_restaurant" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("createdAt=" +
@@ -153,28 +173,36 @@ class Restaurant extends amplify_core.Model {
     return buffer.toString();
   }
 
-  Restaurant copyWith({String? user, String? restaurant, String? email}) {
+  Restaurant copyWith(
+      {String? firstName,
+      String? lastName,
+      String? restaurant,
+      String? email}) {
     return Restaurant._internal(
         id: id,
-        user: user ?? this.user,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
         restaurant: restaurant ?? this.restaurant,
         email: email ?? this.email);
   }
 
   Restaurant copyWithModelFieldValues(
-      {ModelFieldValue<String>? user,
+      {ModelFieldValue<String>? firstName,
+      ModelFieldValue<String>? lastName,
       ModelFieldValue<String>? restaurant,
       ModelFieldValue<String>? email}) {
     return Restaurant._internal(
         id: id,
-        user: user == null ? this.user : user.value,
+        firstName: firstName == null ? this.firstName : firstName.value,
+        lastName: lastName == null ? this.lastName : lastName.value,
         restaurant: restaurant == null ? this.restaurant : restaurant.value,
         email: email == null ? this.email : email.value);
   }
 
   Restaurant.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        _user = json['user'],
+        _firstName = json['firstName'],
+        _lastName = json['lastName'],
         _restaurant = json['restaurant'],
         _email = json['email'],
         _createdAt = json['createdAt'] != null
@@ -186,7 +214,8 @@ class Restaurant extends amplify_core.Model {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'user': _user,
+        'firstName': _firstName,
+        'lastName': _lastName,
         'restaurant': _restaurant,
         'email': _email,
         'createdAt': _createdAt?.format(),
@@ -195,7 +224,8 @@ class Restaurant extends amplify_core.Model {
 
   Map<String, Object?> toMap() => {
         'id': id,
-        'user': _user,
+        'firstName': _firstName,
+        'lastName': _lastName,
         'restaurant': _restaurant,
         'email': _email,
         'createdAt': _createdAt,
@@ -206,7 +236,8 @@ class Restaurant extends amplify_core.Model {
       MODEL_IDENTIFIER =
       amplify_core.QueryModelIdentifier<RestaurantModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final USER = amplify_core.QueryField(fieldName: "user");
+  static final FIRSTNAME = amplify_core.QueryField(fieldName: "firstName");
+  static final LASTNAME = amplify_core.QueryField(fieldName: "lastName");
   static final RESTAURANT = amplify_core.QueryField(fieldName: "restaurant");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static var schema = amplify_core.Model.defineSchema(
@@ -231,7 +262,13 @@ class Restaurant extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: Restaurant.USER,
+        key: Restaurant.FIRSTNAME,
+        isRequired: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: Restaurant.LASTNAME,
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));

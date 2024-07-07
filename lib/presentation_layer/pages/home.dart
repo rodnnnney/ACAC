@@ -1,19 +1,20 @@
 import 'package:ACAC/common_layer/consts/globals.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
-import 'package:ACAC/domain_layer/controller/user_list_controller.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:ACAC/presentation_layer/pages/history.dart';
+import 'package:ACAC/domain_layer/service/user_api_service.dart';
+import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'discount_card.dart';
+import 'history.dart';
 
 class HomePage extends ConsumerWidget {
   static String id = 'home_screen';
@@ -26,8 +27,10 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final userInfoAsyncValue = ref.watch(userInfoProvider);
+    final userNameProvider = ref.watch(userNameProviderProvider);
+
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -45,61 +48,29 @@ class HomePage extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // userInfoAsyncValue.when(
-                        //   data: (Map<String, String> userinfo) {
-                        //     final name = userinfo['name'];
-                        //     if (name != null) {
-                        //       return ShaderMask(
-                        //         shaderCallback: (bounds) =>
-                        //             const LinearGradient(colors: [
-                        //           GlobalTheme.kDarkGreen,
-                        //           GlobalTheme.kGreen,
-                        //           GlobalTheme.kWhite
-                        //         ], stops: [
-                        //           0.05,
-                        //           0.97,
-                        //           1.0
-                        //         ]).createShader(bounds),
-                        //         child: Text(
-                        //           name,
-                        //           style: const TextStyle(
-                        //               fontSize: 18,
-                        //               color: GlobalTheme.kWhite,
-                        //               fontWeight: FontWeight.bold),
-                        //         ),
-                        //       );
-                        //     } else {
-                        //       return Text(name ?? '');
-                        //     }
-                        //   },
-                        //   error: (error, stack) {
-                        //     return const Text('');
-                        //   },
-                        //   loading: () => const Text('....'),
-                        // ),
-                        const Text(''),
+                        userNameProvider.when(
+                          data: (userName) {
+                            return Text('$userName!');
+                          },
+                          loading: () => const CircularProgressIndicator(),
+                          error: (error, stackTrace) => Text('Error: $error'),
+                        ),
                         Row(
                           children: [
                             IconButton(
-                                onPressed: () async {
-                                  await ref
-                                      .read(userListControllerProvider.notifier)
-                                      .addUser(
-                                          firstName: 'Rodney',
-                                          email: 'rodneyshenn@gmail.com');
-
-                                  print('successfully added user');
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
                                       builder: (context) => DiscountCard(
-                                        name: 'rodney',
-                                        restName: 'Kinton_Ramen',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.card_giftcard_outlined)),
+                                            restName: 'Kinton_Ramen',
+                                            firstName: 'Rodney',
+                                            lastName: 'Shen',
+                                          )),
+                                );
+                              },
+                              icon: const Icon(Icons.card_giftcard_outlined),
+                            ),
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.heavyImpact();
@@ -108,15 +79,16 @@ class HomePage extends ConsumerWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(1),
                                 decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        GlobalTheme.kDarkGreen,
-                                        GlobalTheme.kGreen,
-                                        Color(0xff98C48D)
-                                      ],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      GlobalTheme.kDarkGreen,
+                                      GlobalTheme.kGreen,
+                                      Color(0xff98C48D)
+                                    ],
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                ),
                                 child: const Icon(
                                   Icons.account_circle,
                                   color: GlobalTheme.kWhite,
@@ -133,15 +105,16 @@ class HomePage extends ConsumerWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        GlobalTheme.kGreen,
-                                        Color(0xff98C48D),
-                                        GlobalTheme.kDarkGreen,
-                                      ],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      GlobalTheme.kGreen,
+                                      Color(0xff98C48D),
+                                      GlobalTheme.kDarkGreen,
+                                    ],
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                ),
                                 child: const Icon(Icons.receipt,
                                     color: GlobalTheme.kWhite),
                               ),
@@ -162,34 +135,18 @@ class HomePage extends ConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Featured',
                               style: TextStyle(
-                                  color: Colors.green, //GlobalTheme
-                                  // .kWhite,
+                                  color: Colors.green,
                                   fontWeight: FontWeight.bold),
                             ),
-                            // ShaderMask(
-                            //   shaderCallback: (bounds) =>
-                            //       const LinearGradient(colors: [
-                            //     GlobalTheme.kDarkGreen,
-                            //     GlobalTheme.kGreen,
-                            //   ]).createShader(bounds),
-                            //   child: const Text(
-                            //     'Featured',
-                            //     style: TextStyle(
-                            //         color: Colors.lightGreen, //GlobalTheme
-                            //         // .kWhite,
-                            //         fontWeight: FontWeight.bold),
-                            //   ),
-                            // ),
                             ShaderMask(
-                              shaderCallback: (bounds) => const LinearGradient(
-                                colors: [
-                                  GlobalTheme.kDarkGreen,
-                                  GlobalTheme.kGreen,
-                                ],
-                              ).createShader(bounds),
+                              shaderCallback: (bounds) =>
+                                  const LinearGradient(colors: [
+                                GlobalTheme.kDarkGreen,
+                                GlobalTheme.kGreen,
+                              ]).createShader(bounds),
                               child: Text(
                                 'Items Found: ${images.length}',
                                 style: const TextStyle(
@@ -351,3 +308,20 @@ class HomePage extends ConsumerWidget {
     );
   }
 }
+
+// Name is a future provider that is cached upon first time loading page
+final userNameProviderProvider = FutureProvider<String>((ref) async {
+  try {
+    var currentUser = await Amplify.Auth.getCurrentUser();
+    var users = await ref.read(userAPIServiceProvider).getUsers();
+    for (var user in users) {
+      if (user.id == currentUser.userId) {
+        return user.firstName;
+      }
+    }
+    throw Exception('User not found');
+  } catch (e) {
+    debugPrint('Error getting user name: $e');
+    rethrow;
+  }
+});

@@ -13,7 +13,8 @@ class UserAPIService {
 
   Future<List<User>> getUsers() async {
     try {
-      final request = ModelQueries.list(User.classType);
+      final request = ModelQueries.list(User.classType,
+          authorizationMode: APIAuthorizationType.apiKey);
       final response = await Amplify.API.query(request: request).response;
 
       final spaces = response.data?.items;
@@ -29,6 +30,40 @@ class UserAPIService {
       return const [];
     }
   }
+
+  Future<User> getUser(String userId) async {
+    try {
+      final request = ModelQueries.get(
+        User.classType,
+        UserModelIdentifier(id: userId),
+      );
+      final response = await Amplify.API.query(request: request).response;
+
+      return response.data!;
+    } on Exception catch (error) {
+      safePrint('getUser failed: $error');
+      return User(
+          firstName: "Deleted User",
+          email: "Error fetching email",
+          lastName: 'Delete User');
+    }
+  }
+
+  // Future<Post> getPost(String postId) async {
+  //   try {
+  //     final request = ModelQueries.get(
+  //       Post.classType,
+  //       PostModelIdentifier(id: postId),
+  //     );
+  //     final response = await Amplify.API.query(request: request).response;
+  //
+  //     final post = response.data!;
+  //     return post;
+  //   } on Exception catch (error) {
+  //     safePrint('getPost failed: $error');
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> deleteUser(User user) async {
     try {

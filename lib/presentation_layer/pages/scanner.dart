@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
+import 'package:ACAC/domain_layer/service/user_api_service.dart';
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
@@ -60,27 +61,37 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   }
 
   Future<void> sendData(WidgetRef ref, String restaurantName) async {
-    handleScan(restaurantName);
     try {
-      await ref.watch(restaurantListControllerProvider.notifier).addRestaurant(
-            user: name,
-            restaurantName: restaurantName,
-            email: email,
-          );
+      var currentUser = await Amplify.Auth.getCurrentUser();
+      var users = await ref.read(userAPIServiceProvider).getUsers();
+      for (var user in users) {
+        if (user.id == currentUser.userId) {
+          await ref
+              .watch(restaurantListControllerProvider.notifier)
+              .addRestaurant(
+                restaurantName: restaurantName,
+                email: email,
+                userFirstName: user.firstName,
+                userLastName: user.lastName,
+              );
+          handleScan(restaurantName, user.firstName, user.lastName);
+        }
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  void handleScan(String restName) {
+  void handleScan(String restName, String firstName, String lastName) {
     controller?.dispose();
     HapticFeedback.heavyImpact();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DiscountCard(
-          name: email,
           restName: restName,
+          firstName: firstName,
+          lastName: lastName,
         ),
       ),
     );

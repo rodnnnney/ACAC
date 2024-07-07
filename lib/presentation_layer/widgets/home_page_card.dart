@@ -19,6 +19,7 @@ class HomeCard extends StatelessWidget {
         routeName(context, text);
       },
       child: Card(
+        elevation: 2,
         child: SizedBox(
           width: 120,
           height: 130,

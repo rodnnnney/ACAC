@@ -28,6 +28,7 @@ class User extends amplify_core.Model {
   static const classType = const _UserModelType();
   final String id;
   final String? _firstName;
+  final String? _lastName;
   final String? _email;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
@@ -47,6 +48,19 @@ class User extends amplify_core.Model {
   String get firstName {
     try {
       return _firstName!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
+  }
+
+  String get lastName {
+    try {
+      return _lastName!;
     } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages
@@ -81,18 +95,25 @@ class User extends amplify_core.Model {
   const User._internal(
       {required this.id,
       required firstName,
+      required lastName,
       required email,
       createdAt,
       updatedAt})
       : _firstName = firstName,
+        _lastName = lastName,
         _email = email,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
-  factory User({String? id, required String firstName, required String email}) {
+  factory User(
+      {String? id,
+      required String firstName,
+      required String lastName,
+      required String email}) {
     return User._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
         firstName: firstName,
+        lastName: lastName,
         email: email);
   }
 
@@ -106,6 +127,7 @@ class User extends amplify_core.Model {
     return other is User &&
         id == other.id &&
         _firstName == other._firstName &&
+        _lastName == other._lastName &&
         _email == other._email;
   }
 
@@ -119,6 +141,7 @@ class User extends amplify_core.Model {
     buffer.write("User {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("firstName=" + "$_firstName" + ", ");
+    buffer.write("lastName=" + "$_lastName" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("createdAt=" +
         (_createdAt != null ? _createdAt!.format() : "null") +
@@ -130,24 +153,29 @@ class User extends amplify_core.Model {
     return buffer.toString();
   }
 
-  User copyWith({String? firstName, String? email}) {
+  User copyWith({String? firstName, String? lastName, String? email}) {
     return User._internal(
         id: id,
         firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
         email: email ?? this.email);
   }
 
   User copyWithModelFieldValues(
-      {ModelFieldValue<String>? firstName, ModelFieldValue<String>? email}) {
+      {ModelFieldValue<String>? firstName,
+      ModelFieldValue<String>? lastName,
+      ModelFieldValue<String>? email}) {
     return User._internal(
         id: id,
         firstName: firstName == null ? this.firstName : firstName.value,
+        lastName: lastName == null ? this.lastName : lastName.value,
         email: email == null ? this.email : email.value);
   }
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         _firstName = json['firstName'],
+        _lastName = json['lastName'],
         _email = json['email'],
         _createdAt = json['createdAt'] != null
             ? amplify_core.TemporalDateTime.fromString(json['createdAt'])
@@ -159,6 +187,7 @@ class User extends amplify_core.Model {
   Map<String, dynamic> toJson() => {
         'id': id,
         'firstName': _firstName,
+        'lastName': _lastName,
         'email': _email,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
@@ -167,6 +196,7 @@ class User extends amplify_core.Model {
   Map<String, Object?> toMap() => {
         'id': id,
         'firstName': _firstName,
+        'lastName': _lastName,
         'email': _email,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
@@ -177,6 +207,7 @@ class User extends amplify_core.Model {
       amplify_core.QueryModelIdentifier<UserModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final FIRSTNAME = amplify_core.QueryField(fieldName: "firstName");
+  static final LASTNAME = amplify_core.QueryField(fieldName: "lastName");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static var schema = amplify_core.Model.defineSchema(
       define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
@@ -185,10 +216,7 @@ class User extends amplify_core.Model {
 
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
-          authStrategy: amplify_core.AuthStrategy.OWNER,
-          ownerField: "owner",
-          identityClaim: "cognito:username",
-          provider: amplify_core.AuthRuleProvider.USERPOOLS,
+          authStrategy: amplify_core.AuthStrategy.PUBLIC,
           operations: const [
             amplify_core.ModelOperation.CREATE,
             amplify_core.ModelOperation.UPDATE,
@@ -201,6 +229,12 @@ class User extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: User.FIRSTNAME,
+        isRequired: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: User.LASTNAME,
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));

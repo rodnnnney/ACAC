@@ -20,12 +20,14 @@ class RestaurantListController extends _$RestaurantListController {
   }
 
   Future<void> addRestaurant({
-    required String user,
+    required String userFirstName,
+    required String userLastName,
     required String restaurantName,
     required String email,
   }) async {
     final restaurant = Restaurant(
-      user: user,
+      firstName: userFirstName,
+      lastName: userLastName,
       restaurant: restaurantName,
       email: email,
     );

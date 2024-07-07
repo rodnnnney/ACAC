@@ -20,6 +20,10 @@ class UserRepository {
     return userAPIService.addUser(user);
   }
 
+  Future<User> getUser(String userId) async {
+    return userAPIService.getUser(userId);
+  }
+
   Future<void> deleteUser(User deleteUser) async {
     return userAPIService.deleteUser(deleteUser);
   }
