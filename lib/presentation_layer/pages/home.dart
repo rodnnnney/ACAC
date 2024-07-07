@@ -3,12 +3,10 @@ import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:ACAC/domain_layer/service/user_api_service.dart';
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,8 +25,6 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userNameProvider = ref.watch(userNameProviderProvider);
-
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -44,17 +40,17 @@ class HomePage extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Welcome(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        userNameProvider.when(
-                          data: (userName) {
-                            return Text('$userName!');
-                          },
-                          loading: () => const CircularProgressIndicator(),
-                          error: (error, stackTrace) => Text('Error: $error'),
-                        ),
+                        Welcome(),
+                        // userNameProvider.when(
+                        //   data: (userName) {
+                        //     return Text('$userName!');
+                        //   },
+                        //   loading: () => const CircularProgressIndicator(),
+                        //   error: (error, stackTrace) => Text('Error: $error'),
+                        // ),
                         Row(
                           children: [
                             IconButton(
@@ -310,18 +306,18 @@ class HomePage extends ConsumerWidget {
 }
 
 // Name is a future provider that is cached upon first time loading page
-final userNameProviderProvider = FutureProvider<String>((ref) async {
-  try {
-    var currentUser = await Amplify.Auth.getCurrentUser();
-    var users = await ref.read(userAPIServiceProvider).getUsers();
-    for (var user in users) {
-      if (user.id == currentUser.userId) {
-        return user.firstName;
-      }
-    }
-    throw Exception('User not found');
-  } catch (e) {
-    debugPrint('Error getting user name: $e');
-    rethrow;
-  }
-});
+// final userNameProviderProvider = FutureProvider<String>((ref) async {
+//   try {
+//     var currentUser = await Amplify.Auth.getCurrentUser();
+//     var users = await ref.read(userAPIServiceProvider).getUsers();
+//     for (var user in users) {
+//       if (user.id == currentUser.userId) {
+//         return user.firstName;
+//       }
+//     }
+//     throw Exception('User not found');
+//   } catch (e) {
+//     debugPrint('Error getting user name: $e');
+//     rethrow;
+//   }
+// });

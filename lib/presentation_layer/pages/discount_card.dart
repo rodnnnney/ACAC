@@ -39,29 +39,24 @@ class _DiscountCardState extends ConsumerState<DiscountCard> {
     var place = getInfo(restaurantProvider, widget.restName);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(place.restaurantName),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.65,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: CachedNetworkImage(
-                      imageUrl:
-                          "https://acacpicturesgenerealbucket.s3.amazonaws"
-                          ".com/acac.gif",
-                      repeat: ImageRepeat.repeat,
-                      fit: BoxFit.fitWidth),
-                ),
-              ),
-              Row(
-                children: [
-                  const Text('Card Holder:'),
-                  Text(" ${widget.firstName} ${widget.lastName}")
-                ],
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                    imageUrl: "https://acacpicturesgenerealbucket.s3.amazonaws"
+                        ".com/acac1.gif",
+                    repeat: ImageRepeat.repeat,
+                    fit: BoxFit.contain),
               ),
               Column(
                 children: [
@@ -87,7 +82,7 @@ class _DiscountCardState extends ConsumerState<DiscountCard> {
                                 'ACAC Discount',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              Text('Valid until 12/12/2024')
+                              Text('Valid until 08/31/2025')
                             ],
                           ),
                           Container(
@@ -120,7 +115,32 @@ class _DiscountCardState extends ConsumerState<DiscountCard> {
                     ),
                   ),
                 ],
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'Card Holder:',
+                          style: TextStyle(fontSize: 18),
+                          textAlign:
+                              TextAlign.left, // Aligns the text to the left
+                        ),
+                        Text(
+                          "${widget.firstName} ${widget.lastName}",
+                          style: const TextStyle(fontSize: 32),
+                          textAlign:
+                              TextAlign.left, // Aligns the text to the left
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
+import 'package:ACAC/common_layer/widgets/loading.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
 import 'package:ACAC/domain_layer/service/user_api_service.dart';
@@ -24,6 +25,7 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   QRViewController? controller;
   String email = '';
   String name = '';
+  Loading loading = Loading();
 
   @override
   void reassemble() {
@@ -61,6 +63,8 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   }
 
   Future<void> sendData(WidgetRef ref, String restaurantName) async {
+    controller?.dispose();
+    loading.showLoadingDialog(context);
     try {
       var currentUser = await Amplify.Auth.getCurrentUser();
       var users = await ref.read(userAPIServiceProvider).getUsers();

@@ -11,6 +11,7 @@ import 'package:ACAC/presentation_layer/state_management/riverpod/userLocation.d
 import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -202,6 +203,7 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                                     WidgetStatePropertyAll<Color>(Colors.white),
                               ),
                               onPressed: () async {
+                                HapticFeedback.heavyImpact();
                                 try {
                                   LatLng user = await widget.data.getLocation();
                                   String url = await widget.gmaps.createHttpUrl(

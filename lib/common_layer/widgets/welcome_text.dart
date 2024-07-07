@@ -52,7 +52,7 @@ String greetingText(time, language) {
         break;
       case 'English':
       default:
-        greeting = 'good morning🤠,';
+        greeting = 'Good morning🤠,';
         break;
     }
   } else if (time.hour >= 12 && time.hour < 18) {
@@ -68,7 +68,7 @@ String greetingText(time, language) {
         break;
       case 'English':
       default:
-        greeting = 'good afternoon😎,';
+        greeting = 'Good afternoon😎,';
         break;
     }
   } else {
@@ -84,7 +84,7 @@ String greetingText(time, language) {
         break;
       case 'English':
       default:
-        greeting = 'good evening😴,';
+        greeting = 'Good evening😴,';
         break;
     }
   }

@@ -8,6 +8,7 @@ import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 import 'package:url_launcher/url_launcher.dart';
@@ -203,7 +204,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                                   'ACAC Discount',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
-                                Text('Valid until 12/12/2024')
+                                Text('Valid until 08/31/202')
                               ],
                             ),
                             Container(
@@ -351,9 +352,11 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                                   WidgetStatePropertyAll<Color>(Colors.white),
                             ),
                             onPressed: () async {
+                              HapticFeedback.heavyImpact();
                               if (context.mounted) {
                                 Navigator.pushNamed(context, MapScreen.id);
                               }
+
                               try {
                                 LatLng user = await data.getLocation();
                                 String url = await maps.createHttpUrl(

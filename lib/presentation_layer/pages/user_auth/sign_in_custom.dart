@@ -6,6 +6,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignInCustom extends StatefulWidget {
   SignInCustom({super.key, required this.state});
@@ -18,7 +19,7 @@ class SignInCustom extends StatefulWidget {
 
 late TextEditingController usernameController;
 late TextEditingController passwordController;
-double round = 7;
+const double round = 7;
 bool obscureText = true;
 Loading loading = Loading();
 
@@ -250,6 +251,7 @@ class _SignInCustomState extends State<SignInCustom> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: InkWell(
                         onTap: () async {
+                          HapticFeedback.heavyImpact();
                           if (usernameController.text.isNotEmpty &&
                               passwordController.text.isNotEmpty) {
                             await signInUser(usernameController.text,
