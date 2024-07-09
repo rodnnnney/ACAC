@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'discount_card.dart';
 import 'history.dart';
 
 class HomePage extends ConsumerWidget {
@@ -53,20 +52,20 @@ class HomePage extends ConsumerWidget {
                         // ),
                         Row(
                           children: [
-                            IconButton(
-                              onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DiscountCard(
-                                            restName: 'Kinton_Ramen',
-                                            firstName: 'Rodney',
-                                            lastName: 'Shen',
-                                          )),
-                                );
-                              },
-                              icon: const Icon(Icons.card_giftcard_outlined),
-                            ),
+                            // IconButton(
+                            //   onPressed: () async {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => DiscountCard(
+                            //                 restName: 'Kinton_Ramen',
+                            //                 firstName: 'Rodney',
+                            //                 lastName: 'Shen',
+                            //               )),
+                            //     );
+                            //   },
+                            //   icon: const Icon(Icons.card_giftcard_outlined),
+                            // ),
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.heavyImpact();
