@@ -184,16 +184,20 @@ class _HistoryState extends ConsumerState<History> {
                                               ),
                                               TextButton(
                                                 onPressed: () async {
+                                                  print('pressed');
                                                   HapticFeedback.heavyImpact();
                                                   distance = await getDistance(
                                                       snapshot.data!,
                                                       card.location);
                                                   if (context.mounted) {
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          RestaurantAdditionalInfo(
-                                                        restaurant: card,
-                                                        distance: distance,
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            RestaurantAdditionalInfo(
+                                                          restaurant: card,
+                                                          distance: distance,
+                                                        ),
                                                       ),
                                                     );
                                                   }

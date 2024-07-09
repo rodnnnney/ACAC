@@ -130,11 +130,18 @@ class HomePage extends ConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              'Featured',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold),
+                            ShaderMask(
+                              shaderCallback: (bounds) =>
+                                  const LinearGradient(colors: [
+                                GlobalTheme.kDarkGreen,
+                                GlobalTheme.kGreen,
+                              ]).createShader(bounds),
+                              child: const Text(
+                                'Featured',
+                                style: TextStyle(
+                                    color: GlobalTheme.kWhite,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                             ShaderMask(
                               shaderCallback: (bounds) =>
