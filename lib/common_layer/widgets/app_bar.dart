@@ -35,7 +35,10 @@ class AppBarBottom extends ConsumerWidget {
           children: [
             IconButton(
               onPressed: () async {
-                updatePage(0, HomePage.id);
+                if (watchCounter.counter == 0) {
+                } else {
+                  updatePage(0, HomePage.id);
+                }
               },
               icon: Container(
                 decoration: watchCounter.counter == 0 ? selected : null,
@@ -48,8 +51,10 @@ class AppBarBottom extends ConsumerWidget {
             ),
             IconButton(
               onPressed: () {
-                //   updatePage(1, Scanner.id);
-                updatePage(1, QRViewExample.id);
+                if (watchCounter.counter == 1) {
+                } else {
+                  updatePage(1, QRViewExample.id);
+                }
               },
               icon: Container(
                 decoration: watchCounter.counter == 1 ? selected : null,
@@ -62,7 +67,10 @@ class AppBarBottom extends ConsumerWidget {
             ),
             IconButton(
               onPressed: () {
-                updatePage(2, MapScreen.id);
+                if (watchCounter.counter == 2) {
+                } else {
+                  updatePage(2, MapScreen.id);
+                }
               },
               icon: Container(
                 decoration: watchCounter.counter == 2 ? selected : null,
