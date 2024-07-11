@@ -1,3 +1,4 @@
+import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
 import 'package:ACAC/domain_layer/repository_interface/markers.dart';
@@ -19,7 +20,7 @@ class MapScreen extends ConsumerStatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends ConsumerState<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
   Markers markerManager = Markers();
   bool isLocationLoaded = false;
   UserLocation location = UserLocation();
@@ -31,6 +32,17 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void initState() {
     super.initState();
     _initializeLocation();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(userPageCounter).setCounter(2);
   }
 
   Future<void> _initializeLocation() async {

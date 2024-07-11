@@ -1,9 +1,11 @@
 import 'package:ACAC/common_layer/consts/globals.dart';
+import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,9 +15,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'history.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   static String id = 'home_screen';
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> with RouteAware {
   final List<String> images = [
     'https://acacpicturesgenerealbucket.s3.amazonaws.com/china.webp',
     'https://acacpicturesgenerealbucket.s3.amazonaws.com/tofu.webp',
@@ -23,7 +30,29 @@ class HomePage extends ConsumerWidget {
   ];
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(userPageCounter).setCounter(0);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    routeObserver.unsubscribe(this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -305,7 +334,7 @@ class HomePage extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: AppBarBottom(
-        id: id,
+        id: HomePage.id,
       ),
     );
   }

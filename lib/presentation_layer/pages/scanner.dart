@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/loading.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
 import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
 import 'package:ACAC/domain_layer/service/user_api_service.dart';
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ class QRViewExample extends ConsumerStatefulWidget {
   _QRViewExampleState createState() => _QRViewExampleState();
 }
 
-class _QRViewExampleState extends ConsumerState<QRViewExample> {
+class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
@@ -28,18 +30,33 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   Loading loading = Loading();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(userPageCounter).setCounter(1);
+  }
+
+  @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
       controller?.pauseCamera();
     } else if (Platform.isIOS) {
       controller?.resumeCamera();
+      ref.read(userPageCounter).setCounter(1);
     }
   }
 
   @override
   void initState() {
     fetchUserInfo();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userPageCounter).setCounter(1);
+    });
     super.initState();
   }
 
@@ -93,7 +110,6 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
         ),
       ),
     );
-
     setState(() {
       const ResponsePopUp(
         response: 'QR scanned successfully',
@@ -216,6 +232,7 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> {
   @override
   void dispose() {
     controller?.dispose();
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 }

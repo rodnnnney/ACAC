@@ -1,3 +1,4 @@
+import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/pages/user_auth/firstTimeSignIn.dart';
 import 'package:ACAC/presentation_layer/pages/user_auth/sign_in_custom.dart';
@@ -75,6 +76,7 @@ class MyApp extends ConsumerWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         builder: Authenticator.builder(),
+        navigatorObservers: [routeObserver],
         theme: ref.watch(darkLight).theme
             ? colorTheme.themeDataDark()
             : colorTheme.themeDataLight(),
