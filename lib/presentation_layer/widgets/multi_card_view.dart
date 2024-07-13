@@ -294,7 +294,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Call'),
+                                  Text('Reserve'),
                                   SizedBox(
                                     width: 10,
                                   ),

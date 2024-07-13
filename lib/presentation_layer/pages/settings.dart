@@ -127,7 +127,7 @@ class AccountInfo extends ConsumerWidget {
                       const Spacer(),
                       TextButton(
                         style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
+                          elevation: WidgetStateProperty.all(0),
                         ),
                         onPressed: () {
                           const ResponsePopUp(
@@ -231,7 +231,9 @@ class AccountInfo extends ConsumerWidget {
                               padding: WidgetStateProperty.all(EdgeInsets.zero),
                             ),
                             onPressed: () {
-                              ref.read(darkLight).toggleThemeOff();
+                              ref.watch(darkLight).theme == false
+                                  ? null
+                                  : ref.read(darkLight).toggleThemeOff();
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -253,7 +255,11 @@ class AccountInfo extends ConsumerWidget {
                                 padding:
                                     WidgetStateProperty.all(EdgeInsets.zero)),
                             onPressed: () {
-                              ref.read(darkLight.notifier).toggleThemeOn();
+                              ref.watch(darkLight).theme
+                                  ? null
+                                  : ref
+                                      .read(darkLight.notifier)
+                                      .toggleThemeOn();
                             },
                             child: Container(
                               decoration: BoxDecoration(

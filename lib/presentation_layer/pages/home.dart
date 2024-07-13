@@ -4,6 +4,7 @@ import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
+import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
@@ -81,20 +82,20 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                         // ),
                         Row(
                           children: [
-                            // IconButton(
-                            //   onPressed: () async {
-                            //     Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //           builder: (context) => DiscountCard(
-                            //                 restName: 'Kinton_Ramen',
-                            //                 firstName: 'Rodney',
-                            //                 lastName: 'Shen',
-                            //               )),
-                            //     );
-                            //   },
-                            //   icon: const Icon(Icons.card_giftcard_outlined),
-                            // ),
+                            IconButton(
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DiscountCard(
+                                            restName: 'Kinton_Ramen',
+                                            firstName: 'Rodney',
+                                            lastName: 'Shen',
+                                          )),
+                                );
+                              },
+                              icon: const Icon(Icons.card_giftcard_outlined),
+                            ),
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.heavyImpact();

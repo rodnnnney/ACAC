@@ -1,3 +1,4 @@
+import 'package:ACAC/common_layer/widgets/discount_card.dart';
 import 'package:ACAC/common_layer/widgets/star_builder.dart';
 import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
@@ -76,7 +77,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
                     Row(
@@ -183,59 +184,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              minRadius: 18,
-                              maxRadius: 24,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  widget.restaurant.imageLogo),
-                            ),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'ACAC Discount',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                                Text('Valid until 08/31/202')
-                              ],
-                            ),
-                            Container(
-                              width: 0.5,
-                              height: 48,
-                              color: Colors.black,
-                            ),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '10%',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xffE68437)),
-                                ),
-                                Text(
-                                  'OFF',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Color(0xffE68437),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    Discount(place: widget.restaurant),
                     const SizedBox(height: 20),
                     const Row(
                       children: [
@@ -405,7 +354,7 @@ class _RestaurantAdditionalInfoState extends State<RestaurantAdditionalInfo> {
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('Call'),
+                                Text('Reserve'),
                                 SizedBox(
                                   width: 10,
                                 ),
