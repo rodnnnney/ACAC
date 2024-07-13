@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/presentation_layer/pages/scanner.dart';
@@ -5,11 +8,13 @@ import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_resta
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 class DiscountCard extends ConsumerStatefulWidget {
   static String id = 'discount_card';
 
-  DiscountCard({
+  const DiscountCard({
+    super.key,
     required this.firstName,
     required this.lastName,
     required this.restName,
@@ -23,7 +28,40 @@ class DiscountCard extends ConsumerStatefulWidget {
   _DiscountCardState createState() => _DiscountCardState();
 }
 
-class _DiscountCardState extends ConsumerState<DiscountCard> {
+class _DiscountCardState extends ConsumerState<DiscountCard> with RouteAware {
+  Future<void> preventSS() async {
+    await ScreenProtector.preventScreenshotOn();
+  }
+
+  Future<void> allowSS() async {
+    await ScreenProtector.preventScreenshotOff();
+  }
+
+  //Disable screenshots
+  @override
+  void initState() {
+    super.initState();
+    preventSS();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  // Allow screenshots to resume
+  @override
+  void didPushNext() {
+    allowSS();
+  }
+
   @override
   Widget build(BuildContext context) {
     final restaurantProvider = ref.read(restaurant);

@@ -22,21 +22,31 @@
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 import 'Restaurant.dart';
+import 'RestaurantInfoCard.dart';
+import 'StartStop.dart';
+import 'Time.dart';
 import 'User.dart';
 
 export 'Restaurant.dart';
+export 'RestaurantInfoCard.dart';
+export 'StartStop.dart';
+export 'Time.dart';
 export 'User.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "8b66b57dea84dbcf037e605462d441fb";
+  String version = "a9cab573c5e9219047aa2a08ad5f0fea";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [
     Restaurant.schema,
+    RestaurantInfoCard.schema,
     User.schema
   ];
   @override
-  List<amplify_core.ModelSchema> customTypeSchemas = [];
+  List<amplify_core.ModelSchema> customTypeSchemas = [
+    StartStop.schema,
+    Time.schema
+  ];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
@@ -45,6 +55,8 @@ class ModelProvider implements amplify_core.ModelProviderInterface {
     switch (modelName) {
       case "Restaurant":
         return Restaurant.classType;
+      case "RestaurantInfoCard":
+        return RestaurantInfoCard.classType;
       case "User":
         return User.classType;
       default:

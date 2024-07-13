@@ -16,3 +16,42 @@ type User @model @auth(rules: [{ allow: public, operations: [read]}]) {
     lastName: String!
     email: AWSEmail!
 }
+
+type RestaurantInfoCard @model @auth(rules: [{ allow: public, operations: [read]}]) {
+    id: ID!
+    restaurantName : String
+    location : String
+    address : String
+    imageSrc : String
+    imageLogo : String
+    scannerDataMatch : String
+    hours : Time
+    rating : Float
+    cuisineType : [String]
+    reviewNum : Int
+    discounts : [String]
+    discountPercent : String
+    phoneNumber : String
+    gMapsLink : String
+    websiteLink : String
+    topRatedItemsImgSrc : [String]
+    topRatedItemsName : [String]
+    topRatedItemsPrice : [String]
+}
+
+type Time {
+    monday: StartStop!
+    tuesday: StartStop!
+    wednesday: StartStop!
+    thursday: StartStop!
+    friday: StartStop!
+    saturday: StartStop!
+    sunday: StartStop!
+}
+
+type StartStop {
+    start: String!
+    stop: String!
+}
+
+

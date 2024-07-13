@@ -64,6 +64,8 @@ dependencies:
   pretty_qr_code: ^3.3.0
   delightful_toast: ^1.1.0
   qr_code_scanner: ^1.0.1
+  flutter_windowmanager: ^0.2.0
+  screen_protector: ^1.4.2
 
 dev_dependencies:
   flutter_test:
