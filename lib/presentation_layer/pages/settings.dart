@@ -94,8 +94,8 @@ class AccountInfo extends ConsumerWidget {
   Widget buildLayout(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Account Settings'),
-          automaticallyImplyLeading: false),
+        title: const Text('Account Settings'),
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

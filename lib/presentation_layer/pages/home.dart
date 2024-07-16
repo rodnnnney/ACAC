@@ -4,7 +4,6 @@ import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
@@ -73,29 +72,22 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Welcome(),
-                        // userNameProvider.when(
-                        //   data: (userName) {
-                        //     return Text('$userName!');
-                        //   },
-                        //   loading: () => const CircularProgressIndicator(),
-                        //   error: (error, stackTrace) => Text('Error: $error'),
-                        // ),
                         Row(
                           children: [
-                            IconButton(
-                              onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DiscountCard(
-                                            restName: 'Kinton_Ramen',
-                                            firstName: 'Rodney',
-                                            lastName: 'Shen',
-                                          )),
-                                );
-                              },
-                              icon: const Icon(Icons.card_giftcard_outlined),
-                            ),
+                            // IconButton(
+                            //   onPressed: () async {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => DiscountCard(
+                            //                 restName: 'Kinton_Ramen',
+                            //                 firstName: 'Rodney',
+                            //                 lastName: 'Shen',
+                            //               )),
+                            //     );
+                            //   },
+                            //   icon: const Icon(Icons.card_giftcard_outlined),
+                            // ),
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.heavyImpact();
@@ -285,46 +277,32 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                         ),
                         SizedBox(
                           height: 130,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, SortedByRating.id);
+                          child: ListView.builder(
+                            itemCount: 1,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              return HomeCard(
+                                displayIMG: 'https://acacpicture'
+                                    'sgenerealbucket.s3.amazonaws.com/chinese2'
+                                    '.png',
+                                text: 'Rating',
+                                routeName: (BuildContext, String) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    SortedByRating.id,
+                                  );
+                                },
+                              );
                             },
-                            child: Card(
-                              child: SizedBox(
-                                width: 120,
-                                height: 130,
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: CachedNetworkImage(
-                                        height: 100,
-                                        fit: BoxFit.contain,
-                                        imageUrl:
-                                            'https://acacpicturesgenerealbucket.s3.amazonaws.com/chinese2.png',
-                                      ),
-                                    ),
-                                    const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Rating',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                           ),
                         ),
+
                         const SizedBox(
                           height: 10,
-                        )
+                        ),
+                        // GestureDetector(
+                        //   onTap: ,
+                        //     child: Text('data'))
                       ],
                     )
                   ],
