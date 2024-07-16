@@ -31,27 +31,12 @@ class UserAPIService {
     }
   }
 
-  Future<User> getTrip(String tripId) async {
-    try {
-      final request = ModelQueries.get(
-        User.classType,
-        UserModelIdentifier(id: tripId),
-      );
-      final response = await Amplify.API.query(request: request).response;
-
-      final trip = response.data!;
-      return trip;
-    } on Exception catch (error) {
-      safePrint('getTrip failed: $error');
-      rethrow;
-    }
-  }
-
   Future<User> getUser(String userId) async {
     try {
       final request = ModelQueries.get(
           User.classType, UserModelIdentifier(id: userId),
           authorizationMode: APIAuthorizationType.apiKey);
+
       final response = await Amplify.API.query(request: request).response;
 
       return response.data!;

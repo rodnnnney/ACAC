@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 final List<HomeCard> sortByCountry = [
   HomeCard(
-    displayIMG: 'https://acacpicturesgenerealbucket.s3.amazonaws'
-        '.com/ai_gen/openart-image_G585saq6_1719106933802_raw.png',
+    displayIMG:
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
     text: 'Chinese',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
@@ -17,7 +17,7 @@ final List<HomeCard> sortByCountry = [
   ),
   HomeCard(
     displayIMG:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/ai_gen/openart-image_W8ZOTKz__1719106517856_raw.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/image.png',
     text: 'Vietnamese',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
@@ -29,7 +29,7 @@ final List<HomeCard> sortByCountry = [
   ),
   HomeCard(
     displayIMG:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/ai_gen/openart-image_8MOLZGVs_1719107165925_raw.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/japanese1.png',
     text: 'Japanese',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(
@@ -41,7 +41,7 @@ final List<HomeCard> sortByCountry = [
   ),
   HomeCard(
     displayIMG:
-        'https://acacpicturesgenerealbucket.s3.amazonaws.com/ai_gen/openart-image_Dn-YfkBF_1719107094617_raw.png',
+        'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/korean1.png',
     text: 'Korean',
     routeName: (BuildContext context, String cuisineType) {
       Navigator.pushNamed(

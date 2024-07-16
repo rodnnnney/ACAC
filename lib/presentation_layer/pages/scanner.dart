@@ -86,7 +86,7 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
       var currentUser = await Amplify.Auth.getCurrentUser();
       var user =
           await ref.read(userAPIServiceProvider).getUser(currentUser.userId);
-      await ref.watch(restaurantListControllerProvider.notifier).addRestaurant(
+      await ref.read(restaurantListControllerProvider.notifier).addRestaurant(
           restaurantName: restaurantName,
           email: email,
           userFirstName: user.firstName,
