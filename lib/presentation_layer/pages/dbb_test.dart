@@ -6,6 +6,7 @@ import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:ACAC/presentation_layer/widgets/additional_data_dbb.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart' as provider;
 
 import '../state_management/provider/navigation_info_provider.dart';
 import '../state_management/provider/restaurant_provider.dart';
+import 'maps.dart';
 
 class DbbTest extends ConsumerStatefulWidget {
   const DbbTest({super.key});
@@ -60,6 +62,9 @@ class _DbbTestState extends ConsumerState<DbbTest> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text('${allInfoCards.length}'),
+        ),
         body: ListView.builder(
           itemCount: allInfoCards.length,
           itemBuilder: (BuildContext context, int index) {
@@ -80,16 +85,16 @@ class _DbbTestState extends ConsumerState<DbbTest> {
               margin: const EdgeInsets.all(15),
               child: GestureDetector(
                 onTap: () async {
-                  // String distance = await getDistance();
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => RestaurantAdditionalInfo(
-                  //       restaurant: filteredRestaurants[index],
-                  //       distance: distance,
-                  //     ),
-                  //   ),
-                  // );
+                  String distance = await getDistance();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdditionalDataDbb(
+                        restaurant: allInfoCards[index],
+                        distance: distance,
+                      ),
+                    ),
+                  );
                 },
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -102,7 +107,7 @@ class _DbbTestState extends ConsumerState<DbbTest> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: CachedNetworkImage(
-                          imageUrl: allInfoCards[index].imageSrc!,
+                          imageUrl: allInfoCards[index].imageSrc,
                           width: double.infinity,
                           height: 130,
                           fit: BoxFit.cover,
@@ -191,28 +196,29 @@ class _DbbTestState extends ConsumerState<DbbTest> {
                                 ),
                                 onPressed: () async {
                                   HapticFeedback.heavyImpact();
-                                  // try {
-                                  //   LatLng user = await data.getLocation();
-                                  //   String url = await maps.createHttpUrl(
-                                  //       user.latitude,
-                                  //       user.longitude,
-                                  //       filteredRestaurants[index]
-                                  //           .location
-                                  //           .latitude,
-                                  //       filteredRestaurants[index]
-                                  //           .location
-                                  //           .longitude);
-                                  //
-                                  //   maps.processPolylineData(url);
-                                  //   maps.updateCameraBounds([
-                                  //     user,
-                                  //     filteredRestaurants[index].location
-                                  //   ]);
-                                  //   nav.updateRouteDetails(url);
-                                  //   if (context.mounted) {
-                                  //     Navigator.pushNamed(context, MapScreen.id);
-                                  //   }
-                                  // } catch (e) {}
+                                  try {
+                                    if (context.mounted) {
+                                      Navigator.pushNamed(
+                                          context, MapScreen.id);
+                                    }
+                                    LatLng user = await data.getLocation();
+                                    String url = await maps.createHttpUrl(
+                                        user.latitude,
+                                        user.longitude,
+                                        double.parse(allInfoCards[index]
+                                            .location
+                                            .latitude),
+                                        double.parse(allInfoCards[index]
+                                            .location
+                                            .longitude));
+
+                                    maps.processPolylineData(url);
+                                    maps.updateCameraBounds([
+                                      user,
+                                      allInfoCards[index].location as LatLng
+                                    ]);
+                                    nav.updateRouteDetails(url);
+                                  } catch (e) {}
                                 },
                                 child: const Text('Find on Map'),
                               ),

@@ -95,19 +95,19 @@ Future<Map<String, dynamic>> getCurrentStatusWithColor(
 String getOpeningTime(int weekday, List<RestaurantInfoCard> rest, int index) {
   switch (weekday) {
     case 1:
-      return rest[index].hours?.monday.start ?? 'Closed';
+      return rest[index].hours.monday.start ?? 'Closed';
     case 2:
-      return rest[index].hours?.tuesday.start ?? 'Closed';
+      return rest[index].hours.tuesday.start ?? 'Closed';
     case 3:
-      return rest[index].hours?.wednesday.start ?? 'Closed';
+      return rest[index].hours.wednesday.start ?? 'Closed';
     case 4:
-      return rest[index].hours?.thursday.start ?? 'Closed';
+      return rest[index].hours.thursday.start ?? 'Closed';
     case 5:
-      return rest[index].hours?.friday.start ?? 'Closed';
+      return rest[index].hours.friday.start ?? 'Closed';
     case 6:
-      return rest[index].hours?.saturday.start ?? 'Closed';
+      return rest[index].hours.saturday.start ?? 'Closed';
     case 7:
-      return rest[index].hours?.sunday.start ?? 'Closed';
+      return rest[index].hours.sunday.start ?? 'Closed';
     default:
       return 'Closed';
   }
@@ -116,19 +116,19 @@ String getOpeningTime(int weekday, List<RestaurantInfoCard> rest, int index) {
 String getClosingTime(int weekday, List<RestaurantInfoCard> rest, int index) {
   switch (weekday) {
     case 1:
-      return rest[index].hours?.monday.stop ?? 'Closed';
+      return rest[index].hours.monday.stop ?? 'Closed';
     case 2:
-      return rest[index].hours?.tuesday.stop ?? 'Closed';
+      return rest[index].hours.tuesday.stop ?? 'Closed';
     case 3:
-      return rest[index].hours?.wednesday.stop ?? 'Closed';
+      return rest[index].hours.wednesday.stop ?? 'Closed';
     case 4:
-      return rest[index].hours?.thursday.stop ?? 'Closed';
+      return rest[index].hours.thursday.stop ?? 'Closed';
     case 5:
-      return rest[index].hours?.friday.stop ?? 'Closed';
+      return rest[index].hours.friday.stop ?? 'Closed';
     case 6:
-      return rest[index].hours?.saturday.stop ?? 'Closed';
+      return rest[index].hours.saturday.stop ?? 'Closed';
     case 7:
-      return rest[index].hours?.sunday.stop ?? 'Closed';
+      return rest[index].hours.sunday.stop ?? 'Closed';
     default:
       return 'Closed';
   }
@@ -159,5 +159,75 @@ String getHours(List<RestaurantInfoCard> rest, int index, int weekday) {
           '${rest[index].hours.sunday.stop}');
     default:
       return "Closed";
+  }
+}
+
+String getHoursSingle(RestaurantInfoCard rest, int weekday) {
+  switch (weekday) {
+    case 1:
+      return ('${rest.hours.monday.start} - '
+          '${rest.hours.monday.stop}');
+    case 2:
+      return ('${rest.hours.tuesday.start} - '
+          '${rest.hours.tuesday.stop}');
+    case 3:
+      return ('${rest.hours.wednesday.start} - '
+          '${rest.hours.wednesday.stop}');
+    case 4:
+      return ('${rest.hours.thursday.start} - '
+          '${rest.hours.thursday.stop}');
+    case 5:
+      return ('${rest.hours.friday.start} - '
+          '${rest.hours.friday.stop}');
+    case 6:
+      return ('${rest.hours.saturday.start} - '
+          '${rest.hours.saturday.stop}');
+    case 7:
+      return ('${rest.hours.sunday.start} - '
+          '${rest.hours.sunday.stop}');
+    default:
+      return "Closed";
+  }
+}
+
+String getOpeningTimeSingle(int weekday, RestaurantInfoCard rest) {
+  switch (weekday) {
+    case 1:
+      return rest.hours.monday.start;
+    case 2:
+      return rest.hours.tuesday.start;
+    case 3:
+      return rest.hours.wednesday.start;
+    case 4:
+      return rest.hours.thursday.start;
+    case 5:
+      return rest.hours.friday.start;
+    case 6:
+      return rest.hours.saturday.start;
+    case 7:
+      return rest.hours.sunday.start;
+    default:
+      return 'Closed';
+  }
+}
+
+String getClosingTimeSingle(int weekday, RestaurantInfoCard rest) {
+  switch (weekday) {
+    case 1:
+      return rest.hours.monday.stop;
+    case 2:
+      return rest.hours.tuesday.stop;
+    case 3:
+      return rest.hours.wednesday.stop;
+    case 4:
+      return rest.hours.thursday.stop;
+    case 5:
+      return rest.hours.friday.stop;
+    case 6:
+      return rest.hours.saturday.stop;
+    case 7:
+      return rest.hours.sunday.stop;
+    default:
+      return 'Closed';
   }
 }

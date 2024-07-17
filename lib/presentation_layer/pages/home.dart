@@ -2,12 +2,8 @@ import 'package:ACAC/common_layer/consts/globals.dart';
 import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/welcome_text.dart';
-import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_country.dart';
 import 'package:ACAC/domain_layer/local_db/sort_by_food_type.dart';
-import 'package:ACAC/domain_layer/service/restaurant_api_service.dart';
-import 'package:ACAC/domain_layer/service/restaurant_info_card.dart';
-import 'package:ACAC/models/ModelProvider.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
@@ -81,57 +77,9 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                           children: [
                             IconButton(
                               onPressed: () async {
-                                RestaurantInfoCard test = RestaurantInfoCard(
-                                  restaurantName: 'Kinton Ramen',
-                                  location: LatLng(
-                                      latitude: '45.41913804744197',
-                                      longitude: '-75.6914954746089'),
-                                  address: '216 Elgin St #2',
-                                  imageSrc:
-                                      'https://acacpicturesgenerealbucket.s3.amazonaws.com/kinton/kt.jpeg',
-                                  imageLogo:
-                                      'https://acacpicturesgenerealbucket.s3.amazonaws.com/kinton/kintonlogo.png',
-                                  scannerDataMatch: 'Kinton_Ramen',
-                                  hours: Time(
-                                    monday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                    tuesday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                    wednesday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                    thursday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                    friday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                    saturday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                    sunday: StartStop(
-                                        start: '11:30 AM', stop: '10:30 PM'),
-                                  ),
-                                  rating: 4.8,
-                                  cuisineType: ['Japanese', 'Noodle'],
-                                  reviewNum: 1569,
-                                  discounts: ['10% off dine in'],
-                                  discountPercent: '10',
-                                  phoneNumber: '+1613 565 8138',
-                                  gMapsLink:
-                                      'https://www.google.ca/maps/place/KINTON+RAMEN+OTTAWA/@45.4190401,-75.6913349,17z/data=!4m22!1m13!4m12!1m4!2m2!1d-79.3741151!2d43.6436609!4e1!1m6!1m2!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!2sKINTON+RAMEN+OTTAWA,+216+Elgin+St+%232,+Ottawa,+ON+K2P+1L7!2m2!1d-75.6915062!2d45.4189724!3m7!1s0x4cce053ef4bda579:0x7f0a3ad6db8cc017!8m2!3d45.4189724!4d-75.6915062!9m1!1b1!16s%2Fg%2F11ty4xjgmw?entry=ttu',
-                                  websiteLink:
-                                      'https://www.kintonramen.com/menu/',
-                                  topRatedItemsImgSrc: [
-                                    'https://acacpicturesgenerealbucket.s3.amazonaws.com/kinton/ramen1.webp',
-                                    'https://acacpicturesgenerealbucket.s3.amazonaws.com/kinton/ramen2.webp',
-                                    'https://acacpicturesgenerealbucket.s3.amazonaws.com/kinton/ramen3.png'
-                                  ],
-                                  topRatedItemsName: [
-                                    'Pork Original',
-                                    'Beef Original',
-                                    'Pork Shoyu'
-                                  ],
-                                );
-                                await ref
-                                    .read(restaurantInfoCardAPIServiceProvider)
-                                    .addRestaurantInfoCard(test);
+                                // await ref
+                                //     .read(restaurantInfoCardAPIServiceProvider)
+                                //     .addRestaurantInfoCard(test);
                                 print('done');
                                 // Navigator.push(
                                 //   context,
@@ -332,51 +280,50 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: 130,
-                              child: HomeCard(
-                                displayIMG: 'https://acacpicture'
-                                    'sgenerealbucket.s3.amazonaws.com/chinese2'
-                                    '.png',
-                                text: 'Rating',
-                                routeName: (BuildContext, String) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    SortedByRating.id,
-                                  );
-                                },
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const DbbTest()),
-                                );
-                              },
-                              child: const SizedBox(
+                        SizedBox(
+                          height: 130,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              SizedBox(
                                 height: 130,
-                                child: Card(
-                                  color: Colors.pink,
-                                  child: SizedBox(
-                                      width: 120,
-                                      height: 130,
-                                      child: Text('s')),
+                                child: HomeCard(
+                                  displayIMG:
+                                      'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
+                                  text: 'Rating',
+                                  routeName: (BuildContext, String) {
+                                    Navigator.pushNamed(
+                                      context,
+                                      SortedByRating.id,
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                          ],
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const DbbTest()),
+                                  );
+                                },
+                                child: const SizedBox(
+                                  height: 130,
+                                  child: Card(
+                                    color: Colors.pink,
+                                    child: SizedBox(
+                                        width: 120,
+                                        height: 130,
+                                        child: Text('s')),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-
                         const SizedBox(
                           height: 10,
                         ),
-                        // GestureDetector(
-                        //   onTap: ,
-                        //     child: Text('data'))
                       ],
                     )
                   ],
