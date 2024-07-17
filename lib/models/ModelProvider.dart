@@ -21,12 +21,14 @@
 
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
+import 'LatLng.dart';
 import 'Restaurant.dart';
 import 'RestaurantInfoCard.dart';
 import 'StartStop.dart';
 import 'Time.dart';
 import 'User.dart';
 
+export 'LatLng.dart';
 export 'Restaurant.dart';
 export 'RestaurantInfoCard.dart';
 export 'StartStop.dart';
@@ -35,7 +37,7 @@ export 'User.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "a9cab573c5e9219047aa2a08ad5f0fea";
+  String version = "66edf7d0280f8895660f6a84efc4bd54";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [
     Restaurant.schema,
@@ -44,6 +46,7 @@ class ModelProvider implements amplify_core.ModelProviderInterface {
   ];
   @override
   List<amplify_core.ModelSchema> customTypeSchemas = [
+    LatLng.schema,
     StartStop.schema,
     Time.schema
   ];

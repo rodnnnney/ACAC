@@ -1,3 +1,4 @@
+import 'package:ACAC/models/ModelProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -89,4 +90,74 @@ TimeOfDay parseTimeOfDay(String timeString) {
 Future<Map<String, dynamic>> getCurrentStatusWithColor(
     String openTimeStr, String closeTimeStr) async {
   return getStatusWithColor(DateTime.now(), openTimeStr, closeTimeStr);
+}
+
+String getOpeningTime(int weekday, List<RestaurantInfoCard> rest, int index) {
+  switch (weekday) {
+    case 1:
+      return rest[index].hours?.monday.start ?? 'Closed';
+    case 2:
+      return rest[index].hours?.tuesday.start ?? 'Closed';
+    case 3:
+      return rest[index].hours?.wednesday.start ?? 'Closed';
+    case 4:
+      return rest[index].hours?.thursday.start ?? 'Closed';
+    case 5:
+      return rest[index].hours?.friday.start ?? 'Closed';
+    case 6:
+      return rest[index].hours?.saturday.start ?? 'Closed';
+    case 7:
+      return rest[index].hours?.sunday.start ?? 'Closed';
+    default:
+      return 'Closed';
+  }
+}
+
+String getClosingTime(int weekday, List<RestaurantInfoCard> rest, int index) {
+  switch (weekday) {
+    case 1:
+      return rest[index].hours?.monday.stop ?? 'Closed';
+    case 2:
+      return rest[index].hours?.tuesday.stop ?? 'Closed';
+    case 3:
+      return rest[index].hours?.wednesday.stop ?? 'Closed';
+    case 4:
+      return rest[index].hours?.thursday.stop ?? 'Closed';
+    case 5:
+      return rest[index].hours?.friday.stop ?? 'Closed';
+    case 6:
+      return rest[index].hours?.saturday.stop ?? 'Closed';
+    case 7:
+      return rest[index].hours?.sunday.stop ?? 'Closed';
+    default:
+      return 'Closed';
+  }
+}
+
+String getHours(List<RestaurantInfoCard> rest, int index, int weekday) {
+  switch (weekday) {
+    case 1:
+      return ('${rest[index].hours.monday.start} - '
+          '${rest[index].hours.monday.stop}');
+    case 2:
+      return ('${rest[index].hours.tuesday.start} - '
+          '${rest[index].hours.tuesday.stop}');
+    case 3:
+      return ('${rest[index].hours.wednesday.start} - '
+          '${rest[index].hours.wednesday.stop}');
+    case 4:
+      return ('${rest[index].hours.thursday.start} - '
+          '${rest[index].hours.thursday.stop}');
+    case 5:
+      return ('${rest[index].hours.friday.start} - '
+          '${rest[index].hours.friday.stop}');
+    case 6:
+      return ('${rest[index].hours.saturday.start} - '
+          '${rest[index].hours.saturday.stop}');
+    case 7:
+      return ('${rest[index].hours.sunday.start} - '
+          '${rest[index].hours.sunday.stop}');
+    default:
+      return "Closed";
+  }
 }

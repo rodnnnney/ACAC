@@ -29,7 +29,7 @@ class RestaurantInfoCard extends amplify_core.Model {
   static const classType = const _RestaurantInfoCardModelType();
   final String id;
   final String? _restaurantName;
-  final String? _location;
+  final LatLng? _location;
   final String? _address;
   final String? _imageSrc;
   final String? _imageLogo;
@@ -61,72 +61,225 @@ class RestaurantInfoCard extends amplify_core.Model {
     return RestaurantInfoCardModelIdentifier(id: id);
   }
 
-  String? get restaurantName {
-    return _restaurantName;
+  String get restaurantName {
+    try {
+      return _restaurantName!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get location {
-    return _location;
+  LatLng get location {
+    try {
+      return _location!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get address {
-    return _address;
+  String get address {
+    try {
+      return _address!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get imageSrc {
-    return _imageSrc;
+  String get imageSrc {
+    try {
+      return _imageSrc!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get imageLogo {
-    return _imageLogo;
+  String get imageLogo {
+    try {
+      return _imageLogo!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get scannerDataMatch {
-    return _scannerDataMatch;
+  String get scannerDataMatch {
+    try {
+      return _scannerDataMatch!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  Time? get hours {
-    return _hours;
+  Time get hours {
+    try {
+      return _hours!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  double? get rating {
-    return _rating;
+  double get rating {
+    try {
+      return _rating!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  List<String>? get cuisineType {
-    return _cuisineType;
+  List<String> get cuisineType {
+    try {
+      return _cuisineType!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  int? get reviewNum {
-    return _reviewNum;
+  int get reviewNum {
+    try {
+      return _reviewNum!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  List<String>? get discounts {
-    return _discounts;
+  List<String> get discounts {
+    try {
+      return _discounts!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get discountPercent {
-    return _discountPercent;
+  String get discountPercent {
+    try {
+      return _discountPercent!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get phoneNumber {
-    return _phoneNumber;
+  String get phoneNumber {
+    try {
+      return _phoneNumber!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get gMapsLink {
-    return _gMapsLink;
+  String get gMapsLink {
+    try {
+      return _gMapsLink!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  String? get websiteLink {
-    return _websiteLink;
+  String get websiteLink {
+    try {
+      return _websiteLink!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  List<String>? get topRatedItemsImgSrc {
-    return _topRatedItemsImgSrc;
+  List<String> get topRatedItemsImgSrc {
+    try {
+      return _topRatedItemsImgSrc!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
-  List<String>? get topRatedItemsName {
-    return _topRatedItemsName;
+  List<String> get topRatedItemsName {
+    try {
+      return _topRatedItemsName!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
   List<String>? get topRatedItemsPrice {
@@ -143,23 +296,23 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   const RestaurantInfoCard._internal(
       {required this.id,
-      restaurantName,
-      location,
-      address,
-      imageSrc,
-      imageLogo,
-      scannerDataMatch,
-      hours,
-      rating,
-      cuisineType,
-      reviewNum,
-      discounts,
-      discountPercent,
-      phoneNumber,
-      gMapsLink,
-      websiteLink,
-      topRatedItemsImgSrc,
-      topRatedItemsName,
+      required restaurantName,
+      required location,
+      required address,
+      required imageSrc,
+      required imageLogo,
+      required scannerDataMatch,
+      required hours,
+      required rating,
+      required cuisineType,
+      required reviewNum,
+      required discounts,
+      required discountPercent,
+      required phoneNumber,
+      required gMapsLink,
+      required websiteLink,
+      required topRatedItemsImgSrc,
+      required topRatedItemsName,
       topRatedItemsPrice,
       createdAt,
       updatedAt})
@@ -186,23 +339,23 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   factory RestaurantInfoCard(
       {String? id,
-      String? restaurantName,
-      String? location,
-      String? address,
-      String? imageSrc,
-      String? imageLogo,
-      String? scannerDataMatch,
-      Time? hours,
-      double? rating,
-      List<String>? cuisineType,
-      int? reviewNum,
-      List<String>? discounts,
-      String? discountPercent,
-      String? phoneNumber,
-      String? gMapsLink,
-      String? websiteLink,
-      List<String>? topRatedItemsImgSrc,
-      List<String>? topRatedItemsName,
+      required String restaurantName,
+      required LatLng location,
+      required String address,
+      required String imageSrc,
+      required String imageLogo,
+      required String scannerDataMatch,
+      required Time hours,
+      required double rating,
+      required List<String> cuisineType,
+      required int reviewNum,
+      required List<String> discounts,
+      required String discountPercent,
+      required String phoneNumber,
+      required String gMapsLink,
+      required String websiteLink,
+      required List<String> topRatedItemsImgSrc,
+      required List<String> topRatedItemsName,
       List<String>? topRatedItemsPrice}) {
     return RestaurantInfoCard._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
@@ -278,7 +431,9 @@ class RestaurantInfoCard extends amplify_core.Model {
     buffer.write("RestaurantInfoCard {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("restaurantName=" + "$_restaurantName" + ", ");
-    buffer.write("location=" + "$_location" + ", ");
+    buffer.write("location=" +
+        (_location != null ? _location!.toString() : "null") +
+        ", ");
     buffer.write("address=" + "$_address" + ", ");
     buffer.write("imageSrc=" + "$_imageSrc" + ", ");
     buffer.write("imageLogo=" + "$_imageLogo" + ", ");
@@ -325,7 +480,7 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   RestaurantInfoCard copyWith(
       {String? restaurantName,
-      String? location,
+      LatLng? location,
       String? address,
       String? imageSrc,
       String? imageLogo,
@@ -365,21 +520,21 @@ class RestaurantInfoCard extends amplify_core.Model {
   }
 
   RestaurantInfoCard copyWithModelFieldValues(
-      {ModelFieldValue<String?>? restaurantName,
-      ModelFieldValue<String?>? location,
-      ModelFieldValue<String?>? address,
-      ModelFieldValue<String?>? imageSrc,
-      ModelFieldValue<String?>? imageLogo,
-      ModelFieldValue<String?>? scannerDataMatch,
-      ModelFieldValue<Time?>? hours,
-      ModelFieldValue<double?>? rating,
+      {ModelFieldValue<String>? restaurantName,
+      ModelFieldValue<LatLng>? location,
+      ModelFieldValue<String>? address,
+      ModelFieldValue<String>? imageSrc,
+      ModelFieldValue<String>? imageLogo,
+      ModelFieldValue<String>? scannerDataMatch,
+      ModelFieldValue<Time>? hours,
+      ModelFieldValue<double>? rating,
       ModelFieldValue<List<String>?>? cuisineType,
-      ModelFieldValue<int?>? reviewNum,
+      ModelFieldValue<int>? reviewNum,
       ModelFieldValue<List<String>?>? discounts,
-      ModelFieldValue<String?>? discountPercent,
-      ModelFieldValue<String?>? phoneNumber,
-      ModelFieldValue<String?>? gMapsLink,
-      ModelFieldValue<String?>? websiteLink,
+      ModelFieldValue<String>? discountPercent,
+      ModelFieldValue<String>? phoneNumber,
+      ModelFieldValue<String>? gMapsLink,
+      ModelFieldValue<String>? websiteLink,
       ModelFieldValue<List<String>?>? topRatedItemsImgSrc,
       ModelFieldValue<List<String>?>? topRatedItemsName,
       ModelFieldValue<List<String>?>? topRatedItemsPrice}) {
@@ -419,7 +574,13 @@ class RestaurantInfoCard extends amplify_core.Model {
   RestaurantInfoCard.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         _restaurantName = json['restaurantName'],
-        _location = json['location'],
+        _location = json['location'] != null
+            ? json['location']['serializedData'] != null
+                ? LatLng.fromJson(new Map<String, dynamic>.from(
+                    json['location']['serializedData']))
+                : LatLng.fromJson(
+                    new Map<String, dynamic>.from(json['location']))
+            : null,
         _address = json['address'],
         _imageSrc = json['imageSrc'],
         _imageLogo = json['imageLogo'],
@@ -451,7 +612,7 @@ class RestaurantInfoCard extends amplify_core.Model {
   Map<String, dynamic> toJson() => {
         'id': id,
         'restaurantName': _restaurantName,
-        'location': _location,
+        'location': _location?.toJson(),
         'address': _address,
         'imageSrc': _imageSrc,
         'imageLogo': _imageLogo,
@@ -535,9 +696,20 @@ class RestaurantInfoCard extends amplify_core.Model {
           authStrategy: amplify_core.AuthStrategy.PUBLIC,
           operations: const [
             amplify_core.ModelOperation.CREATE,
-            amplify_core.ModelOperation.READ,
             amplify_core.ModelOperation.UPDATE,
-            amplify_core.ModelOperation.DELETE
+            amplify_core.ModelOperation.DELETE,
+            amplify_core.ModelOperation.READ
+          ]),
+      amplify_core.AuthRule(
+          authStrategy: amplify_core.AuthStrategy.OWNER,
+          ownerField: "owner",
+          identityClaim: "cognito:username",
+          provider: amplify_core.AuthRuleProvider.USERPOOLS,
+          operations: const [
+            amplify_core.ModelOperation.CREATE,
+            amplify_core.ModelOperation.UPDATE,
+            amplify_core.ModelOperation.DELETE,
+            amplify_core.ModelOperation.READ
           ])
     ];
 
@@ -545,56 +717,57 @@ class RestaurantInfoCard extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.RESTAURANTNAME,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: RestaurantInfoCard.LOCATION,
-        isRequired: false,
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
+        fieldName: 'location',
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
-            amplify_core.ModelFieldTypeEnum.string)));
+            amplify_core.ModelFieldTypeEnum.embedded,
+            ofCustomTypeName: 'LatLng')));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.ADDRESS,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.IMAGESRC,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.IMAGELOGO,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.SCANNERDATAMATCH,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
         fieldName: 'hours',
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.embedded,
             ofCustomTypeName: 'Time')));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.RATING,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.double)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.CUISINETYPE,
-        isRequired: false,
+        isRequired: true,
         isArray: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.collection,
@@ -602,13 +775,13 @@ class RestaurantInfoCard extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.REVIEWNUM,
-        isRequired: false,
+        isRequired: true,
         ofType:
             amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.DISCOUNTS,
-        isRequired: false,
+        isRequired: true,
         isArray: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.collection,
@@ -616,31 +789,31 @@ class RestaurantInfoCard extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.DISCOUNTPERCENT,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.PHONENUMBER,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.GMAPSLINK,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.WEBSITELINK,
-        isRequired: false,
+        isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.TOPRATEDITEMSIMGSRC,
-        isRequired: false,
+        isRequired: true,
         isArray: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.collection,
@@ -648,7 +821,7 @@ class RestaurantInfoCard extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.TOPRATEDITEMSNAME,
-        isRequired: false,
+        isRequired: true,
         isArray: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.collection,

@@ -23,7 +23,7 @@ class HomeCard extends StatelessWidget {
         elevation: 2,
         child: SizedBox(
           width: 120,
-          height: 160, // Increase the height to allow more space for the image
+          height: 130,
           child: Column(
             children: [
               Expanded(

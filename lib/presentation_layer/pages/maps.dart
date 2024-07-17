@@ -113,11 +113,12 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
             ? const Color(0xff402C7D)
             : const Color(0xffE2F1D6),
         onPressed: () => showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => SwipeUpMenu(
-                  userLocation: userPosition,
-                )),
+          isScrollControlled: true,
+          context: context,
+          builder: (context) => SwipeUpMenu(
+            userLocation: userPosition,
+          ),
+        ),
         child: const Icon(Icons.menu),
       ),
       bottomNavigationBar: AppBarBottom(id: id),

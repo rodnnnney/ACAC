@@ -19,23 +19,23 @@ type User @model @auth(rules: [{ allow: public, operations: [read]}]) {
 
 type RestaurantInfoCard @model @auth(rules: [{ allow: public}, {allow: owner}]) {
     id: ID!
-    restaurantName : String
-    location : String
-    address : String
-    imageSrc : String
-    imageLogo : String
-    scannerDataMatch : String
-    hours : Time
-    rating : Float
-    cuisineType : [String]
-    reviewNum : Int
-    discounts : [String]
-    discountPercent : String
-    phoneNumber : String
-    gMapsLink : String
-    websiteLink : String
-    topRatedItemsImgSrc : [String]
-    topRatedItemsName : [String]
+    restaurantName : String!
+    location : LatLng!
+    address : String!
+    imageSrc : String!
+    imageLogo : String!
+    scannerDataMatch : String!
+    hours : Time!
+    rating : Float!
+    cuisineType : [String]!
+    reviewNum : Int!
+    discounts : [String]!
+    discountPercent : String!
+    phoneNumber : String!
+    gMapsLink : String!
+    websiteLink : String!
+    topRatedItemsImgSrc : [String]!
+    topRatedItemsName : [String]!
     topRatedItemsPrice : [String]
 }
 
@@ -54,3 +54,7 @@ type StartStop {
     stop: String!
 }
 
+type LatLng{
+    latitude: String!
+    longitude: String!
+}
