@@ -1,6 +1,6 @@
+import 'package:ACAC/presentation_layer/widgets/dbb_widgets/dbb_sort.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
-import 'package:ACAC/presentation_layer/widgets/multi_card_view.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 final List<HomeCard> sortByCountry = [
   HomeCard(
@@ -8,10 +8,13 @@ final List<HomeCard> sortByCountry = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
     text: 'Chinese',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: 'Chinese',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: 'Chinese',
+          ),
+        ),
       );
     },
   ),
@@ -20,10 +23,13 @@ final List<HomeCard> sortByCountry = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/image.png',
     text: 'Vietnamese',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: 'Vietnamese',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: 'Vietnamese',
+          ),
+        ),
       );
     },
   ),
@@ -32,10 +38,13 @@ final List<HomeCard> sortByCountry = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/japanese1.png',
     text: 'Japanese',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: 'Japanese',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: 'Japanese',
+          ),
+        ),
       );
     },
   ),
@@ -44,10 +53,13 @@ final List<HomeCard> sortByCountry = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/korean1.png',
     text: 'Korean',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: 'Korean',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: 'Korean',
+          ),
+        ),
       );
     },
   ),

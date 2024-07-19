@@ -1,6 +1,6 @@
+import 'package:ACAC/presentation_layer/widgets/dbb_widgets/dbb_sort.dart';
 import 'package:ACAC/presentation_layer/widgets/home_page_card.dart';
-import 'package:ACAC/presentation_layer/widgets/multi_card_view.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 final List<HomeCard> sortByFoodType = [
   HomeCard(
@@ -8,10 +8,13 @@ final List<HomeCard> sortByFoodType = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/noodle.png',
     text: 'Noodle-Based',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: 'Noodle',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: 'Noodle',
+          ),
+        ),
       );
     },
   ),
@@ -20,10 +23,13 @@ final List<HomeCard> sortByFoodType = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/boba.png',
     text: 'Bubble Tea',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: 'Bubble Tea',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: 'Bubble Tea',
+          ),
+        ),
       );
     },
   ),
@@ -32,10 +38,13 @@ final List<HomeCard> sortByFoodType = [
         'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/veg.png',
     text: 'Vegan',
     routeName: (BuildContext context, String cuisineType) {
-      Navigator.pushNamed(
+      Navigator.push(
         context,
-        CardViewerHomePage.id,
-        arguments: '',
+        MaterialPageRoute(
+          builder: (context) => DbbSort(
+            cuisineType: '',
+          ),
+        ),
       );
     },
   ),

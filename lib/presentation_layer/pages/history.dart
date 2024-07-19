@@ -1,20 +1,21 @@
 import 'dart:convert';
 
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
+import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
-import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
+import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
+import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
-import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
+import 'package:ACAC/presentation_layer/widgets/dbb_widgets/additional_data_dbb.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart' as legacy;
+import 'package:provider/provider.dart' as provider;
 
 // Define the page route ID
 class History extends ConsumerStatefulWidget {
@@ -28,6 +29,7 @@ class History extends ConsumerStatefulWidget {
 
 late String distance;
 UserLocation location = UserLocation();
+List<RestaurantInfoCard> allInfoCards = [];
 
 // Function to format date string (-4 cuz aws uses utc)
 String formatDateString(String dateTimeString) {
@@ -38,9 +40,10 @@ String formatDateString(String dateTimeString) {
 }
 
 // Function to retrieve restaurant card information
-restaurantCard getInfo(List<restaurantCard> infoList, String checkName) {
+RestaurantInfoCard getInfo(
+    List<RestaurantInfoCard> infoList, String checkName) {
   for (var info in infoList) {
-    if (info.awsMatch == checkName) {
+    if (info.scannerDataMatch == checkName) {
       return info;
     }
   }
@@ -56,9 +59,17 @@ Future<LatLng> getLocation() async {
 class _HistoryState extends ConsumerState<History> {
   @override
   Widget build(BuildContext context) {
-    final maps = legacy.Provider.of<PolyInfo>(context);
+    final maps = provider.Provider.of<PolyInfo>(context);
+    RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
     var pastRestaurants = ref.watch(restaurantListControllerProvider);
-    final restaurantProvider = ref.watch(restaurant);
+    var test = ref.watch(restaurantInfoCardListProvider);
+
+    switch (test) {
+      case AsyncData(value: final allInfoLoaded):
+        for (var data in allInfoLoaded) {
+          allInfoCards.add(data);
+        }
+    }
 
     // Function to fetch distance between user and restaurant
     Future<String> getDistance(LatLng user, LatLng restaurant) async {
@@ -128,7 +139,7 @@ class _HistoryState extends ConsumerState<History> {
                             return ListView.builder(
                               itemCount: restaurants.length,
                               itemBuilder: (context, index) {
-                                var card = getInfo(restaurantProvider,
+                                var card = getInfo(allInfoCards,
                                     restaurants[index].restaurant);
                                 return Padding(
                                   padding:
@@ -184,17 +195,25 @@ class _HistoryState extends ConsumerState<History> {
                                               ),
                                               TextButton(
                                                 onPressed: () async {
-                                                  print('pressed');
                                                   HapticFeedback.heavyImpact();
-                                                  distance = await getDistance(
-                                                      snapshot.data!,
-                                                      card.location);
+                                                  LatLng user =
+                                                      await data.getLocation();
+                                                  String distance =
+                                                      await getDistance(
+                                                    user,
+                                                    LatLng(
+                                                      double.parse(card
+                                                          .location.latitude),
+                                                      double.parse(card
+                                                          .location.longitude),
+                                                    ),
+                                                  );
                                                   if (context.mounted) {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) =>
-                                                            RestaurantAdditionalInfo(
+                                                            AdditionalDataDbb(
                                                           restaurant: card,
                                                           distance: distance,
                                                         ),

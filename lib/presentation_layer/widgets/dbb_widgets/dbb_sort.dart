@@ -3,9 +3,11 @@ import 'dart:convert';
 
 import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
+import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
+import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
@@ -17,21 +19,23 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 
-import '../pages/maps.dart';
-import 'dbb_widgets/additional_data_dbb.dart';
+import 'additional_data_dbb.dart';
 
-class SortedByRating extends ConsumerStatefulWidget {
-  static const String id = 'sorted_by_rating_list';
+class DbbSort extends ConsumerStatefulWidget {
+  static const String id = 'card_viewer';
 
-  const SortedByRating({super.key});
+  late final String cuisineType;
+
+  DbbSort({super.key, required this.cuisineType});
 
   @override
-  ConsumerState<SortedByRating> createState() => CardViewerHomePageState();
+  ConsumerState<DbbSort> createState() => DbbSortState();
 }
 
-class CardViewerHomePageState extends ConsumerState<SortedByRating> {
+class DbbSortState extends ConsumerState<DbbSort> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
+  LaunchLink phoneCall = LaunchLink();
   List<RestaurantInfoCard> allInfoCards = [];
 
   @override
@@ -60,34 +64,31 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
         }
     }
 
-    List<RestaurantInfoCard> sortedRestaurants = List.from(allInfoCards);
+    List<RestaurantInfoCard> filteredRestaurants = allInfoCards
+        .where((card) => card.cuisineType.contains(widget.cuisineType))
+        .toList();
 
     return Scaffold(
       body: SafeArea(
-        child: sortedRestaurants.isEmpty
+        child: filteredRestaurants.isEmpty
             ? Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(),
-                    TextButton(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, HomePage.id);
                       },
-                      child: const Text('Go back'),
-                    )
-                  ],
-                ),
-              )
-            : buildList(sortedRestaurants.cast<RestaurantInfoCard>(), weekday),
+                      child: const Text('Go back'))
+                ],
+              ))
+            : buildList(filteredRestaurants, weekday),
       ),
     );
   }
 
-  Widget buildList(
-    List<RestaurantInfoCard> sortedRestaurants,
-    int weekday,
-  ) {
+  Widget buildList(List<RestaurantInfoCard> filteredRestaurants, int weekday) {
     PolyInfo maps = provider.Provider.of<PolyInfo>(context);
     RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
     NavInfo nav = provider.Provider.of<NavInfo>(context);
@@ -104,25 +105,26 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        //  title: Text(widget.cuisineType),
+        title: Text(widget.cuisineType),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: sortedRestaurants.length == 1
-                  ? Text('${sortedRestaurants.length.toString()} item found')
-                  : Text('${sortedRestaurants.length.toString()} items found')),
+              child: filteredRestaurants.length == 1
+                  ? Text('${filteredRestaurants.length.toString()} item found')
+                  : Text(
+                      '${filteredRestaurants.length.toString()} items found')),
         ],
       ),
       body: ListView.builder(
         physics: const ClampingScrollPhysics(),
-        itemCount: sortedRestaurants.length,
+        itemCount: filteredRestaurants.length,
         itemBuilder: (BuildContext context, int index) {
           Future<String> getDistance() async {
             String url = await maps.createHttpUrl(
                 userPosition.latitude,
                 userPosition.longitude,
-                double.parse(sortedRestaurants[index].location.latitude),
-                double.parse(sortedRestaurants[index].location.longitude));
+                double.parse(filteredRestaurants[index].location.latitude),
+                double.parse(filteredRestaurants[index].location.longitude));
             var decodedJson = jsonDecode(url);
             String distance =
                 decodedJson['routes'][0]['legs'][0]['distance']['text'];
@@ -139,7 +141,7 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AdditionalDataDbb(
-                      restaurant: allInfoCards[index],
+                      restaurant: filteredRestaurants[index],
                       distance: distance,
                     ),
                   ),
@@ -156,10 +158,10 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: CachedNetworkImage(
+                        imageUrl: filteredRestaurants[index].imageSrc,
                         width: double.infinity,
                         height: 130,
                         fit: BoxFit.cover,
-                        imageUrl: sortedRestaurants[index].imageSrc,
                       ),
                     ),
                     Padding(
@@ -171,7 +173,7 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                sortedRestaurants[index].restaurantName,
+                                filteredRestaurants[index].restaurantName,
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -185,7 +187,7 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(sortedRestaurants[index].address),
+                          Text(filteredRestaurants[index].address),
                           Row(
                             children: [
                               Text(
@@ -225,62 +227,98 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 13),
+                      padding: const EdgeInsets.only(
+                          bottom: 13, right: 15, left: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextButton(
-                            style: const ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.green),
-                              foregroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.white),
-                            ),
-                            onPressed: () async {
-                              HapticFeedback.heavyImpact();
-                              try {
-                                if (context.mounted) {
-                                  Navigator.pushNamed(context, MapScreen.id);
-                                }
-                                if (watchCounter.counter == 2) {
-                                } else {
-                                  updatePage(2, MapScreen.id);
-                                }
-                                LatLng user = await data.getLocation();
-                                String url = await maps.createHttpUrl(
-                                    user.latitude,
-                                    user.longitude,
-                                    double.parse(
-                                        allInfoCards[index].location.latitude),
-                                    double.parse(allInfoCards[index]
-                                        .location
-                                        .longitude));
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                backgroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.green),
+                                foregroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.white),
+                              ),
+                              onPressed: () async {
+                                HapticFeedback.heavyImpact();
+                                try {
+                                  if (context.mounted) {
+                                    Navigator.pushNamed(context, MapScreen.id);
+                                  }
+                                  if (watchCounter.counter == 2) {
+                                  } else {
+                                    updatePage(2, MapScreen.id);
+                                  }
+                                  LatLng user = await data.getLocation();
+                                  String url = await maps.createHttpUrl(
+                                      user.latitude,
+                                      user.longitude,
+                                      double.parse(allInfoCards[index]
+                                          .location
+                                          .latitude),
+                                      double.parse(allInfoCards[index]
+                                          .location
+                                          .longitude));
 
-                                maps.processPolylineData(url);
-                                maps.updateCameraBounds([
-                                  user,
-                                  allInfoCards[index].location as LatLng
-                                ]);
-                                nav.updateRouteDetails(url);
-                              } catch (e) {}
-                            },
-                            child: const Text('Find on Map'),
-                          ),
-                          const SizedBox(
-                            width: 22,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFFE8E8E8),
+                                  maps.processPolylineData(url);
+                                  maps.updateCameraBounds([
+                                    user,
+                                    allInfoCards[index].location as LatLng
+                                  ]);
+                                  nav.updateRouteDetails(url);
+                                } catch (e) {}
+                              },
+                              child: const Text('Find on Map'),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                sortedRestaurants[index].rating.toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                padding: WidgetStatePropertyAll(
+                                    EdgeInsets.symmetric(horizontal: 12)),
+                                backgroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.black),
+                                foregroundColor:
+                                    WidgetStatePropertyAll<Color>(Colors.white),
+                              ),
+                              onPressed: () async {
+                                phoneCall.makePhoneCall(
+                                    filteredRestaurants[index].phoneNumber);
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Reserve'),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(Icons.phone)
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFE8E8E8),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(
+                                    filteredRestaurants[index]
+                                        .rating
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ),

@@ -4,8 +4,11 @@ import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/common_layer/widgets/loading.dart';
 import 'package:ACAC/common_layer/widgets/response_pop_up.dart';
+import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/domain_layer/controller/restaurant_list_controller.dart';
 import 'package:ACAC/domain_layer/service/user_api_service.dart';
+import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:ACAC/models/User.dart';
 import 'package:ACAC/presentation_layer/pages/discount_card.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -23,11 +26,12 @@ class QRViewExample extends ConsumerStatefulWidget {
 
 class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
   QRViewController? controller;
   String email = '';
   String name = '';
   Loading loading = Loading();
+  late User user;
+  List<RestaurantInfoCard> allInfoCards = [];
 
   @override
   void didChangeDependencies() {
@@ -62,6 +66,12 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
 
   Future<void> fetchUserInfo() async {
     try {
+      var currentUser = await Amplify.Auth.getCurrentUser();
+      User newUser =
+          await ref.read(userAPIServiceProvider).getUser(currentUser.userId);
+      setState(() {
+        user = newUser;
+      });
       final result = await Amplify.Auth.fetchUserAttributes();
       for (final element in result) {
         if (element.userAttributeKey.toString() == 'email') {
@@ -83,9 +93,6 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
     controller?.dispose();
     loading.showLoadingDialog(context);
     try {
-      var currentUser = await Amplify.Auth.getCurrentUser();
-      var user =
-          await ref.read(userAPIServiceProvider).getUser(currentUser.userId);
       await ref.read(restaurantListControllerProvider.notifier).addRestaurant(
           restaurantName: restaurantName,
           email: email,
@@ -123,14 +130,13 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
       _handleQRCode(scanData);
     });
   }
 
-  Future<void> _handleQRCode(Barcode scanData) async {
+  Future<void> _handleQRCode(
+    Barcode scanData,
+  ) async {
     debugPrint('Scanned QR Code: ${scanData.code}');
     if (scanData.code != null) {
       switch (scanData.code) {
@@ -200,6 +206,14 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    var test = ref.watch(restaurantInfoCardListProvider);
+
+    switch (test) {
+      case AsyncData(value: final allInfoLoaded):
+        for (var data in allInfoLoaded) {
+          allInfoCards.add(data);
+        }
+    }
     return Scaffold(
       body: email.isEmpty && name.isEmpty
           ? const Center(child: CircularProgressIndicator())

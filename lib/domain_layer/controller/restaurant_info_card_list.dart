@@ -31,7 +31,7 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
   }) async {
     final restaurantDetails = RestaurantInfoCard(
         restaurantName: '',
-        location: LatLng(latitude: x, longitude: y),
+        location: LatLong(latitude: x, longitude: y),
         address: '',
         imageSrc: '',
         imageLogo: '',

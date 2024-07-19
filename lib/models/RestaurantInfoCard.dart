@@ -29,7 +29,7 @@ class RestaurantInfoCard extends amplify_core.Model {
   static const classType = const _RestaurantInfoCardModelType();
   final String id;
   final String? _restaurantName;
-  final LatLng? _location;
+  final LatLong? _location;
   final String? _address;
   final String? _imageSrc;
   final String? _imageLogo;
@@ -74,7 +74,7 @@ class RestaurantInfoCard extends amplify_core.Model {
     }
   }
 
-  LatLng get location {
+  LatLong get location {
     try {
       return _location!;
     } catch (e) {
@@ -340,7 +340,7 @@ class RestaurantInfoCard extends amplify_core.Model {
   factory RestaurantInfoCard(
       {String? id,
       required String restaurantName,
-      required LatLng location,
+      required LatLong location,
       required String address,
       required String imageSrc,
       required String imageLogo,
@@ -480,7 +480,7 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   RestaurantInfoCard copyWith(
       {String? restaurantName,
-      LatLng? location,
+      LatLong? location,
       String? address,
       String? imageSrc,
       String? imageLogo,
@@ -521,7 +521,7 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   RestaurantInfoCard copyWithModelFieldValues(
       {ModelFieldValue<String>? restaurantName,
-      ModelFieldValue<LatLng>? location,
+      ModelFieldValue<LatLong>? location,
       ModelFieldValue<String>? address,
       ModelFieldValue<String>? imageSrc,
       ModelFieldValue<String>? imageLogo,
@@ -576,9 +576,9 @@ class RestaurantInfoCard extends amplify_core.Model {
         _restaurantName = json['restaurantName'],
         _location = json['location'] != null
             ? json['location']['serializedData'] != null
-                ? LatLng.fromJson(new Map<String, dynamic>.from(
+                ? LatLong.fromJson(new Map<String, dynamic>.from(
                     json['location']['serializedData']))
-                : LatLng.fromJson(
+                : LatLong.fromJson(
                     new Map<String, dynamic>.from(json['location']))
             : null,
         _address = json['address'],
@@ -726,7 +726,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.embedded,
-            ofCustomTypeName: 'LatLng')));
+            ofCustomTypeName: 'LatLong')));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.ADDRESS,

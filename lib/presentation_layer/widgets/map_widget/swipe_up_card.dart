@@ -1,25 +1,26 @@
-import 'dart:async';
 import 'dart:convert';
 
-import 'package:ACAC/domain_layer/repository_interface/cards.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
+import 'package:ACAC/models/ModelProvider.dart';
+import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/userLocation.dart';
-import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart' as provider;
 
 class SwipeUpCard extends ConsumerStatefulWidget {
-  final restaurantCard restaurant;
+  final RestaurantInfoCard restaurant;
   final RestaurantInfo data;
   final PolyInfo gmaps;
   final NavInfo nav;
+  final int weekday;
 
   const SwipeUpCard({
     super.key,
@@ -27,6 +28,7 @@ class SwipeUpCard extends ConsumerStatefulWidget {
     required this.data,
     required this.gmaps,
     required this.nav,
+    required this.weekday,
   });
 
   @override
@@ -34,29 +36,6 @@ class SwipeUpCard extends ConsumerStatefulWidget {
 }
 
 class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
-  String getHours() {
-    DateTime now = DateTime.now();
-    int weekday = now.weekday;
-    switch (weekday) {
-      case DateTime.monday:
-        return '${widget.restaurant.hours.monday.startTime} - ${widget.restaurant.hours.monday.endTime}';
-      case DateTime.tuesday:
-        return '${widget.restaurant.hours.tuesday.startTime} - ${widget.restaurant.hours.tuesday.endTime}';
-      case DateTime.wednesday:
-        return '${widget.restaurant.hours.wednesday.startTime} - ${widget.restaurant.hours.wednesday.endTime}';
-      case DateTime.thursday:
-        return '${widget.restaurant.hours.thursday.startTime} - ${widget.restaurant.hours.thursday.endTime}';
-      case DateTime.friday:
-        return '${widget.restaurant.hours.friday.startTime} - ${widget.restaurant.hours.friday.endTime}';
-      case DateTime.saturday:
-        return '${widget.restaurant.hours.saturday.startTime} - ${widget.restaurant.hours.saturday.endTime}';
-      case DateTime.sunday:
-        return '${widget.restaurant.hours.sunday.startTime} - ${widget.restaurant.hours.sunday.endTime}';
-      default:
-        return 'Closed';
-    }
-  }
-
   double fSize = 11;
   late String distance;
 
@@ -64,6 +43,9 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
   Widget build(BuildContext context) {
     final userLocationAsyncValue = ref.watch(userLocationProvider);
     final watchCounter = ref.watch(userPageCounter);
+    PolyInfo maps = provider.Provider.of<PolyInfo>(context);
+    RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
+    NavInfo nav = provider.Provider.of<NavInfo>(context);
 
     Future<String> getDistance(LatLng user, LatLng restaurant) async {
       String url = await widget.gmaps.createHttpUrl(user.latitude,
@@ -73,19 +55,25 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
       return distance;
     }
 
+    void updatePage(int index, String route) {
+      Navigator.pushNamed(context, route);
+      ref.read(userPageCounter).setCounter(index);
+    }
+
     return GestureDetector(
       onTap: () {
-        distance.isNotEmpty
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RestaurantAdditionalInfo(
-                    restaurant: widget.restaurant,
-                    distance: distance,
-                  ),
-                ),
-              )
-            : () {};
+        // distance.isNotEmpty
+        //     ? String distance = await getDistance();
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => AdditionalDataDbb(
+        //       restaurant: allInfoCards[index],
+        //       distance: distance,
+        //     ),
+        //   ),
+        // );
+        //     : () {};
       },
       child: Card(
         elevation: 1,
@@ -115,8 +103,14 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                     child: userLocationAsyncValue.when(
                       data: (location) {
                         return FutureBuilder<String>(
-                          future:
-                              getDistance(location, widget.restaurant.location),
+                          future: getDistance(
+                            location,
+                            LatLng(
+                              double.parse(widget.restaurant.location.latitude),
+                              double.parse(
+                                  widget.restaurant.location.longitude),
+                            ),
+                          ),
                           builder: (context, snap) {
                             if (snap.connectionState ==
                                 ConnectionState.waiting) {
@@ -173,16 +167,15 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        getHours(),
+                        getHour(widget.restaurant, widget.weekday),
                         style: TextStyle(
                           color: timeColor(
-                              DateTime.now(),
-                              widget.restaurant.hours
-                                  .getTodayStartStop()
-                                  .startTime,
-                              widget.restaurant.hours
-                                  .getTodayStartStop()
-                                  .endTime),
+                            DateTime.now(),
+                            getOpeningTimeSingle(
+                                widget.weekday, widget.restaurant),
+                            getClosingTimeSingle(
+                                widget.weekday, widget.restaurant),
+                          ),
                         ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -205,23 +198,29 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                               onPressed: () async {
                                 HapticFeedback.heavyImpact();
                                 try {
-                                  LatLng user = await widget.data.getLocation();
-                                  String url = await widget.gmaps.createHttpUrl(
-                                    user.latitude,
-                                    user.longitude,
-                                    widget.restaurant.location.latitude,
-                                    widget.restaurant.location.longitude,
-                                  );
-                                  widget.gmaps.processPolylineData(url);
-                                  widget.gmaps.updateCameraBounds(
-                                      [user, widget.restaurant.location]);
-                                  widget.nav.updateRouteDetails(url);
                                   if (context.mounted) {
-                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, MapScreen.id);
                                   }
-                                } catch (e) {
-                                  debugPrint(e.toString());
-                                }
+                                  if (watchCounter.counter == 2) {
+                                  } else {
+                                    updatePage(2, MapScreen.id);
+                                  }
+                                  LatLng user = await data.getLocation();
+                                  String url = await maps.createHttpUrl(
+                                      user.latitude,
+                                      user.longitude,
+                                      double.parse(
+                                          widget.restaurant.location.latitude),
+                                      double.parse(widget
+                                          .restaurant.location.longitude));
+
+                                  maps.processPolylineData(url);
+                                  maps.updateCameraBounds([
+                                    user,
+                                    widget.restaurant.location as LatLng
+                                  ]);
+                                  nav.updateRouteDetails(url);
+                                } catch (e) {}
                               },
                               child: const Text('Find on Map'),
                             ),

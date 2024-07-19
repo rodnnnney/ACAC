@@ -6,7 +6,8 @@ import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:ACAC/presentation_layer/widgets/additional_data_dbb.dart';
+import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
+import 'package:ACAC/presentation_layer/widgets/dbb_widgets/additional_data_dbb.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +53,12 @@ class _DbbTestState extends ConsumerState<DbbTest> {
     LaunchLink phoneCall = LaunchLink();
     DateTime now = DateTime.now();
     int weekday = now.weekday;
+    final watchCounter = ref.watch(userPageCounter);
+
+    void updatePage(int index, String route) {
+      Navigator.pushNamed(context, route);
+      ref.read(userPageCounter).setCounter(index);
+    }
 
     switch (test) {
       case AsyncData(value: final allInfoLoaded):
@@ -148,10 +155,11 @@ class _DbbTestState extends ConsumerState<DbbTest> {
                                 ),
                                 FutureBuilder<Map<String, dynamic>>(
                                   future: getCurrentStatusWithColor(
-                                      getOpeningTime(
-                                          weekday, allInfoCards, index),
-                                      getClosingTime(
-                                          weekday, allInfoCards, index)),
+                                    getOpeningTime(
+                                        weekday, allInfoCards, index),
+                                    getClosingTime(
+                                        weekday, allInfoCards, index),
+                                  ),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -200,6 +208,10 @@ class _DbbTestState extends ConsumerState<DbbTest> {
                                     if (context.mounted) {
                                       Navigator.pushNamed(
                                           context, MapScreen.id);
+                                    }
+                                    if (watchCounter.counter == 2) {
+                                    } else {
+                                      updatePage(2, MapScreen.id);
                                     }
                                     LatLng user = await data.getLocation();
                                     String url = await maps.createHttpUrl(

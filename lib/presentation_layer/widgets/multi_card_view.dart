@@ -11,7 +11,7 @@ import 'package:ACAC/presentation_layer/state_management/provider/navigation_inf
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
-import 'package:ACAC/presentation_layer/widgets/restaurant_additional_info.dart';
+import 'package:ACAC/presentation_layer/widgets/home_page_widgets/restaurant_additional_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,7 +62,7 @@ class CardViewerHomePageState extends ConsumerState<CardViewerHomePage> {
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('No restaurants of the cuisine available!'),
+                  const CircularProgressIndicator(),
                   TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, HomePage.id);

@@ -2,12 +2,13 @@ import 'package:ACAC/presentation_layer/state_management/provider/navigation_inf
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class InfoCard extends StatelessWidget {
-  double? travelTime;
+  final double? travelTime;
 
-  InfoCard(this.travelTime, {super.key});
+  const InfoCard(this.travelTime, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +31,38 @@ class InfoCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${travelTime?.toStringAsFixed(0)} mins',
-                            style: const TextStyle(
-                                fontSize: 22, color: Colors.green),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${travelTime?.toStringAsFixed(0)} mins',
+                                style: const TextStyle(
+                                    fontSize: 22, color: Colors.green),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  HapticFeedback.heavyImpact();
+                                  nav.closeNav();
+                                  maps.clearPoly();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                      color: Color(0xffA7A6A6)), //
+                                  child: const Icon(
+                                    Icons.close,
+                                    size: 20,
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -53,13 +82,6 @@ class InfoCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          TextButton(
-                            onPressed: () {
-                              nav.closeNav();
-                              maps.clearPoly();
-                            },
-                            child: const Text('End Navigation'),
-                          )
                         ],
                       ),
                     ),

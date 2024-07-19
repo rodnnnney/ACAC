@@ -1,19 +1,20 @@
+import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
+import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
-import 'package:ACAC/presentation_layer/widgets/swipe_up_card.dart';
+import 'package:ACAC/presentation_layer/widgets/map_widget/swipe_up_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as legacy;
 
 class SwipeUpMenu extends ConsumerStatefulWidget {
-  LatLng userLocation;
+  final LatLng userLocation;
 
-  SwipeUpMenu({super.key, required this.userLocation});
+  const SwipeUpMenu({super.key, required this.userLocation});
 
   @override
   ConsumerState<SwipeUpMenu> createState() => _SwipeUpMenuState();
@@ -21,6 +22,7 @@ class SwipeUpMenu extends ConsumerStatefulWidget {
 
 class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
   UserLocation location = UserLocation();
+  List<RestaurantInfoCard> allInfoCards = [];
 
   Future<LatLng> getLocation() async {
     return await location.find();
@@ -28,11 +30,20 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final restaurantProvider = ref.watch(restaurant);
     final data = legacy.Provider.of<RestaurantInfo>(context);
     final maps = legacy.Provider.of<PolyInfo>(context);
     final nav = legacy.Provider.of<NavInfo>(context);
     final double screenHeight = MediaQuery.sizeOf(context).height;
+    DateTime now = DateTime.now();
+    int weekday = now.weekday;
+    var test = ref.watch(restaurantInfoCardListProvider);
+
+    switch (test) {
+      case AsyncData(value: final allInfoLoaded):
+        for (var data in allInfoLoaded) {
+          allInfoCards.add(data);
+        }
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -71,13 +82,14 @@ class _SwipeUpMenuState extends ConsumerState<SwipeUpMenu> {
                       childAspectRatio: 2 / 3, //(screenHeight * 0.00091316), //
                       // Aspect ratio of the cards
                     ),
-                    itemCount: restaurantProvider.length,
+                    itemCount: allInfoCards.length,
                     itemBuilder: (context, index) {
                       return SwipeUpCard(
-                        restaurant: restaurantProvider[index],
+                        restaurant: allInfoCards[index],
                         data: data,
                         gmaps: maps,
                         nav: nav,
+                        weekday: weekday,
                       );
                     },
                   );
