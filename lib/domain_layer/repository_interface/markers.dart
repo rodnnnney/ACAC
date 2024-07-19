@@ -1,7 +1,8 @@
 import 'dart:ui' as ui;
 
+import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
+import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -32,20 +33,35 @@ class Markers {
     );
   }
 
-  void initializeMarkers(BuildContext context) {
-    final restaurantInfo = container.read(restaurant);
-    for (var rest in restaurantInfo) {
-      markerList.add(
-        Marker(
-          infoWindow: InfoWindow(
-              title: rest.restaurantName, snippet: rest.restaurantName),
-          markerId: MarkerId(rest.restaurantName),
-          position: rest.location,
-          // icon: await getBitmapDescriptorFromIcon(
-          //     await getMarkerFromIcon(Icons.location_on)),
-        ),
-      );
-    }
+  // void initializeMarkers(BuildContext context) {
+  //   final restaurantInfo =
+  //       container.read(restaurantInfoCardListProvider); //read(restaurant);
+
+  // }
+
+  Future<void> initializeMarkers(BuildContext context) async {
+    AsyncValue<List<RestaurantInfoCard>> restaurantInfoAsync =
+        container.read(restaurantInfoCardListProvider);
+
+    restaurantInfoAsync.when(
+      data: (allInfoLoaded) {
+        for (var rest in allInfoLoaded) {
+          markerList.add(
+            Marker(
+              infoWindow: InfoWindow(
+                  title: rest.restaurantName, snippet: rest.restaurantName),
+              markerId: MarkerId(rest.restaurantName),
+              position: LatLng(double.parse(rest.location.latitude),
+                  double.parse(rest.location.longitude)),
+              // icon: await getBitmapDescriptorFromIcon(
+              //     await getMarkerFromIcon(Icons.location_on)),
+            ),
+          );
+        }
+      },
+      loading: () => print('Loading restaurant info...'),
+      error: (error, stack) => print('Error loading restaurant info: $error'),
+    );
   }
 
   void goTo(BuildContext context, LatLng location) {

@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
-import 'package:ACAC/common_layer/widgets/discount_card.dart';
-import 'package:ACAC/domain_layer/repository_interface/cards.dart';
+import 'package:ACAC/models/ModelProvider.dart';
 import 'package:ACAC/presentation_layer/pages/scanner.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_restaurant.dart';
+import 'package:ACAC/presentation_layer/widgets/card_rest_info_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,14 +15,14 @@ class DiscountCard extends ConsumerStatefulWidget {
 
   const DiscountCard({
     super.key,
+    required this.restaurantInfoCard,
     required this.firstName,
     required this.lastName,
-    required this.restName,
   });
 
+  final RestaurantInfoCard restaurantInfoCard;
   final String firstName;
   final String lastName;
-  final String restName;
 
   @override
   _DiscountCardState createState() => _DiscountCardState();
@@ -65,24 +64,11 @@ class _DiscountCardState extends ConsumerState<DiscountCard> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final restaurantProvider = ref.read(restaurant);
-
-    restaurantCard getInfo(List<restaurantCard> infoList, String checkName) {
-      for (var info in infoList) {
-        if (info.awsMatch == checkName) {
-          return info;
-        }
-      }
-      throw Error();
-    }
-
-    var place = getInfo(restaurantProvider, widget.restName);
-
     return PopScope(
       canPop: false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(place.restaurantName),
+          title: Text(widget.restaurantInfoCard.restaurantName),
           automaticallyImplyLeading:
               false, // Optional: Prevents showing the back button
           centerTitle: true,
@@ -104,7 +90,7 @@ class _DiscountCardState extends ConsumerState<DiscountCard> with RouteAware {
                         fit: BoxFit.contain),
                   ),
                   const SizedBox(height: 10),
-                  Discount(place: place),
+                  CardRestInfoCard(place: widget.restaurantInfoCard),
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Row(

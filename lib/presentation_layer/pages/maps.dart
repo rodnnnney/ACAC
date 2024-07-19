@@ -27,6 +27,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
   late LatLng userPosition;
   LatLng? restPosition;
   GoogleMapController? _controller;
+  Set<Marker> _markers = {};
 
   @override
   void initState() {
@@ -45,21 +46,47 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
     ref.read(userPageCounter).setCounter(2);
   }
 
+  // Future<void> _initializeLocation() async {
+  //   try {
+  //     LatLng userLocation = await location.find();
+  //     setState(() {
+  //       isLocationLoaded = true;
+  //       userPosition = userLocation;
+  //     });
+  //     markerManager.initializeUserLocation(userPosition);
+  //     if (context.mounted) {
+  //       markerManager.initializeMarkers(context);
+  //     }
+  //     print('Location and markers initialized');
+  //   } catch (e) {
+  //     print('Error initializing location: $e');
+  //     // Handle the error appropriately
+  //   }
+  // }
   Future<void> _initializeLocation() async {
     try {
       LatLng userLocation = await location.find();
-      setState(() {
-        isLocationLoaded = true;
-        userPosition = userLocation;
-      });
-      markerManager.initializeUserLocation(userPosition);
-      if (context.mounted) {
-        markerManager.initializeMarkers(context);
+      if (mounted) {
+        setState(() {
+          isLocationLoaded = true;
+          userPosition = userLocation;
+        });
       }
+      await _initializeMarkers();
       print('Location and markers initialized');
     } catch (e) {
       print('Error initializing location: $e');
       // Handle the error appropriately
+    }
+  }
+
+  Future<void> _initializeMarkers() async {
+    markerManager.initializeUserLocation(userPosition);
+    await markerManager.initializeMarkers(context);
+    if (mounted) {
+      setState(() {
+        _markers = markerManager.marker;
+      });
     }
   }
 
@@ -100,7 +127,8 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
               zoom: 11,
             ),
             myLocationButtonEnabled: false,
-            markers: markerManager.marker,
+            markers: _markers,
+            // Use the local _markers Set
             polylines: Set<Polyline>.of(maps.polylines.values),
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,

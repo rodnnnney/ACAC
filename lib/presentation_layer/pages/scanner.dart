@@ -89,12 +89,13 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
     }
   }
 
-  Future<void> sendData(WidgetRef ref, String restaurantName) async {
+  Future<void> sendData(
+      WidgetRef ref, RestaurantInfoCard restaurantName) async {
     controller?.dispose();
     loading.showLoadingDialog(context);
     try {
       await ref.read(restaurantListControllerProvider.notifier).addRestaurant(
-          restaurantName: restaurantName,
+          restaurantName: restaurantName.restaurantName,
           email: email,
           userFirstName: user.firstName,
           userLastName: user.lastName);
@@ -104,16 +105,17 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
     }
   }
 
-  void handleScan(String restName, String firstName, String lastName) {
+  void handleScan(
+      RestaurantInfoCard restName, String firstName, String lastName) {
     controller?.dispose();
     HapticFeedback.heavyImpact();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DiscountCard(
-          restName: restName,
           firstName: firstName,
           lastName: lastName,
+          restaurantInfoCard: restName,
         ),
       ),
     );
@@ -134,65 +136,28 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
     });
   }
 
-  Future<void> _handleQRCode(
-    Barcode scanData,
-  ) async {
+  Future<void> _handleQRCode(Barcode scanData) async {
     debugPrint('Scanned QR Code: ${scanData.code}');
     if (scanData.code != null) {
-      switch (scanData.code) {
-        case 'kinton_ramen':
-          await sendData(ref, 'Kinton_Ramen');
-          break;
-        case 'Friends&KTV':
-          await sendData(ref, 'Friends&KTV');
-          break;
-        case 'Chatime':
-          await sendData(ref, 'Chatime');
-          break;
-        case 'Dakogi_Elgin':
-          await sendData(ref, 'Dakogi_Elgin');
-          break;
-        case 'Dakogi_Marketplace':
-          await sendData(ref, 'Dakogi_Marketplace');
-          break;
-        case 'Gongfu_Bao':
-          await sendData(ref, 'Gongfu_Bao');
-          break;
-        case 'Hot_Star_Chicken':
-          await sendData(ref, 'Hot_Star_Chicken');
-          break;
-        case 'La_Noodle':
-          await sendData(ref, 'La_Noodle');
-          break;
-        case 'Oriental_house':
-          await sendData(ref, 'Oriental_house');
-          break;
-        case 'Pho_Lady':
-          await sendData(ref, 'Pho_Lady');
-          break;
-        case 'Pomelo_Hat':
-          await sendData(ref, 'Pomelo_Hat');
-          break;
-        case 'Shuyi_Tealicious':
-          await sendData(ref, 'Shuyi_Tealicious');
-          break;
-        case 'Fuwa_Fuwa':
-          await sendData(ref, 'Fuwa_Fuwa');
-          break;
-        default:
-          print('idk');
-          controller?.dispose();
-          setState(() {
-            const ResponsePopUp(
-              response: 'Hmm, idk that one',
-              location: DelightSnackbarPosition.top,
-              icon: Icons.error_outline,
-              color: Colors.red,
-            ).showToast(context);
-          });
-          break;
+      // Find matching RestaurantInfoCard
+      final matchingCard = allInfoCards.firstWhere(
+        (card) => card.scannerDataMatch == scanData.code,
+      );
+      if (matchingCard.scannerDataMatch.isNotEmpty) {
+        await sendData(ref, matchingCard);
+      } else {
+        controller?.dispose();
+        setState(() {
+          const ResponsePopUp(
+            response: 'Hmm, idk that one',
+            location: DelightSnackbarPosition.top,
+            icon: Icons.error_outline,
+            color: Colors.red,
+          ).showToast(context);
+        });
       }
     } else {
+      controller?.dispose();
       setState(() {
         const ResponsePopUp(
           response: 'Hmm, idk that one',
