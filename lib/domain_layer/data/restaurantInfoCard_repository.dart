@@ -26,7 +26,8 @@ class RestaurantInfoCardRepository {
     return restaurantInfoCardAPIService.addRestaurantInfoCard(restaurant);
   }
 
-// Future<void> delete(Restaurant deletedRestaurant) async {
-//   return restaurantInfoCardAPIService.deleteRestaurant(deletedRestaurant);
-// }
+  Future<void> update(RestaurantInfoCard updatedRestaurant) async {
+    return restaurantInfoCardAPIService
+        .updateRestaurantVisit(updatedRestaurant);
+  }
 }

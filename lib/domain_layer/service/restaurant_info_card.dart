@@ -75,4 +75,16 @@ class RestaurantInfoCardAPIService {
       rethrow;
     }
   }
+
+  Future<void> updateRestaurantVisit(RestaurantInfoCard restaurant) async {
+    try {
+      await Amplify.API
+          .mutate(
+            request: ModelMutations.update(restaurant),
+          )
+          .response;
+    } on Exception catch (error) {
+      safePrint('updateItem failed: $error');
+    }
+  }
 }

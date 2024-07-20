@@ -30,7 +30,6 @@ class Welcome extends StatelessWidget {
               textStyle: kWelcomeText,
               speed: const Duration(milliseconds: 250)),
         ],
-        repeatForever: true,
       ),
     );
   }
@@ -42,49 +41,49 @@ String greetingText(time, language) {
   if (time.hour >= 0 && time.hour < 12) {
     switch (language) {
       case 'Korean':
-        greeting = '좋은 아침이에요🫰🏼,';
+        greeting = '좋은 아침이에요🫰🏼';
         break;
       case 'Vietnamese':
-        greeting = 'chào buổi sáng,';
+        greeting = 'chào buổi sáng';
         break;
       case 'Mandarin':
-        greeting = '早上好,';
+        greeting = '早上好';
         break;
       case 'English':
       default:
-        greeting = 'Good morning🤠,';
+        greeting = 'Good morning🤠';
         break;
     }
   } else if (time.hour >= 12 && time.hour < 18) {
     switch (language) {
       case 'Korean':
-        greeting = '좋은 오후예요🫰🏼,';
+        greeting = '좋은 오후예요🫰🏼';
         break;
       case 'Vietnamese':
-        greeting = 'chào buổi chiều,';
+        greeting = 'chào buổi chiều';
         break;
       case 'Mandarin':
-        greeting = '下午好,';
+        greeting = '下午好';
         break;
       case 'English':
       default:
-        greeting = 'Good afternoon😎,';
+        greeting = 'Good afternoon😎';
         break;
     }
   } else {
     switch (language) {
       case 'Korean':
-        greeting = '좋은 저녁이에요🫰🏼,';
+        greeting = '좋은 저녁이에요🫰🏼';
       case 'Vietnamese':
-        greeting = 'Chào buổi tối,';
+        greeting = 'Chào buổi tối';
         // Adjust if necessary for Vietnamese
         break;
       case 'Mandarin':
-        greeting = '晚上好,';
+        greeting = '晚上好';
         break;
       case 'English':
       default:
-        greeting = 'Good evening😴,';
+        greeting = 'Good evening😴';
         break;
     }
   }

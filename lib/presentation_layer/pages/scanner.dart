@@ -90,16 +90,19 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
   }
 
   Future<void> sendData(
-      WidgetRef ref, RestaurantInfoCard restaurantName) async {
+      WidgetRef ref, RestaurantInfoCard scannedRestaurant) async {
     controller?.dispose();
     loading.showLoadingDialog(context);
     try {
       await ref.read(restaurantListControllerProvider.notifier).addRestaurant(
-          restaurantName: restaurantName.restaurantName,
+          restaurantName: scannedRestaurant.restaurantName,
           email: email,
           userFirstName: user.firstName,
           userLastName: user.lastName);
-      handleScan(restaurantName, user.firstName, user.lastName);
+      await ref
+          .read(restaurantInfoCardListProvider.notifier)
+          .updateRestInfo(scannedRestaurant);
+      handleScan(scannedRestaurant, user.firstName, user.lastName);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -133,6 +136,7 @@ class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       _handleQRCode(scanData);
+      controller.dispose();
     });
   }
 

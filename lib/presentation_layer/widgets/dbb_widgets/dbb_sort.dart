@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
+import 'package:ACAC/common_layer/cachedRestaurantProvider.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
 import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
@@ -36,7 +36,6 @@ class DbbSortState extends ConsumerState<DbbSort> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
   LaunchLink phoneCall = LaunchLink();
-  List<RestaurantInfoCard> allInfoCards = [];
 
   @override
   void initState() {
@@ -53,37 +52,33 @@ class DbbSortState extends ConsumerState<DbbSort> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    int weekday = now.weekday;
-    var test = ref.watch(restaurantInfoCardListProvider);
-
-    switch (test) {
-      case AsyncData(value: final allInfoLoaded):
-        for (var data in allInfoLoaded) {
-          allInfoCards.add(data);
-        }
-    }
-
-    List<RestaurantInfoCard> filteredRestaurants = allInfoCards
-        .where((card) => card.cuisineType.contains(widget.cuisineType))
-        .toList();
+    var restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
 
     return Scaffold(
       body: SafeArea(
-        child: filteredRestaurants.isEmpty
-            ? Center(
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircularProgressIndicator(),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, HomePage.id);
-                      },
-                      child: const Text('Go back'))
-                ],
-              ))
-            : buildList(filteredRestaurants, weekday),
+        child: restaurantData.when(
+          data: (allInfoCards) {
+            List<RestaurantInfoCard> filteredRestaurants = allInfoCards
+                .where((card) => card.cuisineType.contains(widget.cuisineType))
+                .toList();
+            return buildList(filteredRestaurants, DateTime.now().weekday);
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error: $error'),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, HomePage.id);
+                  },
+                  child: const Text('Go back'),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -191,15 +186,17 @@ class DbbSortState extends ConsumerState<DbbSort> {
                           Row(
                             children: [
                               Text(
-                                getHours(allInfoCards, index, weekday),
+                                getHours(filteredRestaurants, index, weekday),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               FutureBuilder<Map<String, dynamic>>(
                                 future: getCurrentStatusWithColor(
-                                  getOpeningTime(weekday, allInfoCards, index),
-                                  getClosingTime(weekday, allInfoCards, index),
+                                  getOpeningTime(
+                                      weekday, filteredRestaurants, index),
+                                  getClosingTime(
+                                      weekday, filteredRestaurants, index),
                                 ),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
@@ -255,17 +252,18 @@ class DbbSortState extends ConsumerState<DbbSort> {
                                   String url = await maps.createHttpUrl(
                                       user.latitude,
                                       user.longitude,
-                                      double.parse(allInfoCards[index]
+                                      double.parse(filteredRestaurants[index]
                                           .location
                                           .latitude),
-                                      double.parse(allInfoCards[index]
+                                      double.parse(filteredRestaurants[index]
                                           .location
                                           .longitude));
 
                                   maps.processPolylineData(url);
                                   maps.updateCameraBounds([
                                     user,
-                                    allInfoCards[index].location as LatLng
+                                    filteredRestaurants[index].location
+                                        as LatLng
                                   ]);
                                   nav.updateRouteDetails(url);
                                 } catch (e) {}

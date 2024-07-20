@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
+import 'package:ACAC/common_layer/widgets/common/card_rest_info_card.dart';
 import 'package:ACAC/models/ModelProvider.dart';
 import 'package:ACAC/presentation_layer/pages/scanner.dart';
-import 'package:ACAC/presentation_layer/widgets/card_rest_info_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

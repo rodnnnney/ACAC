@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/ModelProvider.dart';
+import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
-import 'package:ACAC/presentation_layer/state_management/riverpod/userLocation.dart';
 import 'package:ACAC/presentation_layer/widgets/dbb_widgets/additional_data_dbb.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,19 +18,10 @@ import 'package:provider/provider.dart' as provider;
 
 class SwipeUpCard extends ConsumerStatefulWidget {
   final RestaurantInfoCard restaurant;
-  final RestaurantInfo data;
-  final PolyInfo gmaps;
-  final NavInfo nav;
-  final int weekday;
+  final LatLng userPosition;
 
-  const SwipeUpCard({
-    super.key,
-    required this.restaurant,
-    required this.data,
-    required this.gmaps,
-    required this.nav,
-    required this.weekday,
-  });
+  const SwipeUpCard(
+      {super.key, required this.restaurant, required this.userPosition});
 
   @override
   ConsumerState<SwipeUpCard> createState() => _SwipeUpCardState();
@@ -38,41 +29,12 @@ class SwipeUpCard extends ConsumerStatefulWidget {
 
 class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
   double fSize = 11;
-  String distance = '';
-
-  Future<void> _updateDistance() async {
-    final userLocationAsyncValue = ref.read(userLocationProvider);
-    userLocationAsyncValue.when(
-      data: (location) async {
-        distance = await getDistance(
-          location,
-          LatLng(
-            double.parse(widget.restaurant.location.latitude),
-            double.parse(widget.restaurant.location.longitude),
-          ),
-        );
-        setState(() {});
-      },
-      error: (_, __) => setState(() => distance = 'Error'),
-      loading: () => setState(() => distance = 'Loading...'),
-    );
-  }
-
-  Future<String> getDistance(LatLng user, LatLng restaurant) async {
-    String url = await widget.gmaps.createHttpUrl(
-      user.latitude,
-      user.longitude,
-      restaurant.latitude,
-      restaurant.longitude,
-    );
-    var decodedJson = jsonDecode(url);
-    return decodedJson['routes'][0]['legs'][0]['distance']['text'];
-  }
+  int weekday = DateTime.now().weekday;
+  final Map<String, String> distanceCache = {};
 
   @override
   void initState() {
     super.initState();
-    _updateDistance();
   }
 
   @override
@@ -87,16 +49,41 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
       ref.read(userPageCounter).setCounter(index);
     }
 
+    Future<String> userRestDistance() async {
+      String url = await maps.createHttpUrl(
+          widget.userPosition.latitude,
+          widget.userPosition.longitude,
+          double.parse(widget.restaurant.location.latitude),
+          double.parse(widget.restaurant.location.longitude));
+      var decodedJson = jsonDecode(url);
+      String distance = decodedJson['routes'][0]['legs'][0]['distance']['text'];
+      return distance;
+    }
+
+    Future<String> getDistanceForRestaurant(
+        RestaurantInfoCard restaurant) async {
+      if (distanceCache.containsKey(restaurant.id)) {
+        return distanceCache[restaurant.id]!;
+      }
+      // If not cached, make the API call
+      String url = await getDistance.createHttpUrl(
+        userLocation.latitude,
+        userLocation.longitude,
+        double.parse(restaurant.location.latitude),
+        double.parse(restaurant.location.longitude),
+      );
+      var decodedJson = jsonDecode(url);
+      String distance = decodedJson['routes'][0]['legs'][0]['distance']['text'];
+
+      // Cache the result
+      distanceCache[restaurant.id] = distance;
+
+      return distance;
+    }
+
     return GestureDetector(
       onTap: () async {
-        LatLng user = await data.getLocation();
-        String distance = await getDistance(
-          user,
-          LatLng(
-            double.parse(widget.restaurant.location.latitude),
-            double.parse(widget.restaurant.location.longitude),
-          ),
-        );
+        String distance = await userRestDistance();
         if (context.mounted) {
           Navigator.push(
             context,
@@ -130,19 +117,16 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                   left: 10,
                   bottom: 10,
                   child: Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      distance,
-                      style: TextStyle(
-                        fontSize: fSize,
-                        color: watchCounter.counter == 0
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+                    child: FutureBuilder(
+                      future: getDistanceForRestaurant(widget.restaurant),
+                      builder: (context, snapshot) {
+                        return Text(snapshot.data ?? 'Getting Distance..');
+                      },
                     ),
                   ),
                 )
@@ -178,16 +162,16 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        getHour(widget.restaurant, widget.weekday),
+                        getHour(widget.restaurant, weekday),
                         style: TextStyle(
                           color: timeColor(
                             DateTime.now(),
                             getOpeningTimeSingle(
-                              widget.weekday,
+                              weekday,
                               widget.restaurant,
                             ),
                             getClosingTimeSingle(
-                              widget.weekday,
+                              weekday,
                               widget.restaurant,
                             ),
                           ),

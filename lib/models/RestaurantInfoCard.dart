@@ -46,6 +46,7 @@ class RestaurantInfoCard extends amplify_core.Model {
   final List<String>? _topRatedItemsImgSrc;
   final List<String>? _topRatedItemsName;
   final List<String>? _topRatedItemsPrice;
+  final int? _timesVisited;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -286,6 +287,19 @@ class RestaurantInfoCard extends amplify_core.Model {
     return _topRatedItemsPrice;
   }
 
+  int get timesVisited {
+    try {
+      return _timesVisited!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
+  }
+
   amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -314,6 +328,7 @@ class RestaurantInfoCard extends amplify_core.Model {
       required topRatedItemsImgSrc,
       required topRatedItemsName,
       topRatedItemsPrice,
+      required timesVisited,
       createdAt,
       updatedAt})
       : _restaurantName = restaurantName,
@@ -334,6 +349,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         _topRatedItemsImgSrc = topRatedItemsImgSrc,
         _topRatedItemsName = topRatedItemsName,
         _topRatedItemsPrice = topRatedItemsPrice,
+        _timesVisited = timesVisited,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
@@ -356,7 +372,8 @@ class RestaurantInfoCard extends amplify_core.Model {
       required String websiteLink,
       required List<String> topRatedItemsImgSrc,
       required List<String> topRatedItemsName,
-      List<String>? topRatedItemsPrice}) {
+      List<String>? topRatedItemsPrice,
+      required int timesVisited}) {
     return RestaurantInfoCard._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
         restaurantName: restaurantName,
@@ -386,7 +403,8 @@ class RestaurantInfoCard extends amplify_core.Model {
             : topRatedItemsName,
         topRatedItemsPrice: topRatedItemsPrice != null
             ? List<String>.unmodifiable(topRatedItemsPrice)
-            : topRatedItemsPrice);
+            : topRatedItemsPrice,
+        timesVisited: timesVisited);
   }
 
   bool equals(Object other) {
@@ -418,7 +436,8 @@ class RestaurantInfoCard extends amplify_core.Model {
         DeepCollectionEquality()
             .equals(_topRatedItemsName, other._topRatedItemsName) &&
         DeepCollectionEquality()
-            .equals(_topRatedItemsPrice, other._topRatedItemsPrice);
+            .equals(_topRatedItemsPrice, other._topRatedItemsPrice) &&
+        _timesVisited == other._timesVisited;
   }
 
   @override
@@ -468,6 +487,9 @@ class RestaurantInfoCard extends amplify_core.Model {
             ? _topRatedItemsPrice!.toString()
             : "null") +
         ", ");
+    buffer.write("timesVisited=" +
+        (_timesVisited != null ? _timesVisited!.toString() : "null") +
+        ", ");
     buffer.write("createdAt=" +
         (_createdAt != null ? _createdAt!.format() : "null") +
         ", ");
@@ -496,7 +518,8 @@ class RestaurantInfoCard extends amplify_core.Model {
       String? websiteLink,
       List<String>? topRatedItemsImgSrc,
       List<String>? topRatedItemsName,
-      List<String>? topRatedItemsPrice}) {
+      List<String>? topRatedItemsPrice,
+      int? timesVisited}) {
     return RestaurantInfoCard._internal(
         id: id,
         restaurantName: restaurantName ?? this.restaurantName,
@@ -516,7 +539,8 @@ class RestaurantInfoCard extends amplify_core.Model {
         websiteLink: websiteLink ?? this.websiteLink,
         topRatedItemsImgSrc: topRatedItemsImgSrc ?? this.topRatedItemsImgSrc,
         topRatedItemsName: topRatedItemsName ?? this.topRatedItemsName,
-        topRatedItemsPrice: topRatedItemsPrice ?? this.topRatedItemsPrice);
+        topRatedItemsPrice: topRatedItemsPrice ?? this.topRatedItemsPrice,
+        timesVisited: timesVisited ?? this.timesVisited);
   }
 
   RestaurantInfoCard copyWithModelFieldValues(
@@ -537,7 +561,8 @@ class RestaurantInfoCard extends amplify_core.Model {
       ModelFieldValue<String>? websiteLink,
       ModelFieldValue<List<String>?>? topRatedItemsImgSrc,
       ModelFieldValue<List<String>?>? topRatedItemsName,
-      ModelFieldValue<List<String>?>? topRatedItemsPrice}) {
+      ModelFieldValue<List<String>?>? topRatedItemsPrice,
+      ModelFieldValue<int>? timesVisited}) {
     return RestaurantInfoCard._internal(
         id: id,
         restaurantName:
@@ -568,7 +593,9 @@ class RestaurantInfoCard extends amplify_core.Model {
             : topRatedItemsName.value,
         topRatedItemsPrice: topRatedItemsPrice == null
             ? this.topRatedItemsPrice
-            : topRatedItemsPrice.value);
+            : topRatedItemsPrice.value,
+        timesVisited:
+            timesVisited == null ? this.timesVisited : timesVisited.value);
   }
 
   RestaurantInfoCard.fromJson(Map<String, dynamic> json)
@@ -602,6 +629,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         _topRatedItemsImgSrc = json['topRatedItemsImgSrc']?.cast<String>(),
         _topRatedItemsName = json['topRatedItemsName']?.cast<String>(),
         _topRatedItemsPrice = json['topRatedItemsPrice']?.cast<String>(),
+        _timesVisited = (json['timesVisited'] as num?)?.toInt(),
         _createdAt = json['createdAt'] != null
             ? amplify_core.TemporalDateTime.fromString(json['createdAt'])
             : null,
@@ -629,6 +657,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         'topRatedItemsImgSrc': _topRatedItemsImgSrc,
         'topRatedItemsName': _topRatedItemsName,
         'topRatedItemsPrice': _topRatedItemsPrice,
+        'timesVisited': _timesVisited,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
@@ -653,6 +682,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         'topRatedItemsImgSrc': _topRatedItemsImgSrc,
         'topRatedItemsName': _topRatedItemsName,
         'topRatedItemsPrice': _topRatedItemsPrice,
+        'timesVisited': _timesVisited,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
       };
@@ -686,6 +716,8 @@ class RestaurantInfoCard extends amplify_core.Model {
       amplify_core.QueryField(fieldName: "topRatedItemsName");
   static final TOPRATEDITEMSPRICE =
       amplify_core.QueryField(fieldName: "topRatedItemsPrice");
+  static final TIMESVISITED =
+      amplify_core.QueryField(fieldName: "timesVisited");
   static var schema = amplify_core.Model.defineSchema(
       define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "RestaurantInfoCard";
@@ -834,6 +866,12 @@ class RestaurantInfoCard extends amplify_core.Model {
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.collection,
             ofModelName: amplify_core.ModelFieldTypeEnum.string.name)));
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: RestaurantInfoCard.TIMESVISITED,
+        isRequired: true,
+        ofType:
+            amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)));
 
     modelSchemaDefinition.addField(
         amplify_core.ModelFieldDefinition.nonQueryField(

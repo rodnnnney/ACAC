@@ -1,9 +1,9 @@
+import 'package:ACAC/common_layer/widgets/common/card_rest_info_card.dart';
 import 'package:ACAC/common_layer/widgets/star_builder.dart';
 import 'package:ACAC/domain_layer/repository_interface/phone_call.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/ModelProvider.dart';
 import 'package:ACAC/presentation_layer/pages/maps.dart';
-import 'package:ACAC/presentation_layer/widgets/card_rest_info_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

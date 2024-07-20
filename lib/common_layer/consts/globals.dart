@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GlobalTheme {
+  static const cacheDuration = Duration(hours: 1);
+
   static const Color kDarkGreen = Color(0xff14342B);
   static const Color kGreen = Color(0xff60935D);
   static const Color kWhite = Color(0xffFDFFFC);

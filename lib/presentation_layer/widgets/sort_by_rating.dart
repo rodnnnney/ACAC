@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:ACAC/domain_layer/controller/restaurant_info_card_list.dart';
+import 'package:ACAC/common_layer/cachedRestaurantProvider.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
 import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
+import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
@@ -17,7 +18,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 
-import '../pages/maps.dart';
 import 'dbb_widgets/additional_data_dbb.dart';
 
 class SortedByRating extends ConsumerStatefulWidget {
@@ -32,7 +32,6 @@ class SortedByRating extends ConsumerStatefulWidget {
 class CardViewerHomePageState extends ConsumerState<SortedByRating> {
   LatLng userPosition = const LatLng(0, 0);
   UserLocation location = UserLocation();
-  List<RestaurantInfoCard> allInfoCards = [];
 
   @override
   void initState() {
@@ -49,37 +48,32 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    int weekday = now.weekday;
-    var test = ref.watch(restaurantInfoCardListProvider);
-
-    switch (test) {
-      case AsyncData(value: final allInfoLoaded):
-        for (var data in allInfoLoaded) {
-          allInfoCards.add(data);
-        }
-    }
-
-    List<RestaurantInfoCard> sortedRestaurants = List.from(allInfoCards);
-
+    final restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
     return Scaffold(
       body: SafeArea(
-        child: sortedRestaurants.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, HomePage.id);
-                      },
-                      child: const Text('Go back'),
-                    )
-                  ],
-                ),
-              )
-            : buildList(sortedRestaurants.cast<RestaurantInfoCard>(), weekday),
+        child: restaurantData.when(
+          data: (allInfoCards) {
+            final sortedRestaurants =
+                List<RestaurantInfoCard>.from(allInfoCards)
+                  ..sort((a, b) => b.rating.compareTo(a.rating));
+            return buildList(sortedRestaurants, DateTime.now().weekday);
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error: $error'),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, HomePage.id);
+                  },
+                  child: const Text('Go back'),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -109,8 +103,10 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
           Padding(
               padding: const EdgeInsets.only(right: 20),
               child: sortedRestaurants.length == 1
-                  ? Text('${sortedRestaurants.length.toString()} item found')
-                  : Text('${sortedRestaurants.length.toString()} items found')),
+                  ? Text('${sortedRestaurants.length.toString()} restaurant '
+                      'found')
+                  : Text(
+                      '${sortedRestaurants.length.toString()} restaurants found')),
         ],
       ),
       body: ListView.builder(
@@ -139,7 +135,7 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AdditionalDataDbb(
-                      restaurant: allInfoCards[index],
+                      restaurant: sortedRestaurants[index],
                       distance: distance,
                     ),
                   ),
@@ -189,15 +185,17 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                           Row(
                             children: [
                               Text(
-                                getHours(allInfoCards, index, weekday),
+                                getHours(sortedRestaurants, index, weekday),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               FutureBuilder<Map<String, dynamic>>(
                                 future: getCurrentStatusWithColor(
-                                  getOpeningTime(weekday, allInfoCards, index),
-                                  getClosingTime(weekday, allInfoCards, index),
+                                  getOpeningTime(
+                                      weekday, sortedRestaurants, index),
+                                  getClosingTime(
+                                      weekday, sortedRestaurants, index),
                                 ),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
@@ -250,16 +248,17 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                                 String url = await maps.createHttpUrl(
                                     user.latitude,
                                     user.longitude,
-                                    double.parse(
-                                        allInfoCards[index].location.latitude),
-                                    double.parse(allInfoCards[index]
+                                    double.parse(sortedRestaurants[index]
+                                        .location
+                                        .latitude),
+                                    double.parse(sortedRestaurants[index]
                                         .location
                                         .longitude));
 
                                 maps.processPolylineData(url);
                                 maps.updateCameraBounds([
                                   user,
-                                  allInfoCards[index].location as LatLng
+                                  sortedRestaurants[index].location as LatLng
                                 ]);
                                 nav.updateRouteDetails(url);
                               } catch (e) {}

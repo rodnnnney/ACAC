@@ -1,3 +1,4 @@
+import 'package:ACAC/common_layer/cachedRestaurantProvider.dart';
 import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/common_layer/widgets/app_bar.dart';
 import 'package:ACAC/domain_layer/repository_interface/location.dart';
@@ -13,6 +14,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 
+import '../../models/RestaurantInfoCard.dart';
+
 class MapScreen extends ConsumerStatefulWidget {
   static String id = 'Map_Screen';
 
@@ -27,7 +30,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
   late LatLng userPosition;
   LatLng? restPosition;
   GoogleMapController? _controller;
-  Set<Marker> _markers = {};
+  Set<Marker> markers = {};
 
   @override
   void initState() {
@@ -46,23 +49,6 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
     ref.read(userPageCounter).setCounter(2);
   }
 
-  // Future<void> _initializeLocation() async {
-  //   try {
-  //     LatLng userLocation = await location.find();
-  //     setState(() {
-  //       isLocationLoaded = true;
-  //       userPosition = userLocation;
-  //     });
-  //     markerManager.initializeUserLocation(userPosition);
-  //     if (context.mounted) {
-  //       markerManager.initializeMarkers(context);
-  //     }
-  //     print('Location and markers initialized');
-  //   } catch (e) {
-  //     print('Error initializing location: $e');
-  //     // Handle the error appropriately
-  //   }
-  // }
   Future<void> _initializeLocation() async {
     try {
       LatLng userLocation = await location.find();
@@ -81,12 +67,46 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
   }
 
   Future<void> _initializeMarkers() async {
-    markerManager.initializeUserLocation(userPosition);
-    await markerManager.initializeMarkers(context);
-    if (mounted) {
-      setState(() {
-        _markers = markerManager.marker;
-      });
+    final restaurantInfoAsync = ref.read(cachedRestaurantInfoCardListProvider);
+    restaurantInfoAsync.when(
+      data: (allInfoLoaded) async {
+        Set<Marker> newMarkers = {};
+        for (RestaurantInfoCard rest in allInfoLoaded) {
+          final marker = Marker(
+            infoWindow: InfoWindow(
+                title: rest.restaurantName, snippet: rest.restaurantName),
+            markerId: MarkerId(rest.restaurantName),
+            position: LatLng(double.parse(rest.location.latitude),
+                double.parse(rest.location.longitude)),
+          );
+          newMarkers.add(marker);
+        }
+
+        newMarkers.add(
+          Marker(
+            markerId: const MarkerId('User'),
+            position: userPosition,
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            infoWindow: const InfoWindow(
+                title: 'Current location!',
+                snippet: 'This is where you are right now!'),
+          ),
+        );
+
+        setState(() {
+          markers = newMarkers;
+        });
+      },
+      loading: () => print('Loading restaurant info...'),
+      error: (error, stack) => print('Error loading restaurant info: $error'),
+    );
+  }
+
+  Future<void> setMapStyle() async {
+    if (_controller != null) {
+      String style = await rootBundle.loadString('assets/map_style_dark.json');
+      _controller!.setMapStyle(ref.watch(darkLight).theme ? style : null);
     }
   }
 
@@ -104,14 +124,6 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
     PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
     NavInfo nav = legacy_provider.Provider.of<NavInfo>(context);
 
-    Future<void> setMapStyle() async {
-      if (_controller != null) {
-        String style =
-            await rootBundle.loadString('assets/map_style_dark.json');
-        _controller!.setMapStyle(ref.watch(darkLight).theme ? style : null);
-      }
-    }
-
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomLeft,
@@ -127,8 +139,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
               zoom: 11,
             ),
             myLocationButtonEnabled: false,
-            markers: _markers,
-            // Use the local _markers Set
+            markers: markers,
             polylines: Set<Polyline>.of(maps.polylines.values),
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,
