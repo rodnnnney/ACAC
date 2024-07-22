@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 class Welcome extends StatelessWidget {
   final DateTime now = DateTime.now();
   static const kWelcomeText = TextStyle(
-      fontFamily: 'Comforts',
+      fontFamily: 'helveticanowtext',
       fontSize: 18,
       fontWeight: FontWeight.w800,
       color: Color(0xFF588157));
@@ -29,6 +29,11 @@ class Welcome extends StatelessWidget {
           TypewriterAnimatedText(greetingText(now, 'Mandarin'),
               textStyle: kWelcomeText,
               speed: const Duration(milliseconds: 250)),
+          TypewriterAnimatedText(
+            greetingText(now, 'English'),
+            textStyle: kWelcomeText,
+            speed: const Duration(milliseconds: 250),
+          ),
         ],
       ),
     );
@@ -76,7 +81,6 @@ String greetingText(time, language) {
         greeting = '좋은 저녁이에요🫰🏼';
       case 'Vietnamese':
         greeting = 'Chào buổi tối';
-        // Adjust if necessary for Vietnamese
         break;
       case 'Mandarin':
         greeting = '晚上好';

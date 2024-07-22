@@ -13,6 +13,7 @@ import 'package:ACAC/domain_layer/repository_interface/time_formatter.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/presentation_layer/pages/settings.dart';
 import 'package:ACAC/presentation_layer/state_management/riverpod/riverpod_light_dark.dart';
+import 'package:ACAC/presentation_layer/widgets/dbb_widgets/additional_data_dbb.dart';
 import 'package:ACAC/presentation_layer/widgets/sort_by_rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,6 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) => Center(child: Text('Error: $error')),
           data: (allInfoCards) {
-            int weekday = DateTime.now().weekday;
             final restaurantsByTimesVisited =
                 List<RestaurantInfoCard>.from(allInfoCards)
                   ..sort((a, b) => b.timesVisited.compareTo(a.timesVisited));
@@ -181,6 +181,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     child: const Text(
                                       'Featured',
                                       style: TextStyle(
+                                          fontFamily: 'helveticanowtext',
                                           color: GlobalTheme.kWhite,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -194,6 +195,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     child: Text(
                                       'Items Found: ${images.length}',
                                       style: const TextStyle(
+                                          fontFamily: 'helveticanowtext',
                                           color: GlobalTheme.kWhite,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -231,12 +233,13 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: const Text(
                                   'ACAC Favourites:',
                                   style: TextStyle(
+                                      fontFamily: 'helveticanowtext',
                                       color: GlobalTheme.kWhite,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
                               SizedBox(
-                                height: 180,
+                                height: 170,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: 5,
@@ -247,6 +250,8 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                         child: UserCard(
                                           restaurantInfoCard:
                                               restaurantsByTimesVisited[index],
+                                          user: userLocation,
+                                          index: index,
                                         ));
                                   },
                                 ),
@@ -263,6 +268,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: const Text(
                                   'Country:',
                                   style: TextStyle(
+                                      fontFamily: 'helveticanowtext',
                                       color: GlobalTheme.kWhite,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -295,6 +301,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: const Text(
                                   'Food Type:',
                                   style: TextStyle(
+                                      fontFamily: 'helveticanowtext',
                                       color: GlobalTheme.kWhite,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -327,6 +334,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: const Text(
                                   'Popularity:',
                                   style: TextStyle(
+                                      fontFamily: 'helveticanowtext',
                                       color: GlobalTheme.kWhite,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -350,27 +358,26 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                         },
                                       ),
                                     ),
-//TODO All cards
-
-// GestureDetector(
-//   onTap: () {
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//           builder: (context) => const DbbTest()),
-//     );
-//   },
-//   child: const SizedBox(
-//     height: 130,
-//     child: Card(
-//       color: Colors.pink,
-//       child: SizedBox(
-//           width: 120,
-//           height: 130,
-//           child: Text('s')),
-//     ),
-//   ),
-// ),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //           builder: (context) =>
+                                    //               const DbbTest()),
+                                    //     );
+                                    //   },
+                                    //   child: const SizedBox(
+                                    //     height: 130,
+                                    //     child: Card(
+                                    //       color: Colors.pink,
+                                    //       child: SizedBox(
+                                    //           width: 120,
+                                    //           height: 130,
+                                    //           child: Text('s')),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -395,10 +402,17 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
 }
 
 class UserCard extends StatelessWidget {
-  UserCard({super.key, required this.restaurantInfoCard});
+  UserCard(
+      {super.key,
+      required this.restaurantInfoCard,
+      required this.user,
+      required this.index});
 
   final RestaurantInfoCard restaurantInfoCard;
   final int weekday = DateTime.now().weekday;
+  final GetDistance getDistance = GetDistance();
+  final LatLng user;
+  final int index;
 
   Future<String> getDistanceForRestaurant(RestaurantInfoCard restaurant) async {
     if (distanceCache.containsKey(restaurant.id)) {
@@ -406,8 +420,8 @@ class UserCard extends StatelessWidget {
     }
     // If not cached, make the API call
     String url = await getDistance.createHttpUrl(
-      userLocation.latitude,
-      userLocation.longitude,
+      user.latitude,
+      user.longitude,
       double.parse(restaurant.location.latitude),
       double.parse(restaurant.location.longitude),
     );
@@ -420,108 +434,148 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Column(
+    return GestureDetector(
+      onTap: () async {
+        String distance = await getDistance.getDistanceForRestaurant(
+            restaurantInfoCard, user);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AdditionalDataDbb(
+              restaurant: restaurantInfoCard,
+              distance: distance,
+            ),
+          ),
+        );
+      },
+      child: Stack(
         children: [
-          Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20)),
-                child: CachedNetworkImage(
-                  imageUrl: restaurantInfoCard.imageSrc,
-                  width: double.infinity,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                left: 10,
-                bottom: 10,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: FutureBuilder<String>(
-                    future: getDistanceForRestaurant(restaurantInfoCard),
-                    builder: (context, snapshot) {
-                      return Text(snapshot.data ?? 'Getting Distance..');
-                    },
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 5,
-                bottom: 5,
-                child: Container(
-                  width: 38,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xFFE8E8E8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Center(
-                      child: Text(
-                        restaurantInfoCard.rating.toString(),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+          Card(
+            elevation: 1,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.bottomLeft,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(20)),
+                      child: CachedNetworkImage(
+                        imageUrl: restaurantInfoCard.imageSrc,
+                        width: double.infinity,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      left: 10,
+                      bottom: 10,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: FutureBuilder<String>(
+                          future: getDistanceForRestaurant(restaurantInfoCard),
+                          builder: (context, snapshot) {
+                            return Text(snapshot.data ?? 'Getting Distance..');
+                          },
                         ),
                       ),
                     ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      restaurantInfoCard.restaurantName,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          restaurantInfoCard.address,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
+                    Positioned(
+                      right: 5,
+                      bottom: 5,
+                      child: Container(
+                        width: 38,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFE8E8E8),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Center(
+                            child: Text(
+                              restaurantInfoCard.rating.toString(),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                    Text(
-                      getHour(restaurantInfoCard, weekday),
-                      style: TextStyle(
-                        color: timeColor(
-                          DateTime.now(),
-                          getOpeningTimeSingle(weekday, restaurantInfoCard),
-                          getClosingTimeSingle(weekday, restaurantInfoCard),
-                        ),
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
+                    )
                   ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            restaurantInfoCard.restaurantName,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                restaurantInfoCard.address,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            getHour(restaurantInfoCard, weekday),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: timeColor(
+                                DateTime.now(),
+                                getOpeningTimeSingle(
+                                    weekday, restaurantInfoCard),
+                                getClosingTimeSingle(
+                                    weekday, restaurantInfoCard),
+                              ),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
+          Positioned(
+            top: 20,
+            left: 4,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: const BoxDecoration(
+                  color: Color(0xff68ba7b),
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(12),
+                      topRight: Radius.circular(12))),
+              child: Text(
+                ' ${index + 1}# Most Popular!',
+                style: const TextStyle(fontSize: 10, color: Colors.white),
+              ),
+            ),
+          )
         ],
       ),
     );

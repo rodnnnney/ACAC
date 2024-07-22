@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:ACAC/presentation_layer/pages/home.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class GetDistance {
@@ -20,5 +25,24 @@ class GetDistance {
       print('General error:$e');
     }
     return 'ERROR';
+  }
+
+  Future<String> getDistanceForRestaurant(
+      RestaurantInfoCard restaurant, LatLng user) async {
+    if (distanceCache.containsKey(restaurant.id)) {
+      return distanceCache[restaurant.id]!;
+    }
+    // If not cached, make the API call
+    String url = await getDistance.createHttpUrl(
+      user.latitude,
+      user.longitude,
+      double.parse(restaurant.location.latitude),
+      double.parse(restaurant.location.longitude),
+    );
+    var decodedJson = jsonDecode(url);
+    String distance = decodedJson['routes'][0]['legs'][0]['distance']['text'];
+    // Cache the result
+    distanceCache[restaurant.id] = distance;
+    return distance;
   }
 }

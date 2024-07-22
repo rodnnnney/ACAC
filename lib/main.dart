@@ -2,6 +2,7 @@ import 'package:ACAC/common_layer/services/route_observer.dart';
 import 'package:ACAC/presentation_layer/pages/home.dart';
 import 'package:ACAC/presentation_layer/pages/user_auth/firstTimeSignIn.dart';
 import 'package:ACAC/presentation_layer/pages/user_auth/sign_in_custom.dart';
+import 'package:ACAC/presentation_layer/state_management/provider/connect_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/navigation_info_provider.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/polyline_info.dart';
 import 'package:ACAC/presentation_layer/state_management/provider/restaurant_provider.dart';
@@ -80,7 +81,10 @@ class MyApp extends ConsumerWidget {
         theme: ref.watch(darkLight).theme
             ? colorTheme.themeDataDark()
             : colorTheme.themeDataLight(),
-        initialRoute: HomePage.id,
+        home: ConnectivityWrapper(
+          onConnectionChange: (isConnected) {},
+          child: HomePage(),
+        ),
         routes: appRoutes,
       ),
     );

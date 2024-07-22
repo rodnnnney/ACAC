@@ -7,7 +7,6 @@ import 'package:ACAC/presentation_layer/pages/maps.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AdditionalDataDbb extends StatefulWidget {
   const AdditionalDataDbb(
@@ -27,10 +26,6 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     int weekday = now.weekday;
-    //PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
-    //NavInfo nav = legacy_provider.Provider.of<NavInfo>(context);
-    //RestaurantInfo data = legacy_provider.Provider.of<RestaurantInfo>
-    // (context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -86,7 +81,9 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
                             Text(
                               widget.restaurant.restaurantName,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
+                                fontFamily: 'helveticanowtext',
+                                fontSize: 20,
+                              ),
                             ),
                             const SizedBox(
                               height: 10,
@@ -134,11 +131,20 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
                           children: [
                             Column(
                               children: [
-                                Text(
-                                  widget.restaurant.rating.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                Container(
+                                  padding: const EdgeInsets.all(9),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0xFFE8E8E8),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      widget.restaurant.rating.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ),
                                 buildStarRating(widget.restaurant.rating),
                                 const SizedBox(
@@ -147,17 +153,17 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
                               ],
                             ),
                             GestureDetector(
-                              onTap: () async {
-                                final url =
-                                    Uri.parse(widget.restaurant.gMapsLink);
-                                try {
-                                  if (await canLaunchUrl(url)) {
-                                    await launchUrl(url);
-                                  } else {}
-                                } catch (e) {
-                                  //print(e);
-                                }
-                              },
+                              // onTap: () async {
+                              //   final url =
+                              //       Uri.parse(widget.restaurant.gMapsLink);
+                              //   try {
+                              //     if (await canLaunchUrl(url)) {
+                              //       await launchUrl(url);
+                              //     } else {}
+                              //   } catch (e) {
+                              //     //print(e);
+                              //   }
+                              // },
                               child: Text(
                                 '${phoneCall.formatNumber(widget.restaurant.reviewNum)} + ratings',
                                 style: const TextStyle(
@@ -262,16 +268,19 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
                                         ),
                                       ),
                                       Positioned(
-                                        top: 10,
-                                        left: 10,
+                                        top: 14,
+                                        left: 3,
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius:
-                                                  BorderRadius.circular(12)),
+                                          decoration: const BoxDecoration(
+                                              color: Color(0xff68ba7b),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(12),
+                                                  topRight:
+                                                      Radius.circular(12))),
                                           child: Text(
-                                            '${index + 1}# Most Popular!',
+                                            ' ${index + 1}# Most Popular!',
                                             style: const TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white),
