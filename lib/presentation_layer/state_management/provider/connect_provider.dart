@@ -6,10 +6,8 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 
 class ConnectivityWrapper extends StatefulWidget {
   final Widget child;
-  final Function(bool)
-      onConnectionChange; // Callback to notify about connection changes
 
-  ConnectivityWrapper({required this.child, required this.onConnectionChange});
+  ConnectivityWrapper({required this.child});
 
   @override
   State<ConnectivityWrapper> createState() => _ConnectivityWrapperState();
@@ -17,6 +15,7 @@ class ConnectivityWrapper extends StatefulWidget {
 
 class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
   bool isConnected = false;
+  bool isLoading = true; // Add this line
   StreamSubscription? internetConnectionStream;
 
   @override
@@ -24,18 +23,41 @@ class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
     super.initState();
     internetConnectionStream =
         InternetConnection().onStatusChange.listen((event) {
-      bool connectionStatus = event == InternetStatus.connected;
-      setState(() {
-        isConnected = connectionStatus;
-      });
-      widget.onConnectionChange(
-          connectionStatus); // Notify about connection status
+      switch (event) {
+        case InternetStatus.connected:
+          setState(() {
+            isConnected = true;
+            isLoading = false; // Update the loading state
+          });
+          break;
+        case InternetStatus.disconnected:
+          setState(() {
+            isConnected = false;
+            isLoading = false; // Update the loading state
+          });
+          break;
+        default:
+          setState(() {
+            isConnected = false;
+            isLoading = false; // Update the loading state
+          });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: isConnected ? widget.child : NoInternetScreen());
+    if (isLoading) {
+      // Show a loading indicator while determining connectivity status
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    } else {
+      // Show the child widget if connected, otherwise show NoInternetScreen
+      return Scaffold(
+        body: isConnected ? widget.child : NoInternetScreen(),
+      );
+    }
   }
 
   @override

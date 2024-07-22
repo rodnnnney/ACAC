@@ -81,10 +81,7 @@ class MyApp extends ConsumerWidget {
         theme: ref.watch(darkLight).theme
             ? colorTheme.themeDataDark()
             : colorTheme.themeDataLight(),
-        home: ConnectivityWrapper(
-          onConnectionChange: (isConnected) {},
-          child: HomePage(),
-        ),
+        home: ConnectivityWrapper(child: HomePage()),
         routes: appRoutes,
       ),
     );
