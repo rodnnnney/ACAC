@@ -49,13 +49,13 @@ class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
   Widget build(BuildContext context) {
     if (isLoading) {
       // Show a loading indicator while determining connectivity status
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     } else {
       // Show the child widget if connected, otherwise show NoInternetScreen
       return Scaffold(
-        body: isConnected ? widget.child : NoInternetScreen(),
+        body: isConnected ? widget.child : const NoInternetScreen(),
       );
     }
   }
