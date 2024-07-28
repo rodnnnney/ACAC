@@ -46,6 +46,7 @@ dependencies:
   flutter_windowmanager: ^0.2.0
   screen_protector: ^1.4.2
   internet_connection_checker_plus: ^2.5.0
+  flutter_dotenv: ^5.1.0
 
 
 dev_dependencies:
@@ -68,7 +69,8 @@ flutter:
 
   assets:
     - 'assets/'
-    - 'images/'
+    - images/
+    - .env
 
   fonts:
     - family: helveticanowtext

@@ -10,7 +10,8 @@
 .buildlog/
 .history
 .svn/
-migrate_working_dir/
+migrate_working_dir/flutt
+.env
 
 # IntelliJ related
 *.iml
