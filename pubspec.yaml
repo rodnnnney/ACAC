@@ -71,7 +71,7 @@ flutter:
     - 'assets/'
     - images/
     - .env
-    - env.txt
+    - env.text
 
   fonts:
     - family: helveticanowtext
