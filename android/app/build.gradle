@@ -3,7 +3,9 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
-
+def envFile = rootProject.file(".env")
+def properties = new Properties()
+properties.load(new FileInputStream(envFile))
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -50,6 +52,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        resValue "string", "google_maps_api_key", properties['GOOGLE_MAPS_API_KEY']
     }
 
     buildTypes {
