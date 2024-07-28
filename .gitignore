@@ -12,6 +12,7 @@
 .svn/
 migrate_working_dir/flutt
 .env
+env.txt
 
 # IntelliJ related
 *.iml

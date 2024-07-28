@@ -345,44 +345,35 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: [
-                                    SizedBox(
-                                      height: 130,
-                                      child: HomeCard(
-                                        displayIMG:
-                                            'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
-                                        text: 'Rating',
-                                        routeName: (BuildContext, String) {
-                                          Navigator.pushNamed(
-                                              context, SortedByRating.id,
-                                              arguments: "RATING");
-                                        },
-                                      ),
+                                    HomeCard(
+                                      displayIMG:
+                                          'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
+                                      text: 'Rating',
+                                      routeName: (BuildContext, String) {
+                                        Navigator.pushNamed(
+                                            context, SortedByRating.id,
+                                            arguments: "RATING");
+                                      },
                                     ),
-                                    SizedBox(
-                                      height: 130,
-                                      child: HomeCard(
-                                        displayIMG:
-                                            'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
-                                        text: 'Visit',
-                                        routeName: (BuildContext, String) {
-                                          Navigator.pushNamed(
-                                              context, SortedByRating.id,
-                                              arguments: "VISIT");
-                                        },
-                                      ),
+                                    HomeCard(
+                                      displayIMG:
+                                          'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
+                                      text: 'Times Visited',
+                                      routeName: (BuildContext, String) {
+                                        Navigator.pushNamed(
+                                            context, SortedByRating.id,
+                                            arguments: "VISIT");
+                                      },
                                     ),
-                                    SizedBox(
-                                      height: 130,
-                                      child: HomeCard(
-                                        displayIMG:
-                                            'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
-                                        text: 'Alphabetical',
-                                        routeName: (BuildContext, String) {
-                                          Navigator.pushNamed(
-                                              context, SortedByRating.id,
-                                              arguments: "ALPHA");
-                                        },
-                                      ),
+                                    HomeCard(
+                                      displayIMG:
+                                          'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
+                                      text: 'Alphabetical',
+                                      routeName: (BuildContext, String) {
+                                        Navigator.pushNamed(
+                                            context, SortedByRating.id,
+                                            arguments: "ALPHA");
+                                      },
                                     ),
                                   ],
                                 ),
@@ -457,140 +448,144 @@ class UserCard extends StatelessWidget {
           ),
         );
       },
-      child: Stack(
-        children: [
-          Card(
-            elevation: 1,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.bottomLeft,
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          topLeft: Radius.circular(20)),
-                      child: CachedNetworkImage(
-                        imageUrl: restaurantInfoCard.imageSrc,
-                        width: double.infinity,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      left: 10,
-                      bottom: 10,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: FutureBuilder<String>(
-                          future: getDistanceForRestaurant(restaurantInfoCard),
-                          builder: (context, snapshot) {
-                            return Text(
-                              snapshot.data ??
-                                  'Getting Distance'
-                                      '..',
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 5,
-                      bottom: 5,
-                      child: Container(
-                        width: 38,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFFE8E8E8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Center(
-                            child: Text(
-                              restaurantInfoCard.rating.toString(),
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: SizedBox(
+        height: 130,
+        child: Stack(
+          children: [
+            Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.bottomLeft,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            restaurantInfoCard.restaurantName,
-                            overflow: TextOverflow.ellipsis,
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            topLeft: Radius.circular(20)),
+                        child: CachedNetworkImage(
+                          imageUrl: restaurantInfoCard.imageSrc,
+                          width: double.infinity,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        left: 10,
+                        bottom: 10,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                restaurantInfoCard.address,
+                          child: FutureBuilder<String>(
+                            future:
+                                getDistanceForRestaurant(restaurantInfoCard),
+                            builder: (context, snapshot) {
+                              return Text(
+                                snapshot.data ??
+                                    'Getting Distance'
+                                        '..',
+                                style: const TextStyle(color: Colors.black),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 5,
+                        bottom: 5,
+                        child: Container(
+                          width: 38,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFE8E8E8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Center(
+                              child: Text(
+                                restaurantInfoCard.rating.toString(),
                                 style: const TextStyle(
-                                    fontSize: 12,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontWeight: FontWeight.w500),
-                                maxLines: 1,
-                              ),
-                            ],
-                          ),
-                          Text(
-                            getHour(restaurantInfoCard, weekday),
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: timeColor(
-                                DateTime.now(),
-                                getOpeningTimeSingle(
-                                    weekday, restaurantInfoCard),
-                                getClosingTimeSingle(
-                                    weekday, restaurantInfoCard),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
                           ),
-                        ],
-                      ),
+                        ),
+                      )
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 20,
-            left: 4,
-            child: Container(
-              padding: const EdgeInsets.all(3),
-              decoration: const BoxDecoration(
-                  color: Color(0xff68ba7b),
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(12),
-                      topRight: Radius.circular(12))),
-              child: Text(
-                ' ${index + 1}# Most Popular!',
-                style: const TextStyle(fontSize: 10, color: Colors.white),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              restaurantInfoCard.restaurantName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  restaurantInfoCard.address,
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.w500),
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              getHour(restaurantInfoCard, weekday),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: timeColor(
+                                  DateTime.now(),
+                                  getOpeningTimeSingle(
+                                      weekday, restaurantInfoCard),
+                                  getClosingTimeSingle(
+                                      weekday, restaurantInfoCard),
+                                ),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          )
-        ],
+            Positioned(
+              top: 20,
+              left: 4,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                    color: Color(0xff68ba7b),
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(12),
+                        topRight: Radius.circular(12))),
+                child: Text(
+                  ' ${index + 1}# Most Popular!',
+                  style: const TextStyle(fontSize: 10, color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

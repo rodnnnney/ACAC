@@ -128,10 +128,7 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                       builder: (context, snapshot) {
                         return Text(
                           snapshot.data ?? 'Getting Distance..',
-                          style: TextStyle(
-                              color: ref.watch(darkLight).theme
-                                  ? Colors.black
-                                  : Colors.white),
+                          style: TextStyle(color: Colors.black),
                         );
                       },
                     ),
