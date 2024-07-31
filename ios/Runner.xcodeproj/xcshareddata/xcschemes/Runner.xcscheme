@@ -70,6 +70,18 @@
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "GOOGLE_PLACES_API_KEY"
+            value = "AIzaSyAI-ybP5FH1HG9N9UNZkFqVyGZSkAWEsW4"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "GOOGLE_MAPS_API_KEY"
+            value = "ybP5FH1HG9N9UNZkFqVyGZSkAWEsW4"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Profile"

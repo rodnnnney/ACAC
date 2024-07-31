@@ -1,14 +1,21 @@
+import 'package:ACAC/common/providers/riverpod_light_dark.dart';
+import 'package:ACAC/common/services/restaurant_provider.dart';
 import 'package:ACAC/common/widgets/common/card_rest_info_card.dart';
 import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/helper_functions/time_formatter.dart';
 import 'package:ACAC/common/widgets/ui/star_builder.dart';
 import 'package:ACAC/features/maps/maps.dart';
+import 'package:ACAC/features/maps/service/navigation_info_provider.dart';
+import 'package:ACAC/features/maps/service/polyline_info.dart';
 import 'package:ACAC/models/ModelProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart' as provider;
 
-class AdditionalDataDbb extends StatefulWidget {
+class AdditionalDataDbb extends ConsumerStatefulWidget {
   const AdditionalDataDbb(
       {super.key, required this.restaurant, required this.distance});
 
@@ -16,14 +23,92 @@ class AdditionalDataDbb extends StatefulWidget {
   final String distance;
 
   @override
-  State<AdditionalDataDbb> createState() => _RestaurantAdditionalInfoState();
+  ConsumerState<AdditionalDataDbb> createState() =>
+      _RestaurantAdditionalInfoState();
 }
 
-class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
+class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
   LaunchLink phoneCall = LaunchLink();
+
+  List<PropertyTag> tags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.restaurant.cuisineType != null ||
+        widget.restaurant.cuisineType.isEmpty) {
+      filterTagSetup(widget.restaurant.cuisineType);
+    }
+  }
+
+  void filterTagSetup(List<String> infoTag) {
+    for (String filterTag in infoTag) {
+      switch (filterTag.toLowerCase()) {
+        case 'chinese':
+          tags.add(const PropertyTag(
+            tagDescription: 'Chinese 🇨🇳',
+            cardColor: Colors.red,
+            textColor: Colors.white,
+          ));
+          break;
+        case 'vietnamese':
+          tags.add(const PropertyTag(
+            tagDescription: 'Vietnamese 🇻🇳',
+            cardColor: Color(0xff7BAE7F),
+            textColor: Colors.white,
+          ));
+          break;
+        case 'japanese':
+          tags.add(const PropertyTag(
+            tagDescription: 'Japanese 🇯🇵',
+            cardColor: Colors.transparent,
+            textColor: Colors.black87,
+          ));
+          break;
+        case 'korean':
+          tags.add(const PropertyTag(
+            tagDescription: 'Korean 🇰🇷',
+            cardColor: Color(0xffB8E1FF),
+            textColor: Colors.white,
+          ));
+          break;
+        case 'desert':
+          tags.add(const PropertyTag(
+            tagDescription: 'Desert 🍦',
+            cardColor: Color(0xffE5D4ED),
+            textColor: Colors.white,
+          ));
+          break;
+        case 'fried chicken':
+          tags.add(const PropertyTag(
+            tagDescription: 'Fried Chicken 🍗',
+            cardColor: Color(0xffE3D888),
+            textColor: Colors.white,
+          ));
+          break;
+        case 'bubble tea':
+          tags.add(const PropertyTag(
+            tagDescription: 'Bubble Tea 🧋',
+            cardColor: Color(0xff95D7AE),
+            textColor: Colors.white,
+          ));
+          break;
+        case 'noodle':
+          tags.add(const PropertyTag(
+            tagDescription: 'Noodles 🍜',
+            cardColor: Color(0xffE2F1AF),
+            textColor: Colors.black87,
+          ));
+          break;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    PolyInfo maps = provider.Provider.of<PolyInfo>(context);
+    RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
+    NavInfo nav = provider.Provider.of<NavInfo>(context);
     DateTime now = DateTime.now();
     int weekday = now.weekday;
     return Scaffold(
@@ -60,11 +145,29 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
       ),
       body: Column(
         children: [
-          CachedNetworkImage(
-            imageUrl: widget.restaurant.imageSrc,
-            height: MediaQuery.of(context).size.height * 0.3,
-            width: double.infinity,
-            fit: BoxFit.cover,
+          Stack(
+            children: [
+              CachedNetworkImage(
+                imageUrl: widget.restaurant.imageSrc,
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                bottom: 10,
+                left: 10,
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  child: Text(
+                    widget.distance,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              )
+            ],
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -176,19 +279,20 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.distance,
-                        ),
-                        Text(widget.restaurant.cuisineType[0])
-                      ],
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 40,
+                      child: ListView.builder(
+                        itemCount: tags.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return tags[index];
+                        },
+                      ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                     CardRestInfoCard(place: widget.restaurant),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                     const Row(
                       children: [
                         Text('Most Popular'),
@@ -311,26 +415,26 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
                               if (context.mounted) {
                                 Navigator.pushNamed(context, MapScreen.id);
                               }
-
-                              // try {
-                              //   LatLng user = await data.getLocation();
-                              //   String url = await maps.createHttpUrl(
-                              //     user.latitude,
-                              //     user.longitude,
-                              //     double.parse(
-                              //         widget.restaurant.location.latitude),
-                              //     double.parse(
-                              //         widget.restaurant.location.longitude),
-                              //   );
-                              //   maps.processPolylineData(url);
-                              //   maps.updateCameraBounds([
-                              //     user,
-                              //     (widget.restaurant.location as LatLng)
-                              //   ]);
-                              //   nav.updateRouteDetails(url);
-                              // } catch (e) {
-                              //   //  print(e);
-                              // }
+                              ref.read(userPageCounter).setCounter(2);
+                              try {
+                                LatLng user = await data.getLocation();
+                                String url = await maps.createHttpUrl(
+                                  user.latitude,
+                                  user.longitude,
+                                  double.parse(
+                                      widget.restaurant.location.latitude),
+                                  double.parse(
+                                      widget.restaurant.location.longitude),
+                                );
+                                nav.updateRouteDetails(url);
+                                maps.processPolylineData(url);
+                                maps.updateCameraBounds([
+                                  user,
+                                  (widget.restaurant.location as LatLng)
+                                ]);
+                              } catch (e) {
+                                //  print(e);
+                              }
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -382,6 +486,33 @@ class _RestaurantAdditionalInfoState extends State<AdditionalDataDbb> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class PropertyTag extends StatelessWidget {
+  const PropertyTag(
+      {super.key,
+      required this.tagDescription,
+      required this.cardColor,
+      required this.textColor});
+
+  final String tagDescription;
+  final Color cardColor;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              color: cardColor,
+              borderRadius: const BorderRadius.all(Radius.circular(12))),
+          child: Text(
+            tagDescription,
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+          )),
     );
   }
 }

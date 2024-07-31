@@ -121,6 +121,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
   Widget buildMap() {
     const String id = 'Map_Screen';
     PolyInfo maps = legacy_provider.Provider.of<PolyInfo>(context);
+    Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Stack(
@@ -142,7 +143,11 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,
           ),
-          const InfoCard(),
+          Positioned(
+              top: screenSize.height * 0.70,
+              left: screenSize.width * 0.05,
+              right: screenSize.width * 0.05,
+              child: const InfoCard())
         ],
       ),
       floatingActionButton: FloatingActionButton(
