@@ -22,6 +22,7 @@
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 import 'LatLong.dart';
+import 'MarketingCard.dart';
 import 'Restaurant.dart';
 import 'RestaurantInfoCard.dart';
 import 'StartStop.dart';
@@ -29,6 +30,7 @@ import 'Time.dart';
 import 'User.dart';
 
 export 'LatLong.dart';
+export 'MarketingCard.dart';
 export 'Restaurant.dart';
 export 'RestaurantInfoCard.dart';
 export 'StartStop.dart';
@@ -37,9 +39,10 @@ export 'User.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "cfe505c5c6fa31f4ebc8b1ddfdf4e0cd";
+  String version = "2b6570bc7bb4fac3b98073a89ef8cb65";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [
+    MarketingCard.schema,
     Restaurant.schema,
     RestaurantInfoCard.schema,
     User.schema
@@ -56,6 +59,8 @@ class ModelProvider implements amplify_core.ModelProviderInterface {
 
   amplify_core.ModelType getModelTypeByModelName(String modelName) {
     switch (modelName) {
+      case "MarketingCard":
+        return MarketingCard.classType;
       case "Restaurant":
         return Restaurant.classType;
       case "RestaurantInfoCard":

@@ -59,3 +59,9 @@ type LatLong{
     latitude: String!
     longitude: String!
 }
+
+type MarketingCard @model @auth(rules: [{ allow: public}, {allow: owner}]){
+    imageUrl: String!
+    headerText: String!
+    descriptionText: String!
+}

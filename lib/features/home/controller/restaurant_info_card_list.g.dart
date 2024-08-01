@@ -7,7 +7,7 @@ part of 'restaurant_info_card_list.dart';
 // **************************************************************************
 
 String _$restaurantInfoCardListHash() =>
-    r'd846ad2943814a694fc0de02cefd59329f647fa1';
+    r'cfb92726172e2fd49a7b074e507978032e2249d4';
 
 /// See also [RestaurantInfoCardList].
 @ProviderFor(RestaurantInfoCardList)

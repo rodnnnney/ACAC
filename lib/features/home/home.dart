@@ -11,6 +11,7 @@ import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
 import 'package:ACAC/features/settings/settings.dart';
+import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'controller/marketing_card_controller.dart';
 import 'history.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -39,9 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
 
   final List<String> headerList = [
     'Buy one get one free!',
-    '25% Off ACAC '
-        'Meal '
-        'Special'
+    '25% Off ACAC Meal Special'
   ];
 
   final List<String> descriptionList = [
@@ -81,6 +81,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     var restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
+    var test = ref.watch(marketingCardControllerProvider);
 
     return Scaffold(
       body: restaurantData.when(
@@ -108,6 +109,15 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               Welcome(),
                               Row(
                                 children: [
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: const Icon(
+                                      Icons.cruelty_free_outlined,
+                                      color: Colors.black,
+                                      size: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () {
                                       HapticFeedback.heavyImpact();
@@ -207,103 +217,51 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 5,
                               ),
-                              ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                    topLeft: Radius.circular(20)),
-                                child: SizedBox(
-                                  height: 240,
-                                  width: MediaQuery.of(context).size.width - 20,
-                                  child: PageView.builder(
-                                    itemCount: images.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .only(
-                                                              topRight: Radius
-                                                                  .circular(20),
-                                                              topLeft: Radius
-                                                                  .circular(
-                                                                      20)),
-                                                      child: CachedNetworkImage(
-                                                        fit: BoxFit.fitWidth,
-                                                        width: double.infinity,
-                                                        imageUrl: images[index],
-                                                      ),
-                                                    ),
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .only(
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          20),
-                                                              bottomLeft: Radius
-                                                                  .circular(
-                                                                      20)),
-                                                      child: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(20),
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                                  color: Colors
-                                                                      .white),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                headerList[
-                                                                    index],
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                              Text(
-                                                                descriptionList[
-                                                                    index],
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .grey),
-                                                              )
-                                                            ],
-                                                          )),
-                                                    )
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: CachedNetworkImage(
-                                            fit: BoxFit.fitWidth,
-                                            width: double.infinity,
-                                            imageUrl: images[index],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                              test.when(
+                                data: (data) {
+                                  List<MarketingCard> cardList = data;
+                                  return SizedBox(
+                                    height: 240,
+                                    width:
+                                        MediaQuery.of(context).size.width - 20,
+                                    child: PageView.builder(
+                                      itemCount: cardList.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return BogoOntap(
+                                                    imageUrl: cardList[index]
+                                                        .imageUrl,
+                                                    header: cardList[index]
+                                                        .headerText,
+                                                    description: cardList[index]
+                                                        .descriptionText,
+                                                  );
+                                                });
+                                          },
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: CachedNetworkImage(
+                                                fit: BoxFit.fitWidth,
+                                                width: double.infinity,
+                                                imageUrl:
+                                                    cardList[index].imageUrl,
+                                              )),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                error: (error, stackTrace) {
+                                  return Text('An error occurred: $error');
+                                },
+                                loading: () {
+                                  return const CircularProgressIndicator();
+                                },
                               ),
                               const SizedBox(
                                 height: 20,
@@ -477,6 +435,102 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
           }),
       bottomNavigationBar: AppBarBottom(
         id: HomePage.id,
+      ),
+    );
+  }
+}
+
+class BogoOntap extends StatelessWidget {
+  final String imageUrl;
+  final String header;
+  final String description;
+
+  const BogoOntap({
+    Key? key,
+    required this.imageUrl,
+    required this.header,
+    required this.description,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        color: Colors.black.withOpacity(0.5),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(20),
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          imageUrl: imageUrl,
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              header,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              description,
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          color: Colors.white),
+                      child: const Icon(
+                        Icons.close,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
