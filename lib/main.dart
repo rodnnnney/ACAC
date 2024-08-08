@@ -26,7 +26,7 @@ import 'models/ModelProvider.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
-  Gemini.init(apiKey: 'AIzaSyB36-cbvdFrMmEZOxF-eEFwYO2ExUtzS04');
+  Gemini.init(apiKey: dotenv.get('GEMINI_API_KEY'));
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await _configureAmplify();
