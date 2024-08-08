@@ -1,3 +1,4 @@
+import 'package:ACAC/features/chat/chat.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
 import 'package:ACAC/features/home/history.dart';
 import 'package:ACAC/features/home/home.dart';
@@ -14,6 +15,7 @@ final appRoutes = <String, WidgetBuilder>{
   QrCodeGen.id: (context) => const QrCodeGen(),
   QRViewExample.id: (context) => QRViewExample(),
   History.id: (context) => History(),
+  Chat.id: (context) => const Chat(),
   SortedByRating.id: (context) {
     final args = ModalRoute.of(context)!.settings.arguments as String;
     return SortedByRating(type: args);

@@ -36,8 +36,9 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
   void initState() {
     super.initState();
     if (widget.restaurant.cuisineType != null ||
-        widget.restaurant.cuisineType.isEmpty) {
+        widget.restaurant.cuisineType.isNotEmpty) {
       filterTagSetup(widget.restaurant.cuisineType);
+      //isFavourite(widget.restaurant.cuisineType);
     }
   }
 
@@ -100,7 +101,54 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
             textColor: Colors.black87,
           ));
           break;
+        case '10':
+          tags.insert(
+              0,
+              const PropertyTag(
+                tagDescription: '\$~10💵',
+                cardColor: Color(0xff7BAE7F),
+                textColor: Colors.white,
+              ));
+          break;
+        case '15':
+          tags.insert(
+              0,
+              const PropertyTag(
+                tagDescription: '\$~15💵',
+                cardColor: Color(0xff7BAE7F),
+                textColor: Colors.white,
+              ));
+          break;
+        case '20':
+          tags.insert(
+              0,
+              const PropertyTag(
+                tagDescription: '\$~20💵',
+                cardColor: Color(0xff7BAE7F),
+                textColor: Colors.white,
+              ));
+          break;
+        case '25':
+          tags.insert(
+              0,
+              const PropertyTag(
+                tagDescription: '\$~25💵',
+                cardColor: Color(0xff7BAE7F),
+                textColor: Colors.white,
+              ));
       }
+    }
+  }
+
+  isFavourite(List<String> infoTag) {
+    if (infoTag.contains('fav')) {
+      tags.insert(
+          0,
+          const PropertyTag(
+            tagDescription: 'ACAC\'s pick ✅',
+            cardColor: Color(0xff7BAE7F),
+            textColor: Colors.white,
+          ));
     }
   }
 
@@ -345,7 +393,12 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                                             children: [
                                               ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(12),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                12)),
                                                 child: CachedNetworkImage(
                                                   imageUrl: widget.restaurant
                                                           .topRatedItemsImgSrc[
@@ -375,7 +428,7 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                                       ),
                                       Positioned(
                                         top: 14,
-                                        left: 3,
+                                        left: 4,
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           decoration: const BoxDecoration(
@@ -507,8 +560,11 @@ class PropertyTag extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-              color: cardColor,
-              borderRadius: const BorderRadius.all(Radius.circular(12))),
+            color: cardColor,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
           child: Text(
             tagDescription,
             style: TextStyle(color: textColor, fontWeight: FontWeight.bold),

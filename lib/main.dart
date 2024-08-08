@@ -12,6 +12,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ import 'models/ModelProvider.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  Gemini.init(apiKey: 'AIzaSyB36-cbvdFrMmEZOxF-eEFwYO2ExUtzS04');
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await _configureAmplify();

@@ -6,6 +6,7 @@ import 'package:ACAC/common/services/route_observer.dart';
 import 'package:ACAC/common/widgets/common/home_page_card.dart';
 import 'package:ACAC/common/widgets/ui/app_bar.dart';
 import 'package:ACAC/common/widgets/ui/welcome_text.dart';
+import 'package:ACAC/features/chat/chat.dart';
 import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
@@ -16,6 +17,7 @@ import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -32,22 +34,21 @@ class HomePage extends ConsumerStatefulWidget {
 LatLng userLocation = const LatLng(0, 0);
 GetDistance getDistance = GetDistance();
 final Map<String, String> distanceCache = {};
+final gemini = Gemini.instance;
 
 class _HomePageState extends ConsumerState<HomePage> with RouteAware {
-  final List<String> images = [
-    'https://acacpicturesgenerealbucket.s3.amazonaws.com/marketing/chatimeJuly302024.png',
-    'https://acacpicturesgenerealbucket.s3.amazonaws.com/marketing/kintonJuly302024.png'
-  ];
-
-  final List<String> headerList = [
-    'Buy one get one free!',
-    '25% Off ACAC Meal Special'
-  ];
-
-  final List<String> descriptionList = [
-    'Buy 1 bubble tea drink and get the second one free, Offer valid till end of September',
-    'Save 25% when purchasing ACAC Meal Special: 1 Ramen + 4 Gyoza. Offer valid till end of September'
-  ];
+  // void _sendMessage(String message) {
+  //   gemini
+  //       .text('$jsonText, from the restaurants provided, recommend me a '
+  //           'restaurant and its corresponding information. After, provide a '
+  //           'brief '
+  //           'description and always ask if you can help with something else at '
+  //           'the end ')
+  //       .then((value) => safePrint(value?.output))
+  //
+  //       /// or value?.content?.parts?.last.text
+  //       .catchError((e) => safePrint(e));
+  // }
 
   Future<void> _initializeLocation() async {
     try {
@@ -109,63 +110,26 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               Welcome(),
                               Row(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: const Icon(
-                                      Icons.cruelty_free_outlined,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
+                                  TopMenuButton(
+                                    iconData: Icons.search_outlined,
+                                    pathFunction: () {
+                                      Navigator.pushNamed(context, Chat.id);
+                                    },
                                   ),
                                   const SizedBox(width: 10),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.heavyImpact();
+                                  TopMenuButton(
+                                    iconData: Icons.account_circle,
+                                    pathFunction: () {
                                       Navigator.pushNamed(
                                           context, AccountInfo.id);
                                     },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(1),
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            GlobalTheme.kDarkGreen,
-                                            GlobalTheme.kGreen,
-                                            Color(0xff98C48D)
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(30)),
-                                      ),
-                                      child: const Icon(
-                                        Icons.account_circle,
-                                        color: GlobalTheme.kWhite,
-                                        size: 30,
-                                      ),
-                                    ),
                                   ),
                                   const SizedBox(width: 10),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.heavyImpact();
+                                  TopMenuButton(
+                                    iconData: Icons.receipt,
+                                    pathFunction: () {
                                       Navigator.pushNamed(context, History.id);
                                     },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            GlobalTheme.kGreen,
-                                            Color(0xff98C48D),
-                                            GlobalTheme.kDarkGreen,
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(30)),
-                                      ),
-                                      child: const Icon(Icons.receipt,
-                                          color: GlobalTheme.kWhite),
-                                    ),
                                   ),
                                 ],
                               ),
@@ -205,7 +169,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                       GlobalTheme.kGreen,
                                     ]).createShader(bounds),
                                     child: Text(
-                                      'Items Found: ${images.length}',
+                                      'Items Found: 2',
                                       style: const TextStyle(
                                           fontFamily: 'helveticanowtext',
                                           color: GlobalTheme.kWhite,
@@ -232,7 +196,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
-                                                  return BogoOntap(
+                                                  return CouponCard(
                                                     imageUrl: cardList[index]
                                                         .imageUrl,
                                                     header: cardList[index]
@@ -440,17 +404,54 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
   }
 }
 
-class BogoOntap extends StatelessWidget {
+class TopMenuButton extends StatelessWidget {
+  final IconData iconData;
+  final VoidCallback pathFunction;
+
+  const TopMenuButton(
+      {super.key, required this.iconData, required this.pathFunction});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.heavyImpact();
+        pathFunction();
+        // Navigator.pushNamed(context, Chat.id);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(2),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              GlobalTheme.kDarkGreen,
+              GlobalTheme.kGreen,
+              Color(0xff98C48D)
+            ],
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+        ),
+        child: Icon(
+          iconData,
+          color: GlobalTheme.kWhite,
+          size: 30,
+        ),
+      ),
+    );
+  }
+}
+
+class CouponCard extends StatelessWidget {
   final String imageUrl;
   final String header;
   final String description;
 
-  const BogoOntap({
-    Key? key,
+  const CouponCard({
+    super.key,
     required this.imageUrl,
     required this.header,
     required this.description,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
