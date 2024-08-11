@@ -1,9 +1,10 @@
-import 'package:ACAC/common/consts/prompt.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+
+import 'input_text/string_formatting.dart';
 
 class Chat extends StatefulWidget {
   static String id = 'chat.id';
@@ -15,13 +16,9 @@ class Chat extends StatefulWidget {
 }
 
 final gemini = Gemini.instance;
-ChatUser currentUser = ChatUser(id: "0", firstName: "Rodney");
+ChatUser currentUser = ChatUser(id: "0", firstName: "");
 ChatUser geminiUser = ChatUser(id: "1", firstName: "Owen");
 bool userTurn = true;
-String initText = '''
-Hey I am Owen, your personal food recommendation buddy! \n 
-I have context of all the best ACAC restaurants so I would love to
-recommend you your next meal! 😀''';
 
 ChatMessage geminiInitialMessage =
     ChatMessage(user: geminiUser, createdAt: DateTime.now(), text: initText);
@@ -39,6 +36,34 @@ class _ChatState extends State<Chat> {
     _buildOptionList();
   }
 
+  List<TextSpan> parseBoldText(String text, TextStyle baseStyle) {
+    final List<TextSpan> spans = [];
+    final RegExp boldPattern = RegExp(r'\*\*(.*?)\*\*');
+    int currentIndex = 0;
+
+    for (final Match match in boldPattern.allMatches(text)) {
+      if (match.start > currentIndex) {
+        spans.add(TextSpan(
+          text: text.substring(currentIndex, match.start),
+          style: baseStyle,
+        ));
+      }
+      spans.add(TextSpan(
+        text: match.group(1)!, // Remove the asterisks
+        style: baseStyle.copyWith(fontWeight: FontWeight.bold),
+      ));
+      currentIndex = match.end;
+    }
+
+    if (currentIndex < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(currentIndex),
+        style: baseStyle,
+      ));
+    }
+    return spans;
+  }
+
   void _buildOptionList() {
     optionList = [
       ClearBox(
@@ -47,25 +72,25 @@ class _ChatState extends State<Chat> {
       ),
       PromptOption(
         sendMessage: sendMessage,
-        prompt: 'Suggest me a Chinese restaurant🇨🇳',
+        prompt: 'Chinese',
         buttonDisplayText: 'Chinese🇨🇳',
         userTurn: _userTurn,
       ),
       PromptOption(
         sendMessage: sendMessage,
-        prompt: 'Suggest me a Korean restaurant🇰🇷',
+        prompt: 'Korean',
         buttonDisplayText: 'Korean🇰🇷',
         userTurn: _userTurn,
       ),
       PromptOption(
         sendMessage: sendMessage,
-        prompt: 'Suggest me a bubble tea shop🧋',
+        prompt: 'Bubble Tea',
         buttonDisplayText: 'Bubble Tea🧋',
         userTurn: _userTurn,
       ),
       PromptOption(
         sendMessage: sendMessage,
-        prompt: 'Suggest me a desert spot🍦',
+        prompt: 'Desert',
         buttonDisplayText: 'Desert🍦',
         userTurn: _userTurn,
       ),
@@ -80,7 +105,7 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  void clearChat() {
+  void clearChat() async {
     setState(() {
       messages = [];
       messages = [geminiInitialMessage, ...messages];
@@ -94,53 +119,63 @@ class _ChatState extends State<Chat> {
     });
   }
 
-  void sendMessage(ChatMessage chatInputMessage) {
+  void sendMessage(ChatMessage chatInputMessage) async {
     setState(() {
       messages = [chatInputMessage, ...messages];
       _userTurn = false;
       _buildOptionList(); // Rebuild option list
     });
     try {
-      String question = chatInputMessage.text;
-      gemini.streamGenerateContent(question + jsonText).listen(
-        (event) {
-          ChatMessage? lastMessage = messages.firstOrNull;
-          if (lastMessage != null && lastMessage.user == geminiUser) {
-            lastMessage = messages.removeAt(0);
-            String geminiResponseFormat = event.content?.parts?.fold(
-                    "", (previous, current) => "$previous${current.text}") ??
-                '';
-            lastMessage.text += geminiResponseFormat;
+      getRestaurantData(chatInputMessage.text).then((restaurantData) {
+        String question = chatInputMessage.text;
+        gemini
+            .streamGenerateContent(questionFormat(chatInputMessage.text) +
+                restaurantData.toString() +
+                answerFormat)
+            .listen(
+          (event) {
+            ChatMessage? lastMessage = messages.firstOrNull;
+            if (lastMessage != null && lastMessage.user == geminiUser) {
+              lastMessage = messages.removeAt(0);
+              String geminiResponseFormat = event.content?.parts?.fold(
+                      "", (previous, current) => "$previous${current.text}") ??
+                  '';
+              lastMessage.text += geminiResponseFormat;
+              parseBoldText(geminiResponseFormat,
+                  Theme.of(context).textTheme.bodyMedium!);
+              setState(() {
+                messages = [lastMessage!, ...messages];
+              });
+            } else {
+              String geminiResponseFormat = event.content?.parts?.fold(
+                      "", (previous, current) => "$previous${current.text}") ??
+                  '';
+              // List<TextSpan> boldSpans = parseBoldText(geminiResponseFormat,
+              //     Theme.of(context).textTheme.bodyMedium!);
+              ChatMessage geminiResponseMessage = ChatMessage(
+                  user: geminiUser,
+                  createdAt: DateTime.now(),
+                  text: geminiResponseFormat);
+              setState(() {
+                messages = [geminiResponseMessage, ...messages];
+              });
+            }
+          },
+          onError: (error) {
+            safePrint('Error: $error');
             setState(() {
-              messages = [lastMessage!, ...messages];
+              _userTurn = true;
+              _buildOptionList(); // Rebuild option list
             });
-          } else {
-            String geminiResponseFormat = event.content?.parts?.fold(
-                    "", (previous, current) => "$previous${current.text}") ??
-                '';
-            ChatMessage geminiResponseMessage = ChatMessage(
-                user: geminiUser,
-                createdAt: DateTime.now(),
-                text: geminiResponseFormat);
+          },
+          onDone: () {
             setState(() {
-              messages = [geminiResponseMessage, ...messages];
+              _userTurn = true;
+              _buildOptionList(); // Rebuild option list
             });
-          }
-        },
-        onError: (error) {
-          safePrint('Error: $error');
-          setState(() {
-            _userTurn = true;
-            _buildOptionList(); // Rebuild option list
-          });
-        },
-        onDone: () {
-          setState(() {
-            _userTurn = true;
-            _buildOptionList(); // Rebuild option list
-          });
-        },
-      );
+          },
+        );
+      });
     } catch (e) {
       safePrint(e);
       setState(() {

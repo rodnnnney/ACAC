@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:ACAC/common/services/route_observer.dart';
 import 'package:ACAC/common/widgets/common/card_rest_info_card.dart';
 import 'package:ACAC/common/widgets/ui/app_bar.dart';
-import 'package:ACAC/features/scanner/scanner.dart';
 import 'package:ACAC/models/ModelProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -117,7 +116,8 @@ class _DiscountCardState extends ConsumerState<DiscountCard> with RouteAware {
           ),
         ),
         bottomNavigationBar: AppBarBottom(
-          id: QRViewExample.id,
+          id: '',
+          // id: QRViewExample.id,
         ),
       ),
     );

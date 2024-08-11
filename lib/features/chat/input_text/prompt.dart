@@ -9,7 +9,7 @@ forget to mention the link as well
         "address_of_restaurant": "280 Elgin St,",
         "rating": "4.6",
         "review_num": "66",
-        "cusine_type": ["Vietnamese", "Pho", "Noodle"],
+        "cuisine_type": ["Vietnamese", "Pho", "Noodle"],
         "average_cost_per_person": "~\$20 CAD",
         "discount" : "10%",
         "aws_card_match": "Pho_Lady"
@@ -19,7 +19,7 @@ forget to mention the link as well
         "address_of_restaurant": "280 Elgin St",
         "rating": "3.9",
         "review_num": "720",
-        "cusine_type": ["Korean", "Fried Chicken"],
+        "cuisine_type": ["Korean", "Fried Chicken"],
         "average_cost_per_person": "~\$20 CAD",
         "discount" : "10%",
         "aws_card_match": "Dakogi_Elgin"
@@ -29,7 +29,7 @@ forget to mention the link as well
         "address_of_restaurant": "1383 Clyde Ave",
         "rating": "3.2",
         "review_num": "132",
-        "cusine_type": ["Chinese", "Noodle"],
+        "cuisine_type": ["Chinese", "Noodle"],
         "average_cost_per_person": "~\$20 CAD",
         "discount" : "10%",
         "aws_card_match": "La_Noodle"
@@ -39,7 +39,7 @@ forget to mention the link as well
         "address_of_restaurant": "695 Somerset St",
         "rating": "4.4",
         "review_num": "123",
-        "cusine_type": ["Bubble Tea", "Desert"],
+        "cuisine_type": ["Bubble Tea", "Desert"],
         "average_cost_per_person": "~\$10 CAD",
         "discount" : "10%",
         "aws_card_match": "Chatime"
@@ -49,7 +49,7 @@ forget to mention the link as well
         "address_of_restaurant": "80 Marketplace Ave",
         "rating": "4.1",
         "review_num": "104",
-        "cusine_type": ["Korean", "Fried Chicken"],
+        "cuisine_type": ["Korean", "Fried Chicken"],
         "average_cost_per_person": "~\$20 CAD",
         "discount" : "10%",
         "aws_card_match": "Dakogi_Marketplace"
@@ -59,7 +59,7 @@ forget to mention the link as well
         "address_of_restaurant": "1430 Prince of Wales",
         "rating": "3.7",
         "review_num": "73",
-        "cusine_type": ["Chinese"],
+        "cuisine_type": ["Chinese"],
         "average_cost_per_person": "~\$20 CAD",
         "discount" : "10%",
         "aws_card_match": "Friends&KTV"
@@ -69,7 +69,7 @@ forget to mention the link as well
         "address_of_restaurant": "1196 Bank St",
         "rating": "4.7",
         "review_num": "197",
-        "cusine_type": ["Bubble Tea"],
+        "cuisine_type": ["Bubble Tea"],
         "average_cost_per_person": "~\$10 CAD",
         "discount" : "10%",
         "aws_card_match": "Pomelo_Hat"
@@ -79,7 +79,7 @@ forget to mention the link as well
         "address_of_restaurant": "1200 St. Laurent Blvd",
         "rating": "3.9",
         "review_num": "83",
-        "cusine_type": ["Desert", "Pancakes"],
+        "cuisine_type": ["Desert", "Pancakes"],
         "average_cost_per_person": "~\$20 CAD",
         "discount" : "10%",
         "aws_card_match": "Fuwa_Fuwa"
@@ -89,7 +89,7 @@ forget to mention the link as well
         "address_of_restaurant": "1400 Clyde Ave",
         "rating": "4.3",
         "review_num": "61",
-        "cusine_type": ["Bubble Tea", "Drinks"],
+        "cuisine_type": ["Bubble Tea", "Drinks"],
         "average_cost_per_person": "~\$10 CAD",
         "discount" : "10%",
         "aws_card_match": "Shuyi_Tealicious"
@@ -99,7 +99,7 @@ forget to mention the link as well
         "address_of_restaurant": "365 Bank St",
         "rating": "4.6",
         "review_num": "968",
-        "cusine_type": ["Chinese", "Bao"],
+        "cuisine_type": ["Chinese", "Bao"],
         "average_cost_per_person": "~\$25 CAD",
         "discount" : "10%",
         "aws_card_match": "Gongfu_Bao"
@@ -109,7 +109,7 @@ forget to mention the link as well
         "address_of_restaurant": "412 Dalhousie St",
         "rating": "4.1",
         "review_num": "109",
-        "cusine_type": ["Korean", "Fried Chicken"],
+        "cuisine_type": ["Korean", "Fried Chicken"],
         "average_cost_per_person": "~\$15 CAD",
         "discount" : "10%",
         "aws_card_match": "Hot_Star_Chicken"
@@ -119,11 +119,21 @@ forget to mention the link as well
         "address_of_restaurant": "216 Elgin St #2",
         "rating": "4.8",
         "review_num": "1569",
-        "cusine_type": ["Japanese", "Noodle"],
+        "cuisine_type": ["Japanese", "Noodle"],
         "average_cost_per_person": "~\$25 CAD",
         "discount" : "10%",
         "aws_card_match": "kinton_ramen"
-    },       
+    },
+     {
+        "restaurant_name": "Oriental House",
+        "address_of_restaurant": "266 Elgin St",
+        "rating": "4.1",
+        "review_num": "244",
+        "cuisine_type": ["Chinese"],
+        "average_cost_per_person": "~\$20 CAD",
+        "discount" : "10%",
+        "aws_card_match": "Oriental_house"
+    },          
 ]
 Structure the response like this:
 

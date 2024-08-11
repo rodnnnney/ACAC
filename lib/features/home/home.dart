@@ -168,9 +168,9 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                       GlobalTheme.kDarkGreen,
                                       GlobalTheme.kGreen,
                                     ]).createShader(bounds),
-                                    child: Text(
+                                    child: const Text(
                                       'Items Found: 2',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontFamily: 'helveticanowtext',
                                           color: GlobalTheme.kWhite,
                                           fontWeight: FontWeight.bold),
@@ -182,6 +182,15 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 height: 5,
                               ),
                               test.when(
+                                error: (error, stackTrace) {
+                                  print(
+                                      'Error loading marketing cards: $error');
+                                  print('Stack trace: $stackTrace');
+                                  return Text('An error occurred: $error');
+                                },
+                                loading: () {
+                                  return const CircularProgressIndicator();
+                                },
                                 data: (data) {
                                   List<MarketingCard> cardList = data;
                                   return SizedBox(
@@ -219,12 +228,6 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                       },
                                     ),
                                   );
-                                },
-                                error: (error, stackTrace) {
-                                  return Text('An error occurred: $error');
-                                },
-                                loading: () {
-                                  return const CircularProgressIndicator();
                                 },
                               ),
                               const SizedBox(

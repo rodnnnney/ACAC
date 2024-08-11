@@ -3,9 +3,7 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
-def envFile = rootProject.file(".env")
-def properties = new Properties()
-properties.load(new FileInputStream(envFile))
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -36,8 +34,6 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += ["-Xskip-metadata-version-check"]
-
     }
 
     sourceSets {
@@ -46,13 +42,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.ACAC"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        resValue "string", "google_maps_api_key", properties['GOOGLE_MAPS_API_KEY']
+        versionCode 1
+        versionName "1.0.5"
     }
 
     buildTypes {

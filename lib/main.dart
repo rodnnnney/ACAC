@@ -26,10 +26,10 @@ import 'models/ModelProvider.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
-  Gemini.init(apiKey: dotenv.get('GEMINI_API_KEY'));
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await _configureAmplify();
+    Gemini.init(apiKey: dotenv.get('GEMINI_API_KEY'));
   } on AmplifyAlreadyConfiguredException {
     debugPrint('Amplify configuration failed.');
   }
