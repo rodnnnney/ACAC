@@ -41,9 +41,6 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView> {
       case AppLifecycleState.paused:
         return;
       case AppLifecycleState.resumed:
-        // Restart the scanner when the app is resumed.
-        // Don't forget to resume listening to the barcode events.
-        _subscription = controller.barcodes.listen(_handleScannedBarcode);
         unawaited(controller.start());
       case AppLifecycleState.inactive:
         // Stop the scanner when the app is paused.
@@ -52,12 +49,6 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView> {
         _subscription = null;
         unawaited(controller.stop());
     }
-  }
-
-  void _handleScannedBarcode(BarcodeCapture barcode) {
-    // Do something with the scanned barcode
-    print('Scanned barcode: ${barcode.barcodes}');
-    // You might want to navigate to a new screen, update state, etc.
   }
 
   @override
@@ -104,6 +95,10 @@ class _BarcodeScannerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Scanner'),
+        automaticallyImplyLeading: false,
+      ),
       body: Stack(
         children: [
           MobileScanner(

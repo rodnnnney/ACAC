@@ -97,11 +97,11 @@ class _ScannedBarcodeLabelState extends ConsumerState<ScannedBarcodeLabel> {
       builder: (context, AsyncSnapshot<BarcodeCapture> snapshot) {
         final scannedBarcodes = snapshot.data?.barcodes ?? [];
         if (scannedBarcodes.isEmpty) {
-          return const Text(
-            'Scan something!',
-            overflow: TextOverflow.fade,
-            style: TextStyle(color: Colors.white),
-          );
+          // return const Text(
+          //   'Scan something!',
+          //   overflow: TextOverflow.fade,
+          //   style: TextStyle(color: Colors.white),
+          // );
         }
 
         final currentBarcode = scannedBarcodes.first.displayValue ?? '';
@@ -110,7 +110,6 @@ class _ScannedBarcodeLabelState extends ConsumerState<ScannedBarcodeLabel> {
             processBarcodeAfterBuild(currentBarcode);
           });
         }
-
         return const Text(
           'Processing scan...',
           style: TextStyle(color: Colors.white),
