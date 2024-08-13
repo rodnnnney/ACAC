@@ -37,19 +37,6 @@ final Map<String, String> distanceCache = {};
 final gemini = Gemini.instance;
 
 class _HomePageState extends ConsumerState<HomePage> with RouteAware {
-  // void _sendMessage(String message) {
-  //   gemini
-  //       .text('$jsonText, from the restaurants provided, recommend me a '
-  //           'restaurant and its corresponding information. After, provide a '
-  //           'brief '
-  //           'description and always ask if you can help with something else at '
-  //           'the end ')
-  //       .then((value) => safePrint(value?.output))
-  //
-  //       /// or value?.content?.parts?.last.text
-  //       .catchError((e) => safePrint(e));
-  // }
-
   Future<void> _initializeLocation() async {
     try {
       userLocation = await location.find();
@@ -182,17 +169,12 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 height: 5,
                               ),
                               test.when(
-                                error: (error, stackTrace) {
-                                  print(
-                                      'Error loading marketing cards: $error');
-                                  print('Stack trace: $stackTrace');
-                                  return Text('An error occurred: $error');
-                                },
-                                loading: () {
-                                  return const CircularProgressIndicator();
-                                },
-                                data: (data) {
-                                  List<MarketingCard> cardList = data;
+                                loading: () => const Center(
+                                    child: CircularProgressIndicator()),
+                                error: (error, stack) =>
+                                    Center(child: Text('Error: $error')),
+                                data: (marketingCard) {
+                                  List<MarketingCard> cardList = marketingCard;
                                   return SizedBox(
                                     height: 240,
                                     width:
@@ -203,27 +185,29 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                         return GestureDetector(
                                           onTap: () {
                                             showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return CouponCard(
-                                                    imageUrl: cardList[index]
-                                                        .imageUrl,
-                                                    header: cardList[index]
-                                                        .headerText,
-                                                    description: cardList[index]
-                                                        .descriptionText,
-                                                  );
-                                                });
+                                              context: context,
+                                              builder: (context) {
+                                                return CouponCard(
+                                                  imageUrl:
+                                                      cardList[index].imageUrl,
+                                                  header: cardList[index]
+                                                      .headerText,
+                                                  description: cardList[index]
+                                                      .descriptionText,
+                                                );
+                                              },
+                                            );
                                           },
                                           child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              child: CachedNetworkImage(
-                                                fit: BoxFit.fitWidth,
-                                                width: double.infinity,
-                                                imageUrl:
-                                                    cardList[index].imageUrl,
-                                              )),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.fitWidth,
+                                              width: double.infinity,
+                                              imageUrl:
+                                                  cardList[index].imageUrl,
+                                            ),
+                                          ),
                                         );
                                       },
                                     ),

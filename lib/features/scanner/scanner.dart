@@ -27,11 +27,7 @@
 // class _QRViewExampleState extends ConsumerState<QRViewExample> with RouteAware {
 //   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 //   QRViewController? controller;
-//   String email = '';
-//   String name = '';
-//   Loading loading = Loading();
-//   late User user;
-//   List<RestaurantInfoCard> allInfoCards = [];
+
 //
 //   @override
 //   void didChangeDependencies() {
@@ -59,79 +55,11 @@
 //   @override
 //   void initState() {
 //     fetchUserInfo();
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       ref.read(userPageCounter).setCounter(1);
-//     });
-//     super.initState();
-//   }
+
 //
-//   Future<void> fetchUserInfo() async {
-//     try {
-//       var currentUser = await Amplify.Auth.getCurrentUser();
-//       User newUser =
-//           await ref.read(userAPIServiceProvider).getUser(currentUser.userId);
-//       setState(() {
-//         user = newUser;
-//       });
-//       final result = await Amplify.Auth.fetchUserAttributes();
-//       for (final element in result) {
-//         if (element.userAttributeKey.toString() == 'email') {
-//           setState(() {
-//             email = element.value.toString();
-//           });
-//         } else if (element.userAttributeKey.toString() == 'name') {
-//           setState(() {
-//             name = element.value.toString();
-//           });
-//         }
-//       }
-//     } on AuthException catch (e) {
-//       safePrint('Error fetching user attributes: ${e.message}');
-//     }
-//   }
+
 //
-//   Future<void> sendData(
-//       WidgetRef ref, RestaurantInfoCard scannedRestaurant) async {
-//     controller?.dispose();
-//     loading.showLoadingDialog(context);
-//     try {
-//       await ref
-//           .read(restaurantInfoCardListProvider.notifier)
-//           .updateRestInfo(scannedRestaurant);
-//       await ref.read(restaurantListControllerProvider.notifier).addRestaurant(
-//           restaurantName: scannedRestaurant.restaurantName,
-//           email: email,
-//           userFirstName: user.firstName,
-//           userLastName: user.lastName);
-//       handleScan(scannedRestaurant, user.firstName, user.lastName);
-//     } catch (e) {
-//       debugPrint(e.toString());
-//     }
-//   }
-//
-//   void handleScan(
-//       RestaurantInfoCard restName, String firstName, String lastName) {
-//     controller?.dispose();
-//     HapticFeedback.heavyImpact();
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => DiscountCard(
-//           firstName: firstName,
-//           lastName: lastName,
-//           restaurantInfoCard: restName,
-//         ),
-//       ),
-//     );
-//     setState(() {
-//       const ResponsePopUp(
-//         response: 'QR scanned successfully',
-//         location: DelightSnackbarPosition.top,
-//         icon: Icons.check_circle,
-//         color: Colors.green,
-//       ).showToast(context);
-//     });
-//   }
+
 //
 //   void _onQRViewCreated(QRViewController controller) {
 //     this.controller = controller;
@@ -141,47 +69,11 @@
 //     });
 //   }
 //
-//   Future<void> _handleQRCode(Barcode scanData) async {
-//     debugPrint('Scanned QR Code: ${scanData.code}');
-//     if (scanData.code != null) {
-//       // Find matching RestaurantInfoCard
-//       final matchingCard = allInfoCards.firstWhere(
-//         (card) => card.scannerDataMatch == scanData.code,
-//       );
-//       if (matchingCard.scannerDataMatch.isNotEmpty) {
-//         await sendData(ref, matchingCard);
-//       } else {
-//         setState(() {
-//           const ResponsePopUp(
-//             response: 'Hmm, idk that one',
-//             location: DelightSnackbarPosition.top,
-//             icon: Icons.error_outline,
-//             color: Colors.red,
-//           ).showToast(context);
-//         });
-//       }
-//     } else {
-//       setState(() {
-//         const ResponsePopUp(
-//           response: 'Hmm, idk that one',
-//           location: DelightSnackbarPosition.top,
-//           icon: Icons.error_outline,
-//           color: Colors.red,
-//         ).showToast(context);
-//       });
-//     }
-//   }
+
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     var test = ref.watch(restaurantInfoCardListProvider);
-//
-//     switch (test) {
-//       case AsyncData(value: final allInfoLoaded):
-//         for (var data in allInfoLoaded) {
-//           allInfoCards.add(data);
-//         }
-//     }
+
 //     return Scaffold(
 //       body: email.isEmpty && name.isEmpty
 //           ? const Center(child: CircularProgressIndicator())

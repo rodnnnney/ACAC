@@ -1,6 +1,7 @@
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/maps.dart';
+import 'package:ACAC/features/scanner/scannerV2.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -52,7 +53,7 @@ class AppBarBottom extends ConsumerWidget {
               onPressed: () {
                 if (watchCounter.counter == 1) {
                 } else {
-                  // updatePage(1, QRViewExample.id);
+                  updatePage(1, BarcodeScannerPageView.id);
                 }
               },
               icon: Container(
