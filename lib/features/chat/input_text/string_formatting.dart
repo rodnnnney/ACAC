@@ -19,7 +19,7 @@ Future<List<Map<String, dynamic>>> loadJsonData() async {
 Future<List<Map<String, dynamic>>> getRestaurantData(
     String? cuisineType) async {
   final restaurantData = await loadJsonData();
-  if (cuisineType == null) {
+  if (cuisineType == 'Surprise') {
     return restaurantData;
   } else {
     return restaurantData.where((restaurant) {
@@ -30,9 +30,9 @@ Future<List<Map<String, dynamic>>> getRestaurantData(
 }
 
 String initText = '''
-Hey I am Owen, your personal food recommendation buddy! \n 
-I have context of all the best ACAC restaurants so I would love to
-recommend you your next meal! 😀''';
+Hey, I’m Owen, your personal food recommendation buddy!
+I have the context of all the best ACAC restaurants, so I would love to 
+recommend your next meal!😀''';
 
 String answerFormat = '''
 Structure the response like this:

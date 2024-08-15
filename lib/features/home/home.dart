@@ -115,6 +115,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     pathFunction: () {
                                       Navigator.pushNamed(
                                           context, AccountInfo.id);
+                                      ref.read(userPageCounter).setCounter(5);
                                     },
                                   ),
                                   const SizedBox(width: 10),
@@ -122,6 +123,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     iconData: Icons.receipt,
                                     pathFunction: () {
                                       Navigator.pushNamed(context, History.id);
+                                      ref.read(userPageCounter).setCounter(4);
                                     },
                                   ),
                                 ],

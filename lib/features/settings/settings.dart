@@ -3,6 +3,7 @@ import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/ui/app_bar.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
+import 'package:ACAC/features/home/home.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AccountInfo extends ConsumerWidget {
+class AccountInfo extends ConsumerWidget with RouteAware {
   static String id = 'Account_screen';
   AccountInfo({super.key});
   String feedbackText = '';
@@ -93,6 +94,10 @@ class AccountInfo extends ConsumerWidget {
 
   Widget buildLayout(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: CenterNavWidget(
+        ref: ref,
+      ),
       appBar: AppBar(
         title: const Text('Account Settings'),
       ),

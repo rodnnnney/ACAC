@@ -7,6 +7,7 @@ import 'package:ACAC/common/widgets/ui/app_bar.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/features/home/controller/restaurant_list_controller.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
+import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -82,6 +83,10 @@ class _HistoryState extends ConsumerState<History> {
     }
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: CenterNavWidget(
+        ref: ref,
+      ),
       appBar: AppBar(
         title: const Text('Restaurant History'),
       ),

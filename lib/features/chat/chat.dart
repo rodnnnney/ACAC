@@ -72,6 +72,12 @@ class _ChatState extends State<Chat> {
       ),
       PromptOption(
         sendMessage: sendMessage,
+        prompt: 'Surprise',
+        buttonDisplayText: 'Surprise😦',
+        userTurn: _userTurn,
+      ),
+      PromptOption(
+        sendMessage: sendMessage,
         prompt: 'Chinese',
         buttonDisplayText: 'Chinese🇨🇳',
         userTurn: _userTurn,
@@ -120,16 +126,16 @@ class _ChatState extends State<Chat> {
   }
 
   void sendMessage(ChatMessage chatInputMessage) async {
+    String question = chatInputMessage.text;
     setState(() {
       messages = [chatInputMessage, ...messages];
       _userTurn = false;
       _buildOptionList(); // Rebuild option list
     });
     try {
-      getRestaurantData(chatInputMessage.text).then((restaurantData) {
-        String question = chatInputMessage.text;
+      getRestaurantData(question).then((restaurantData) {
         gemini
-            .streamGenerateContent(questionFormat(chatInputMessage.text) +
+            .streamGenerateContent(questionFormat(question) +
                 restaurantData.toString() +
                 answerFormat)
             .listen(
@@ -150,8 +156,6 @@ class _ChatState extends State<Chat> {
               String geminiResponseFormat = event.content?.parts?.fold(
                       "", (previous, current) => "$previous${current.text}") ??
                   '';
-              // List<TextSpan> boldSpans = parseBoldText(geminiResponseFormat,
-              //     Theme.of(context).textTheme.bodyMedium!);
               ChatMessage geminiResponseMessage = ChatMessage(
                   user: geminiUser,
                   createdAt: DateTime.now(),
