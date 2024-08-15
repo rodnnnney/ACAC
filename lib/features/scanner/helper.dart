@@ -97,13 +97,10 @@ class _ScannedBarcodeLabelState extends ConsumerState<ScannedBarcodeLabel> {
       builder: (context, AsyncSnapshot<BarcodeCapture> snapshot) {
         final scannedBarcodes = snapshot.data?.barcodes ?? [];
         if (scannedBarcodes.isEmpty) {
-          // return const Text(
-          //   'Scan something!',
-          //   overflow: TextOverflow.fade,
-          //   style: TextStyle(color: Colors.white),
-          // );
+          return Container(
+            color: Colors.transparent,
+          );
         }
-
         final currentBarcode = scannedBarcodes.first.displayValue ?? '';
         if (!processedBarcodes.contains(currentBarcode)) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -135,9 +132,6 @@ class _ScannedBarcodeLabelState extends ConsumerState<ScannedBarcodeLabel> {
     var matchingCard = allInfoCards.firstWhere(
       (card) => card.scannerDataMatch == currentBarcode,
     );
-
-    if (matchingCard != null) {
-      await sendData(matchingCard);
-    }
+    await sendData(matchingCard);
   }
 }

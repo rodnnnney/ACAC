@@ -11,6 +11,7 @@ import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart'
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
+import 'package:ACAC/features/scanner/scannerV2.dart';
 import 'package:ACAC/features/settings/settings.dart';
 import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
@@ -72,6 +73,11 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
     var test = ref.watch(marketingCardControllerProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: CenterNavWidget(
+        ref: ref,
+      ),
       body: restaurantData.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) => Center(child: Text('Error: $error')),
@@ -372,7 +378,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 ),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 30,
                               ),
                             ],
                           )
@@ -386,6 +392,44 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
           }),
       bottomNavigationBar: AppBarBottom(
         id: HomePage.id,
+      ),
+    );
+  }
+}
+
+class CenterNavWidget extends StatelessWidget {
+  const CenterNavWidget({
+    super.key,
+    required this.ref,
+  });
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, BarcodeScannerPageView.id);
+        ref.read(userPageCounter).setCounter(1);
+      },
+      child: SizedBox(
+        width: 65,
+        height: 65,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.lightGreen,
+            borderRadius: BorderRadius.circular(35),
+          ),
+          child: const FittedBox(
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Icon(
+                Icons.qr_code_scanner_rounded,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

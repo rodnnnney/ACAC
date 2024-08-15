@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:ACAC/common/widgets/ui/app_bar.dart';
+import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/scanner/test.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'helper.dart';
@@ -73,7 +75,9 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView> {
           unawaited(controller.start());
         },
         children: [
-          _BarcodeScannerPage(controller: controller),
+          _BarcodeScannerPage(
+            controller: controller,
+          ),
         ],
       ),
     );
@@ -87,14 +91,24 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView> {
   }
 }
 
-class _BarcodeScannerPage extends StatelessWidget {
+class _BarcodeScannerPage extends ConsumerStatefulWidget {
   const _BarcodeScannerPage({required this.controller});
 
   final MobileScannerController controller;
 
   @override
+  ConsumerState<_BarcodeScannerPage> createState() =>
+      _BarcodeScannerPageState();
+}
+
+class _BarcodeScannerPageState extends ConsumerState<_BarcodeScannerPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: CenterNavWidget(
+        ref: ref,
+      ),
       appBar: AppBar(
         title: const Text('Scanner'),
         automaticallyImplyLeading: false,
@@ -102,7 +116,7 @@ class _BarcodeScannerPage extends StatelessWidget {
       body: Stack(
         children: [
           MobileScanner(
-            controller: controller,
+            controller: widget.controller,
             fit: BoxFit.contain,
             errorBuilder: (context, error, child) {
               return ScannerErrorWidget(error: error);
@@ -115,7 +129,8 @@ class _BarcodeScannerPage extends StatelessWidget {
               height: 100,
               color: Colors.black.withOpacity(0.4),
               child: Center(
-                child: ScannedBarcodeLabel(barcodes: controller.barcodes),
+                child:
+                    ScannedBarcodeLabel(barcodes: widget.controller.barcodes),
               ),
             ),
           ),

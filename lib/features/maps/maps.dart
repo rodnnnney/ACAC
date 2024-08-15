@@ -4,6 +4,7 @@ import 'package:ACAC/common/services/route_observer.dart';
 import 'package:ACAC/common/widgets/helper_functions/location.dart';
 import 'package:ACAC/common/widgets/helper_functions/markers.dart';
 import 'package:ACAC/common/widgets/ui/app_bar.dart';
+import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/helper_widgets/info_card.dart';
 import 'package:ACAC/features/maps/helper_widgets/swipe_up_menu.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
@@ -124,6 +125,10 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: CenterNavWidget(
+        ref: ref,
+      ),
       body: Stack(
         alignment: Alignment.bottomLeft,
         children: [
@@ -144,24 +149,38 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
             scrollGesturesEnabled: true,
           ),
           Positioned(
-              top: screenSize.height * 0.70,
-              left: screenSize.width * 0.05,
-              right: screenSize.width * 0.05,
-              child: const InfoCard())
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: ref.watch(darkLight).theme
-            ? const Color(0xff402C7D)
-            : const Color(0xffE2F1D6),
-        onPressed: () => showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (context) => SwipeUpMenu(
-            userLocation: userPosition,
+            top: screenSize.height * 0.70,
+            left: screenSize.width * 0.05,
+            right: screenSize.width * 0.05,
+            child: const InfoCard(),
           ),
-        ),
-        child: const Icon(Icons.menu),
+          Positioned(
+            right: 10,
+            bottom: 10,
+            child: GestureDetector(
+              onTap: () => showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => SwipeUpMenu(
+                  userLocation: userPosition,
+                ),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: ref.watch(darkLight).theme
+                      ? const Color(0xff402C7D)
+                      : Colors.orangeAccent,
+                ),
+                child: const Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: AppBarBottom(id: id),
     );
