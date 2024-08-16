@@ -34,7 +34,7 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
 
     // Update the state
   }
-
+}
 // Future<void> addRestaurantInfo({
 //   required String userFirstName,
 //   required String userLastName,
@@ -82,4 +82,3 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
 //     return fetchRestaurant();
 //   });
 // }
-}

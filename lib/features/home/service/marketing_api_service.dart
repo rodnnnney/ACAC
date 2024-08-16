@@ -13,7 +13,8 @@ class MarketingApiService {
 
   Future<List<MarketingCard>> getMarketingCards() async {
     try {
-      final request = ModelQueries.list(MarketingCard.classType);
+      final request = ModelQueries.list(MarketingCard.classType,
+          authorizationMode: APIAuthorizationType.apiKey);
       final response = await Amplify.API.query(request: request).response;
 
       final marketingCardList = response.data?.items;

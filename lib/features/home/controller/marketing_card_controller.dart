@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:ACAC/features/home/data/marketingcard_repository.dart';
 import 'package:ACAC/models/ModelProvider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'marketing_card_controller.g.dart';
 
 @riverpod
@@ -10,16 +12,9 @@ class MarketingCardController extends _$MarketingCardController {
   final _logger = Logger('MarketingCardController');
 
   Future<List<MarketingCard>> _fetchMarketingCards() async {
-    try {
-      _logger.info('Fetching marketing cards');
-      final marketingCardRepository = ref.read(marketingCardRepositoryProvider);
-      final marketingCards = await marketingCardRepository.getMarketingCards();
-      _logger.info('Fetched ${marketingCards.length} marketing cards');
-      return marketingCards;
-    } catch (e, stackTrace) {
-      _logger.severe('Error fetching marketing cards', e, stackTrace);
-      rethrow;
-    }
+    final marketingCardRepository = ref.read(marketingCardRepositoryProvider);
+    final marketingCards = await marketingCardRepository.getMarketingCards();
+    return marketingCards;
   }
 
   @override

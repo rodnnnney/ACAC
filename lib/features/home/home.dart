@@ -157,20 +157,20 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  ShaderMask(
-                                    shaderCallback: (bounds) =>
-                                        const LinearGradient(colors: [
-                                      GlobalTheme.kDarkGreen,
-                                      GlobalTheme.kGreen,
-                                    ]).createShader(bounds),
-                                    child: const Text(
-                                      'Items Found: 2',
-                                      style: TextStyle(
-                                          fontFamily: 'helveticanowtext',
-                                          color: GlobalTheme.kWhite,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                  // ShaderMask(
+                                  //   shaderCallback: (bounds) =>
+                                  //       const LinearGradient(colors: [
+                                  //     GlobalTheme.kDarkGreen,
+                                  //     GlobalTheme.kGreen,
+                                  //  ]).createShader(bounds),
+                                  //   child: const Text(
+                                  //     'Items Found: 2',
+                                  //     style: TextStyle(
+                                  //         fontFamily: 'helveticanowtext',
+                                  //         color: GlobalTheme.kWhite,
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                               const SizedBox(
@@ -183,6 +183,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     Center(child: Text('Error: $error')),
                                 data: (marketingCard) {
                                   List<MarketingCard> cardList = marketingCard;
+                                  print(cardList);
                                   return SizedBox(
                                     height: 240,
                                     width:
