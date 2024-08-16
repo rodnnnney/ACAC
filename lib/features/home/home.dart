@@ -11,6 +11,7 @@ import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart'
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
+import 'package:ACAC/features/scanner/helper_widget/discount_card.dart';
 import 'package:ACAC/features/scanner/scannerV2.dart';
 import 'package:ACAC/features/settings/settings.dart';
 import 'package:ACAC/models/MarketingCard.dart';
@@ -157,20 +158,35 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  // ShaderMask(
-                                  //   shaderCallback: (bounds) =>
-                                  //       const LinearGradient(colors: [
-                                  //     GlobalTheme.kDarkGreen,
-                                  //     GlobalTheme.kGreen,
-                                  //  ]).createShader(bounds),
-                                  //   child: const Text(
-                                  //     'Items Found: 2',
-                                  //     style: TextStyle(
-                                  //         fontFamily: 'helveticanowtext',
-                                  //         color: GlobalTheme.kWhite,
-                                  //         fontWeight: FontWeight.bold),
-                                  //   ),
-                                  // ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DiscountCard(
+                                            firstName: 'Johny',
+                                            lastName: 'Test',
+                                            restaurantInfoCard:
+                                                restaurantsByTimesVisited[0],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ShaderMask(
+                                      shaderCallback: (bounds) =>
+                                          const LinearGradient(colors: [
+                                        GlobalTheme.kDarkGreen,
+                                        GlobalTheme.kGreen,
+                                      ]).createShader(bounds),
+                                      child: const Text(
+                                        'Items Found: 2',
+                                        style: TextStyle(
+                                            fontFamily: 'helveticanowtext',
+                                            color: GlobalTheme.kWhite,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                               const SizedBox(
@@ -183,7 +199,6 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     Center(child: Text('Error: $error')),
                                 data: (marketingCard) {
                                   List<MarketingCard> cardList = marketingCard;
-                                  print(cardList);
                                   return SizedBox(
                                     height: 240,
                                     width:
@@ -248,14 +263,15 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return SizedBox(
-                                        width: 200,
-                                        child: HomePageUserCard(
-                                          restaurantInfoCard:
-                                              restaurantsByTimesVisited[index],
-                                          user: userLocation,
-                                          index: index,
-                                          ref: ref,
-                                        ));
+                                      width: 200,
+                                      child: HomePageUserCard(
+                                        restaurantInfoCard:
+                                            restaurantsByTimesVisited[index],
+                                        user: userLocation,
+                                        index: index,
+                                        ref: ref,
+                                      ),
+                                    );
                                   },
                                 ),
                               ),

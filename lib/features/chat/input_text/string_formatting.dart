@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 String questionFormat(String data) {
   return '''
   You are a smart and helpful food assistant. You want to try your best to 
-  recommend the user a restaurant from the following list of restaurant/
+  recommend the user a restaurant from the following list of restaurant
   Suggest me a SINGLE restaurant with cuisine type of $data,
   ''';
 }

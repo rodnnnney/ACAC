@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ACAC/common/services/route_observer.dart';
 import 'package:ACAC/common/widgets/common/card_rest_info_card.dart';
 import 'package:ACAC/common/widgets/ui/app_bar.dart';
+import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/models/ModelProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -65,6 +66,11 @@ class _DiscountCardState extends ConsumerState<DiscountCard> with RouteAware {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: CenterNavWidget(
+          ref: ref,
+        ),
         appBar: AppBar(
           title: Text(widget.restaurantInfoCard.restaurantName),
           automaticallyImplyLeading:
@@ -116,7 +122,7 @@ class _DiscountCardState extends ConsumerState<DiscountCard> with RouteAware {
           ),
         ),
         bottomNavigationBar: AppBarBottom(
-          id: '',
+          id: DiscountCard.id,
           // id: QRViewExample.id,
         ),
       ),

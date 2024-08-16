@@ -200,19 +200,23 @@ class _ChatState extends State<Chat> {
       );
     }
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Chatbot'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Image.asset(
+          'images/acac1.png',
+          height: 50,
         ),
-        body: Stack(
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Stack(
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 80),
               child: chatUi(),
             ),
             Positioned(
-              bottom: 10,
+              bottom: 15,
               left: 0,
               right: 0,
               child: LayoutBuilder(

@@ -83,12 +83,13 @@ class _HistoryState extends ConsumerState<History> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('History'),
+        centerTitle: true,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: CenterNavWidget(
         ref: ref,
-      ),
-      appBar: AppBar(
-        title: const Text('Restaurant History'),
       ),
       body: SafeArea(
         child: Column(
