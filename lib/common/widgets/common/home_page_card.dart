@@ -54,3 +54,40 @@ class HomeCard extends StatelessWidget {
     );
   }
 }
+
+class NoImgCard extends StatelessWidget {
+  const NoImgCard({
+    super.key,
+    required this.text,
+    required this.routeName,
+  });
+
+  final String text;
+  final Function(BuildContext, String) routeName;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        routeName(context, text);
+      },
+      child: Card(
+        elevation: 2,
+        child: SizedBox(
+          width: 120,
+          height: 130,
+          child: Center(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center, // Center the text
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

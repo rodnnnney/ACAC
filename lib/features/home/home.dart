@@ -11,7 +11,6 @@ import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart'
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
-import 'package:ACAC/features/scanner/helper_widget/discount_card.dart';
 import 'package:ACAC/features/scanner/scannerV2.dart';
 import 'package:ACAC/features/settings/settings.dart';
 import 'package:ACAC/models/MarketingCard.dart';
@@ -158,33 +157,20 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => DiscountCard(
-                                            firstName: 'Johny',
-                                            lastName: 'Test',
-                                            restaurantInfoCard:
-                                                restaurantsByTimesVisited[0],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: ShaderMask(
-                                      shaderCallback: (bounds) =>
-                                          const LinearGradient(colors: [
+                                  ShaderMask(
+                                    shaderCallback: (bounds) =>
+                                        const LinearGradient(
+                                      colors: [
                                         GlobalTheme.kDarkGreen,
                                         GlobalTheme.kGreen,
-                                      ]).createShader(bounds),
-                                      child: const Text(
-                                        'Items Found: 2',
-                                        style: TextStyle(
-                                            fontFamily: 'helveticanowtext',
-                                            color: GlobalTheme.kWhite,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
+                                    ).createShader(bounds),
+                                    child: const Text(
+                                      'Items Found: 2',
+                                      style: TextStyle(
+                                          fontFamily: 'helveticanowtext',
+                                          color: GlobalTheme.kWhite,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ],
@@ -241,20 +227,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 20,
                               ),
-                              ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    const LinearGradient(colors: [
-                                  GlobalTheme.kDarkGreen,
-                                  GlobalTheme.kGreen,
-                                ]).createShader(bounds),
-                                child: const Text(
-                                  'ACAC Favourites:',
-                                  style: TextStyle(
-                                      fontFamily: 'helveticanowtext',
-                                      color: GlobalTheme.kWhite,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
+                              const GradientText(gradText: "ACAC Favourites:"),
                               SizedBox(
                                 height: 170,
                                 child: ListView.builder(
@@ -278,20 +251,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 20,
                               ),
-                              ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    const LinearGradient(colors: [
-                                  GlobalTheme.kDarkGreen,
-                                  GlobalTheme.kGreen,
-                                ]).createShader(bounds),
-                                child: const Text(
-                                  'Country:',
-                                  style: TextStyle(
-                                      fontFamily: 'helveticanowtext',
-                                      color: GlobalTheme.kWhite,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
+                              const GradientText(gradText: "Country:"),
                               SizedBox(
                                 height: 130,
                                 child: ListView.builder(
@@ -308,23 +268,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   },
                                 ),
                               ),
-                              ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    const LinearGradient(colors: [
-                                  GlobalTheme.kDarkGreen,
-                                  GlobalTheme.kGreen,
-                                ], stops: [
-                                  0.0,
-                                  0.5,
-                                ]).createShader(bounds),
-                                child: const Text(
-                                  'Food Type:',
-                                  style: TextStyle(
-                                      fontFamily: 'helveticanowtext',
-                                      color: GlobalTheme.kWhite,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
+                              const GradientText(gradText: 'Food Type:'),
                               SizedBox(
                                 height: 130,
                                 child: ListView.builder(
@@ -363,9 +307,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: [
-                                    HomeCard(
-                                      displayIMG:
-                                          'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
+                                    NoImgCard(
                                       text: 'Rating',
                                       routeName: (BuildContext, String) {
                                         Navigator.pushNamed(
@@ -373,19 +315,15 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                             arguments: "RATING");
                                       },
                                     ),
-                                    HomeCard(
-                                      displayIMG:
-                                          'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
-                                      text: 'Times Visited',
+                                    NoImgCard(
+                                      text: 'Combined Times Visited',
                                       routeName: (BuildContext, String) {
                                         Navigator.pushNamed(
                                             context, SortedByRating.id,
                                             arguments: "VISIT");
                                       },
                                     ),
-                                    HomeCard(
-                                      displayIMG:
-                                          'https://acacpicturesgenerealbucket.s3.amazonaws.com/hand_drawn/chinese2.png',
+                                    NoImgCard(
                                       text: 'Alphabetical',
                                       routeName: (BuildContext, String) {
                                         Navigator.pushNamed(
@@ -411,6 +349,35 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
           }),
       bottomNavigationBar: AppBarBottom(
         id: HomePage.id,
+      ),
+    );
+  }
+}
+
+class GradientText extends StatelessWidget {
+  const GradientText({
+    super.key,
+    required this.gradText,
+  });
+
+  final String gradText;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => const LinearGradient(colors: [
+        GlobalTheme.kDarkGreen,
+        GlobalTheme.kGreen,
+      ], stops: [
+        0.0,
+        0.5,
+      ]).createShader(bounds),
+      child: Text(
+        gradText,
+        style: const TextStyle(
+            fontFamily: 'helveticanowtext',
+            color: GlobalTheme.kWhite,
+            fontWeight: FontWeight.bold),
       ),
     );
   }
