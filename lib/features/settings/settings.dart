@@ -1,9 +1,9 @@
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/common/routing/ui/app_bar.dart';
+import 'package:ACAC/common/routing/ui/centerNavButton.dart';
 import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
-import 'package:ACAC/features/home/home.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

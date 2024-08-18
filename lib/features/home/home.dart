@@ -1,6 +1,7 @@
 import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/common/routing/ui/app_bar.dart';
+import 'package:ACAC/common/routing/ui/centerNavButton.dart';
 import 'package:ACAC/common/services/cachedRestaurantProvider.dart';
 import 'package:ACAC/common/services/getDistance.dart';
 import 'package:ACAC/common/services/route_observer.dart';
@@ -11,7 +12,6 @@ import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart'
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
-import 'package:ACAC/features/scanner/scannerV3.dart';
 import 'package:ACAC/features/settings/settings.dart';
 import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
@@ -97,36 +97,36 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Welcome(),
+                          const SizedBox(
+                            height: GlobalTheme.spacing,
+                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Welcome(),
-                              Row(
-                                children: [
-                                  TopMenuButton(
-                                    iconData: Icons.search_outlined,
-                                    pathFunction: () {
-                                      Navigator.pushNamed(context, Chat.id);
-                                    },
-                                  ),
-                                  const SizedBox(width: 10),
-                                  TopMenuButton(
-                                    iconData: Icons.account_circle,
-                                    pathFunction: () {
-                                      Navigator.pushNamed(
-                                          context, AccountInfo.id);
-                                      ref.read(userPageCounter).setCounter(5);
-                                    },
-                                  ),
-                                  const SizedBox(width: 10),
-                                  TopMenuButton(
-                                    iconData: Icons.receipt,
-                                    pathFunction: () {
-                                      Navigator.pushNamed(context, History.id);
-                                      ref.read(userPageCounter).setCounter(4);
-                                    },
-                                  ),
-                                ],
+                              TopMenuButton(
+                                iconData: Icons.search_outlined,
+                                pathFunction: () {
+                                  Navigator.pushNamed(context, Chat.id);
+                                },
+                                desc: 'Chat',
+                              ),
+                              const SizedBox(width: 10),
+                              TopMenuButton(
+                                iconData: Icons.account_circle,
+                                pathFunction: () {
+                                  Navigator.pushNamed(context, AccountInfo.id);
+                                  ref.read(userPageCounter).setCounter(5);
+                                },
+                                desc: 'Account',
+                              ),
+                              const SizedBox(width: 10),
+                              TopMenuButton(
+                                iconData: Icons.receipt,
+                                pathFunction: () {
+                                  Navigator.pushNamed(context, History.id);
+                                  ref.read(userPageCounter).setCounter(4);
+                                },
+                                desc: 'History',
                               ),
                             ],
                           ),
@@ -139,40 +139,13 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 15,
                               ),
-                              Row(
+                              const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ShaderMask(
-                                    shaderCallback: (bounds) =>
-                                        const LinearGradient(colors: [
-                                      GlobalTheme.kDarkGreen,
-                                      GlobalTheme.kGreen,
-                                    ]).createShader(bounds),
-                                    child: const Text(
-                                      'Featured',
-                                      style: TextStyle(
-                                          fontFamily: 'helveticanowtext',
-                                          color: GlobalTheme.kWhite,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  ShaderMask(
-                                    shaderCallback: (bounds) =>
-                                        const LinearGradient(
-                                      colors: [
-                                        GlobalTheme.kDarkGreen,
-                                        GlobalTheme.kGreen,
-                                      ],
-                                    ).createShader(bounds),
-                                    child: const Text(
-                                      'Items Found: 2',
-                                      style: TextStyle(
-                                          fontFamily: 'helveticanowtext',
-                                          color: GlobalTheme.kWhite,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                  Text("Featured:", style: GlobalTheme.styling),
+                                  Text("Items Found: 2",
+                                      style: GlobalTheme.styling),
                                 ],
                               ),
                               const SizedBox(
@@ -227,7 +200,9 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 20,
                               ),
-                              const GradientText(gradText: "ACAC Favourites:"),
+                              const Text("ACAC Favourites:",
+                                  style: GlobalTheme.styling),
+                              //const GradientText(gradText: "ACAC Favourites:"),
                               SizedBox(
                                 height: 170,
                                 child: ListView.builder(
@@ -251,7 +226,8 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 20,
                               ),
-                              const GradientText(gradText: "Country:"),
+                              const Text("Country: ",
+                                  style: GlobalTheme.styling),
                               SizedBox(
                                 height: 130,
                                 child: ListView.builder(
@@ -268,7 +244,8 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   },
                                 ),
                               ),
-                              const GradientText(gradText: 'Food Type:'),
+                              const Text("Food Type:",
+                                  style: GlobalTheme.styling),
                               SizedBox(
                                 height: 130,
                                 child: ListView.builder(
@@ -294,13 +271,8 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   0.0,
                                   0.5,
                                 ]).createShader(bounds),
-                                child: const Text(
-                                  'Sort by:',
-                                  style: TextStyle(
-                                      fontFamily: 'helveticanowtext',
-                                      color: GlobalTheme.kWhite,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                child: const Text('Sort by:',
+                                    style: GlobalTheme.styling),
                               ),
                               SizedBox(
                                 height: 130,
@@ -383,52 +355,16 @@ class GradientText extends StatelessWidget {
   }
 }
 
-class CenterNavWidget extends StatelessWidget {
-  const CenterNavWidget({
-    super.key,
-    required this.ref,
-  });
-
-  final WidgetRef ref;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (ref.watch(userPageCounter).counter != 1) {
-          ref.read(userPageCounter).setCounter(1);
-          Navigator.pushNamed(context, App.id);
-        }
-      },
-      child: SizedBox(
-        width: 65,
-        height: 65,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.lightGreen,
-            borderRadius: BorderRadius.circular(35),
-          ),
-          child: const FittedBox(
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Icon(
-                Icons.qr_code_scanner_rounded,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class TopMenuButton extends StatelessWidget {
   final IconData iconData;
   final VoidCallback pathFunction;
+  final String desc;
 
   const TopMenuButton(
-      {super.key, required this.iconData, required this.pathFunction});
+      {super.key,
+      required this.iconData,
+      required this.pathFunction,
+      required this.desc});
 
   @override
   Widget build(BuildContext context) {
@@ -436,24 +372,25 @@ class TopMenuButton extends StatelessWidget {
       onTap: () {
         HapticFeedback.heavyImpact();
         pathFunction();
-        // Navigator.pushNamed(context, Chat.id);
       },
       child: Container(
-        padding: const EdgeInsets.all(2),
+        padding: const EdgeInsets.all(3),
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              GlobalTheme.kDarkGreen,
-              GlobalTheme.kGreen,
-              Color(0xff98C48D)
-            ],
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(30)),
+          color: GlobalTheme.kGreen,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        child: Icon(
-          iconData,
-          color: GlobalTheme.kWhite,
-          size: 30,
+        child: Row(
+          children: [
+            Text(
+              desc,
+              style: const TextStyle(color: Colors.white),
+            ),
+            Icon(
+              iconData,
+              color: GlobalTheme.kWhite,
+              size: 24,
+            ),
+          ],
         ),
       ),
     );

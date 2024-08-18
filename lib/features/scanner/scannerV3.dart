@@ -113,7 +113,6 @@ class _AppState extends ConsumerState<App> {
 
   @override
   Widget build(BuildContext context) {
-    final scanResult = this.scanResult;
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(
@@ -126,8 +125,8 @@ class _AppState extends ConsumerState<App> {
                       await _scan();
                     },
                     child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 60, vertical: 20),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Colors.lightGreen),
@@ -141,7 +140,8 @@ class _AppState extends ConsumerState<App> {
                     Navigator.pop(context);
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 60, vertical: 20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.redAccent),
@@ -162,7 +162,7 @@ class _AppState extends ConsumerState<App> {
   Future<void> _scan() async {
     var test = ref.watch(restaurantInfoCardListProvider);
     try {
-      final result = await BarcodeScanner.scan(
+      await BarcodeScanner.scan(
         options: ScanOptions(
           strings: {
             'cancel': _cancelController.text,
