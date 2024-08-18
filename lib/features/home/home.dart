@@ -99,7 +99,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                         children: [
                           Welcome(),
                           const SizedBox(
-                            height: GlobalTheme.spacing,
+                            height: AppTheme.spacing,
                           ),
                           Row(
                             children: [
@@ -131,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                             ],
                           ),
                           const SizedBox(
-                            height: GlobalTheme.spacing,
+                            height: AppTheme.spacing,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,9 +143,9 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Featured:", style: GlobalTheme.styling),
+                                  Text("Featured:", style: AppTheme.styling),
                                   Text("Items Found: 2",
-                                      style: GlobalTheme.styling),
+                                      style: AppTheme.styling),
                                 ],
                               ),
                               const SizedBox(
@@ -201,7 +201,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 height: 20,
                               ),
                               const Text("ACAC Favourites:",
-                                  style: GlobalTheme.styling),
+                                  style: AppTheme.styling),
                               //const GradientText(gradText: "ACAC Favourites:"),
                               SizedBox(
                                 height: 170,
@@ -226,8 +226,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 20,
                               ),
-                              const Text("Country: ",
-                                  style: GlobalTheme.styling),
+                              const Text("Country: ", style: AppTheme.styling),
                               SizedBox(
                                 height: 130,
                                 child: ListView.builder(
@@ -244,8 +243,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   },
                                 ),
                               ),
-                              const Text("Food Type:",
-                                  style: GlobalTheme.styling),
+                              const Text("Food Type:", style: AppTheme.styling),
                               SizedBox(
                                 height: 130,
                                 child: ListView.builder(
@@ -265,14 +263,14 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               ShaderMask(
                                 shaderCallback: (bounds) =>
                                     const LinearGradient(colors: [
-                                  GlobalTheme.kDarkGreen,
-                                  GlobalTheme.kGreen,
+                                  AppTheme.kDarkGreen,
+                                  AppTheme.kGreen,
                                 ], stops: [
                                   0.0,
                                   0.5,
                                 ]).createShader(bounds),
                                 child: const Text('Sort by:',
-                                    style: GlobalTheme.styling),
+                                    style: AppTheme.styling),
                               ),
                               SizedBox(
                                 height: 130,
@@ -326,35 +324,6 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
   }
 }
 
-class GradientText extends StatelessWidget {
-  const GradientText({
-    super.key,
-    required this.gradText,
-  });
-
-  final String gradText;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (bounds) => const LinearGradient(colors: [
-        GlobalTheme.kDarkGreen,
-        GlobalTheme.kGreen,
-      ], stops: [
-        0.0,
-        0.5,
-      ]).createShader(bounds),
-      child: Text(
-        gradText,
-        style: const TextStyle(
-            fontFamily: 'helveticanowtext',
-            color: GlobalTheme.kWhite,
-            fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
-
 class TopMenuButton extends StatelessWidget {
   final IconData iconData;
   final VoidCallback pathFunction;
@@ -374,9 +343,9 @@ class TopMenuButton extends StatelessWidget {
         pathFunction();
       },
       child: Container(
-        padding: const EdgeInsets.all(3),
+        padding: const EdgeInsets.all(5),
         decoration: const BoxDecoration(
-          color: GlobalTheme.kGreen,
+          color: AppTheme.kGreen2,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(
@@ -385,10 +354,11 @@ class TopMenuButton extends StatelessWidget {
               desc,
               style: const TextStyle(color: Colors.white),
             ),
+            const SizedBox(width: 3),
             Icon(
               iconData,
-              color: GlobalTheme.kWhite,
-              size: 24,
+              color: AppTheme.kWhite,
+              size: 20,
             ),
           ],
         ),

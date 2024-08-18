@@ -14,7 +14,7 @@ final cachedRestaurantInfoCardListProvider =
   final data = await ref.watch(restaurantInfoCardListProvider.future);
 
   // Set up a timer to invalidate the cache after the specified duration
-  final timer = Timer(GlobalTheme.cacheDuration, () {
+  final timer = Timer(AppTheme.cacheDuration, () {
     link.close();
   });
 

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-class GlobalTheme {
+class AppTheme {
   static const cacheDuration = Duration(hours: 1);
 
   static const Color kDarkGreen = Color(0xff14342B);
   static const Color kGreen = Color(0xff60935D);
   static const Color kGreen2 = Color(0xff8CC084);
+  static const Color kGreen3 = Color(0xffA9E1A9);
+
   static const Color kWhite = Color(0xffFDFFFC);
 
   static const double roundedRadius = 12;

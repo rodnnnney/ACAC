@@ -116,13 +116,13 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(
-                                      GlobalTheme.roundedRadius),
+                                      AppTheme.roundedRadius),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: Colors.black, width: 2),
                                   borderRadius: BorderRadius.circular(
-                                      GlobalTheme.roundedRadius),
+                                      AppTheme.roundedRadius),
                                 ),
                               ),
                             ),
@@ -144,13 +144,13 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(
-                                      GlobalTheme.roundedRadius),
+                                      AppTheme.roundedRadius),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: Colors.black, width: 2),
                                   borderRadius: BorderRadius.circular(
-                                      GlobalTheme.roundedRadius),
+                                      AppTheme.roundedRadius),
                                 ),
                               ),
                             ),
@@ -218,14 +218,14 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 20),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.roundedRadius),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: Colors.black, width: 2),
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.roundedRadius),
                           ),
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -250,26 +250,26 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 20),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.roundedRadius),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
                                 color: Color(0xff2E2E2E), width: 2),
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.roundedRadius),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: Colors.red, width: 1),
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.roundedRadius),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: Colors.red, width: 2),
-                            borderRadius: BorderRadius.circular(
-                                GlobalTheme.roundedRadius),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.roundedRadius),
                           ),
                           suffixIcon: IconButton(
                             onPressed: () {

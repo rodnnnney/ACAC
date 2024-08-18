@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/widgets/ui/loading.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
@@ -53,13 +54,8 @@ class _AppState extends ConsumerState<App> {
       _numberOfCameras = await BarcodeScanner.numberOfCameras;
       setState(() {});
     });
-    // Future.delayed(const Duration(milliseconds: 500), () {
-    //   safePrint("Attempting automatic scan after delay");
-    //   _scan();
-    // });
   }
 
-//Future.delayed(Duration(seconds: 1)s
   Future<void> fetchUserInfo() async {
     try {
       var currentUser = await Amplify.Auth.getCurrentUser();
@@ -113,28 +109,15 @@ class _AppState extends ConsumerState<App> {
 
   @override
   Widget build(BuildContext context) {
+    AsyncValue<List<RestaurantInfoCard>> cardList =
+        ref.watch(restaurantInfoCardListProvider);
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                    onTap: () async {
-                      await _scan();
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 60, vertical: 20),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.lightGreen),
-                        child: const Text('Start Scan',
-                            style: TextStyle(color: Colors.white)))),
-                const SizedBox(
-                  height: 20,
-                ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -145,12 +128,40 @@ class _AppState extends ConsumerState<App> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.redAccent),
-                    child: const Text(
-                      'Exit Scan',
-                      style: TextStyle(color: Colors.white),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Exit Scan',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.exit_to_app_outlined,
+                          color: Colors.white,
+                        )
+                      ],
                     ),
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    await _scan(cardList);
+                  },
+                  child: const OptionCard(
+                    displayText: 'Start Scan',
+                    displayIconData: Icons.qr_code_scanner,
+                    cardColor: AppTheme.kGreen3,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                ),
               ],
             ),
           ),
@@ -159,8 +170,7 @@ class _AppState extends ConsumerState<App> {
     );
   }
 
-  Future<void> _scan() async {
-    var test = ref.watch(restaurantInfoCardListProvider);
+  Future<void> _scan(AsyncValue<List<RestaurantInfoCard>> cardList) async {
     try {
       await BarcodeScanner.scan(
         options: ScanOptions(
@@ -179,7 +189,7 @@ class _AppState extends ConsumerState<App> {
         ),
       );
       if (scanResult != null) {
-        test.when(
+        cardList.when(
           data: (list) async {
             var matchingCard = list.firstWhere(
               (card) => card.scannerDataMatch == scanResult?.rawContent,
@@ -194,16 +204,54 @@ class _AppState extends ConsumerState<App> {
           },
         );
       }
-      //safePrint("Raw content: ${scanResult?.rawContent}");
-      //safePrint("Scan result to string: ${scanResult?.format.name}");
     } on PlatformException catch (e) {
-      setState(() {
-        scanResult = ScanResult(
-          rawContent: e.code == BarcodeScanner.cameraAccessDenied
-              ? 'The user did not grant the camera permission!'
-              : 'Unknown error: $e',
-        );
-      });
+      setState(
+        () {
+          scanResult = ScanResult(
+            rawContent: e.code == BarcodeScanner.cameraAccessDenied
+                ? 'The user did not grant the camera permission!'
+                : 'Unknown error: $e',
+          );
+        },
+      );
     }
+  }
+}
+
+class OptionCard extends StatelessWidget {
+  const OptionCard({
+    super.key,
+    required this.displayText,
+    required this.displayIconData,
+    required this.cardColor,
+  });
+
+  final String displayText;
+  final IconData displayIconData;
+  final Color cardColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12), color: cardColor),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            displayText,
+            style: const TextStyle(color: Colors.white),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Icon(
+            displayIconData,
+            color: Colors.white,
+          )
+        ],
+      ),
+    );
   }
 }
