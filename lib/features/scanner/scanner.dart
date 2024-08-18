@@ -1,10 +1,10 @@
 // import 'dart:io';
 //
-// import 'package:ACAC/common/providers/riverpod_light_dark.dart';
-// import 'package:ACAC/common/services/route_observer.dart';
-// import 'package:ACAC/common/widgets/ui/app_bar.dart';
-// import 'package:ACAC/common/widgets/ui/loading.dart';
-// import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
+// import 'package:ACAC/restaurant_related_ui/providers/riverpod_light_dark.dart';
+// import 'package:ACAC/restaurant_related_ui/services/route_observer.dart';
+// import 'package:ACAC/restaurant_related_ui/widgets/ui/app_bar.dart';
+// import 'package:ACAC/restaurant_related_ui/widgets/ui/loading.dart';
+// import 'package:ACAC/restaurant_related_ui/widgets/ui/response_pop_up.dart';
 // import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 // import 'package:ACAC/features/home/controller/restaurant_list_controller.dart';
 // import 'package:ACAC/features/home/service/user_api_service.dart';

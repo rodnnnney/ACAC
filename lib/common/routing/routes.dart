@@ -4,7 +4,7 @@ import 'package:ACAC/features/home/history.dart';
 import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/scanner/helper_widget/qr_code_gen.dart';
-import 'package:ACAC/features/scanner/scannerV2.dart';
+import 'package:ACAC/features/scanner/scannerV3.dart';
 import 'package:ACAC/features/settings/settings.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -20,5 +20,6 @@ final appRoutes = <String, WidgetBuilder>{
     final args = ModalRoute.of(context)!.settings.arguments as String;
     return SortedByRating(type: args);
   },
-  BarcodeScannerPageView.id: (context) => BarcodeScannerPageView()
+  App.id: (context) => const App()
+  //BarcodeScannerPageView.id: (context) => BarcodeScannerPageView()
 };

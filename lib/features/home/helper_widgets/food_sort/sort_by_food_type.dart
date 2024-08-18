@@ -1,4 +1,4 @@
-import 'package:ACAC/common/widgets/common/home_page_card.dart';
+import 'package:ACAC/common/widgets/restaurant_related_ui/home_page_card.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/dbb_sort.dart';
 import 'package:flutter/material.dart';
 

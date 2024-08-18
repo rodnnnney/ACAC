@@ -1,8 +1,8 @@
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/common/services/restaurant_provider.dart';
-import 'package:ACAC/common/widgets/common/card_rest_info_card.dart';
 import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/helper_functions/time_formatter.dart';
+import 'package:ACAC/common/widgets/restaurant_related_ui/card_rest_info_card.dart';
 import 'package:ACAC/common/widgets/ui/star_builder.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/navigation_info_provider.dart';

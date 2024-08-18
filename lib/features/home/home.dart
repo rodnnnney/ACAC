@@ -1,17 +1,17 @@
 import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
+import 'package:ACAC/common/routing/ui/app_bar.dart';
 import 'package:ACAC/common/services/cachedRestaurantProvider.dart';
 import 'package:ACAC/common/services/getDistance.dart';
 import 'package:ACAC/common/services/route_observer.dart';
-import 'package:ACAC/common/widgets/common/home_page_card.dart';
-import 'package:ACAC/common/widgets/ui/app_bar.dart';
+import 'package:ACAC/common/widgets/restaurant_related_ui/home_page_card.dart';
 import 'package:ACAC/common/widgets/ui/welcome_text.dart';
 import 'package:ACAC/features/chat/chat.dart';
 import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
-import 'package:ACAC/features/scanner/scannerV2.dart';
+import 'package:ACAC/features/scanner/scannerV3.dart';
 import 'package:ACAC/features/settings/settings.dart';
 import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
@@ -395,8 +395,10 @@ class CenterNavWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, BarcodeScannerPageView.id);
-        ref.read(userPageCounter).setCounter(1);
+        if (ref.watch(userPageCounter).counter != 1) {
+          ref.read(userPageCounter).setCounter(1);
+          Navigator.pushNamed(context, App.id);
+        }
       },
       child: SizedBox(
         width: 65,

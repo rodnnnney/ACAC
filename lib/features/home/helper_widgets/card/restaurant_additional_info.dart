@@ -14,8 +14,8 @@
 // import 'package:provider/provider.dart' as legacy_provider;
 // import 'package:url_launcher/url_launcher.dart';
 //
-// import '../../../common/widgets/helper_functions/cards.dart';
-// import '../../../common/widgets/helper_functions/phone_call.dart';
+// import '../../../restaurant_related_ui/widgets/helper_functions/cards.dart';
+// import '../../../restaurant_related_ui/widgets/helper_functions/phone_call.dart';
 //
 // class RestaurantAdditionalInfo extends StatefulWidget {
 //   const RestaurantAdditionalInfo(
