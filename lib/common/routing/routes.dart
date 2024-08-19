@@ -6,6 +6,7 @@ import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/scanner/helper_widget/qr_code_gen.dart';
 import 'package:ACAC/features/scanner/scannerV3.dart';
 import 'package:ACAC/features/settings/settings.dart';
+import 'package:ACAC/features/settings/sorting/Favourites.dart';
 import 'package:flutter/cupertino.dart';
 
 final appRoutes = <String, WidgetBuilder>{
@@ -20,6 +21,7 @@ final appRoutes = <String, WidgetBuilder>{
     final args = ModalRoute.of(context)!.settings.arguments as String;
     return SortedByRating(type: args);
   },
-  App.id: (context) => const App()
+  App.id: (context) => const App(),
+  Favourites.id: (context) => Favourites()
   //BarcodeScannerPageView.id: (context) => BarcodeScannerPageView()
 };

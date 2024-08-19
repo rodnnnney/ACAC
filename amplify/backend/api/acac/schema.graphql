@@ -9,37 +9,41 @@ type Restaurant @model @auth(rules: [{ allow: owner}]) {
     restaurant: String!
     email: AWSEmail!
 }
-
-type User @model @auth(rules: [{ allow: public, operations: [read]}]) {
+type User @model @auth(rules: [{ allow: public }]) {
     id: ID!
     firstName: String!
     lastName: String!
-    favourites: [String]
+    #favouriteRestaurants:[RestaurantInfoCard] @hasMany
+    favouriteRestaurants: [String]
     email: AWSEmail!
 }
 
-type RestaurantInfoCard @model @auth(rules: [{ allow: public}]) {
+type RestaurantInfoCard @model @auth(rules: [{ allow: public }]) {
     id: ID!
-    restaurantName : String!
-    location : LatLong!
-    address : String!
-    imageSrc : String!
-    imageLogo : String!
-    scannerDataMatch : String!
-    hours : Time!
-    rating : Float!
-    cuisineType : [String]!
-    reviewNum : Int!
-    discounts : [String]!
-    discountPercent : String!
-    phoneNumber : String!
-    gMapsLink : String!
-    websiteLink : String!
-    topRatedItemsImgSrc : [String]!
-    topRatedItemsName : [String]!
-    topRatedItemsPrice : [String]
+    #userID: ID @index(name: "byUser")
+    #userID: ID! @index(name: "byUser", sortKeyFields: ["id"])
+    #user: User @belongsTo(fields: ["userID"])
+    restaurantName: String!
+    location: LatLong!
+    address: String!
+    imageSrc: String!
+    imageLogo: String!
+    scannerDataMatch: String!
+    hours: Time!
+    rating: Float!
+    cuisineType: [String]!
+    reviewNum: Int!
+    discounts: [String]!
+    discountPercent: String!
+    phoneNumber: String!
+    gMapsLink: String!
+    websiteLink: String!
+    topRatedItemsImgSrc: [String]!
+    topRatedItemsName: [String]!
+    topRatedItemsPrice: [String]
     timesVisited: Int!
 }
+
 
 type Time {
     monday: StartStop!
@@ -61,7 +65,7 @@ type LatLong{
     longitude: String!
 }
 
-type MarketingCard @model @auth(rules: [{ allow: public}]){
+type MarketingCard @model @auth(rules: [{ allow: public}, {allow: owner}]){
     imageUrl: String!
     headerText: String!
     descriptionText: String!

@@ -7,7 +7,10 @@ import 'package:ACAC/common/widgets/ui/star_builder.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/navigation_info_provider.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
+import 'package:ACAC/features/user_auth/controller/user_repository.dart';
+import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/ModelProvider.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,6 +34,7 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
   LaunchLink phoneCall = LaunchLink();
 
   List<PropertyTag> tags = [];
+  bool includedInFavourites = false;
 
   @override
   void initState() {
@@ -38,6 +42,7 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
     if (widget.restaurant.cuisineType != null ||
         widget.restaurant.cuisineType.isNotEmpty) {
       filterTagSetup(widget.restaurant.cuisineType);
+
       //isFavourite(widget.restaurant.cuisineType);
     }
   }
@@ -159,6 +164,13 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
     NavInfo nav = provider.Provider.of<NavInfo>(context);
     DateTime now = DateTime.now();
     int weekday = now.weekday;
+    final itemsRepository = ref.read(userRepositoryProvider);
+
+    Future<User> getUserInfo() async {
+      var userID = await Amplify.Auth.getCurrentUser();
+      return await itemsRepository.getUser(userID.userId);
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -215,33 +227,112 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                   ),
                 ),
               ),
-              // Positioned(
-              //   right: 10,
-              //   bottom: 10,
-              //   child: GestureDetector(
-              //     onTap: () async {
-              //       await ref
-              //           .read(userListControllerProvider.notifier)
-              //           .addToFavourite(widget.restaurant.restaurantName);
-              //       print('added to favourite');
-              //     },
-              //     child: Container(
-              //       padding: const EdgeInsets.all(5),
-              //       decoration: BoxDecoration(
-              //           color: Colors.white,
-              //           borderRadius: BorderRadius.circular(12)),
-              //       child: const Row(
-              //         children: [
-              //           Icon(Icons.favorite_border),
-              //           SizedBox(
-              //             width: 5,
-              //           ),
-              //           Text('Add to favourite')
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // )
+              Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: FutureBuilder<User>(
+                    future: getUserInfo(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<User> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        safePrint(snapshot.error);
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        final user = snapshot.data;
+                        final favouriteRestaurants =
+                            user?.favouriteRestaurants ?? [];
+
+                        if (favouriteRestaurants
+                            .contains(widget.restaurant.restaurantName)) {
+                          return GestureDetector(
+                            onTap: () async {
+                              await ref
+                                  .read(userListControllerProvider.notifier)
+                                  .removeFromFavourite(
+                                      widget.restaurant.restaurantName);
+                              setState(() {});
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.favorite,
+                                    color: Colors.redAccent,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          return GestureDetector(
+                            onTap: () async {
+                              await ref
+                                  .read(userListControllerProvider.notifier)
+                                  .addToFavourite(
+                                      widget.restaurant.restaurantName);
+                              setState(() {
+                                // const ResponsePopUp(
+                                //         response: 'Added to favourites',
+                                //         location: DelightSnackbarPosition.top,
+                                //         icon: Icons.add,
+                                //         color: AppTheme.kGreen2)
+                                //     .showToast(context);
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.favorite_border),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text('Add to favourite')
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      } else {
+                        return const Text('No data available');
+                      }
+                    },
+                  )
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     // await ref
+                  //     //     .read(userListControllerProvider.notifier)
+                  //     //     .addToFavourite(widget.restaurant.restaurantName);
+                  //     await ref
+                  //         .read(userListControllerProvider.notifier)
+                  //         .removeFromFavourite(widget.restaurant.restaurantName);
+                  //   },
+                  //   child: Container(
+                  //     padding: const EdgeInsets.all(5),
+                  //     decoration: BoxDecoration(
+                  //         color: Colors.white,
+                  //         borderRadius: BorderRadius.circular(12)),
+                  //     child: const Row(
+                  //       children: [
+                  //         Icon(Icons.favorite_border),
+                  //         SizedBox(
+                  //           width: 5,
+                  //         ),
+                  //         Text('Add to favourite')
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  )
             ],
           ),
           Expanded(

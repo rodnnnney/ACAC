@@ -97,7 +97,8 @@ class UserAPIService {
     try {
       await Amplify.API
           .mutate(
-            request: ModelMutations.update(updatedUser),
+            request: ModelMutations.update(updatedUser,
+                authorizationMode: APIAuthorizationType.apiKey),
           )
           .response;
     } on Exception catch (error) {

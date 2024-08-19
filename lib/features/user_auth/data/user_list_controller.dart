@@ -56,9 +56,80 @@ class UserListController extends _$UserListController {
       final itemsRepository = ref.read(userRepositoryProvider);
       var userID = await Amplify.Auth.getCurrentUser();
       User currentUser = await itemsRepository.getUser(userID.userId);
-      List<String> updatedFavorites = [...currentUser.favourites ?? [], rest];
-      User updatedUser = currentUser.copyWith(favourites: updatedFavorites);
+      if (currentUser.favouriteRestaurants == null ||
+          currentUser.favouriteRestaurants!.isEmpty) {
+        safePrint('Doing this thing');
+
+        User updatedUser = currentUser.copyWith(favouriteRestaurants: [rest]);
+        await itemsRepository.updateUser(updatedUser);
+        print(updatedUser);
+      } else {
+        if (!currentUser.favouriteRestaurants!.contains(rest)) {
+          List<String> updatedFavorites = [
+            ...?currentUser.favouriteRestaurants,
+            rest
+          ];
+          User updatedUser =
+              currentUser.copyWith(favouriteRestaurants: updatedFavorites);
+          await itemsRepository.updateUser(updatedUser);
+        }
+      }
+      return fetchUsers();
+    });
+  }
+
+  Future<void> addToFavourite1(String restName) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final itemsRepository = ref.read(userRepositoryProvider);
+      var authUser = await Amplify.Auth.getCurrentUser();
+      User currentUser = await itemsRepository.getUser(authUser.userId);
+
+      bool isAlreadyFavorite =
+          currentUser.favouriteRestaurants?.any((r) => r == restName) ?? false;
+
+      if (!isAlreadyFavorite) {
+        // Create a new list with the existing favorites and the new restaurant
+        List<String> updatedFavorites = [
+          ...?currentUser.favouriteRestaurants,
+          restName
+        ];
+
+        // Use copyWith to create an updated user with the new favorites list
+        User updatedUser =
+            currentUser.copyWith(favouriteRestaurants: updatedFavorites);
+
+        // Update the user in the repository
+        await itemsRepository.updateUser(updatedUser);
+
+        safePrint(
+            "User favorites updated. New count: ${updatedUser.favouriteRestaurants}");
+      } else {
+        safePrint("Restaurant ${restName} is already a favorite");
+      }
+
+      return fetchUsers();
+    });
+  }
+
+  Future<void> removeFromFavourite(String restName) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final itemsRepository = ref.read(userRepositoryProvider);
+      var userID = await Amplify.Auth.getCurrentUser();
+      User currentUser = await itemsRepository.getUser(userID.userId);
+
+      // Create a new list without the restaurant to be removed
+      List<String> updatedFavorites = currentUser.favouriteRestaurants
+              ?.where((r) => r != restName)
+              .toList() ??
+          [];
+
+      User updatedUser =
+          currentUser.copyWith(favouriteRestaurants: updatedFavorites);
       await itemsRepository.updateUser(updatedUser);
+
+      safePrint("DBB user after update: ${updatedUser.favouriteRestaurants}");
       return fetchUsers();
     });
   }

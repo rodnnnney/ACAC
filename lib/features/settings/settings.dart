@@ -5,6 +5,7 @@ import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
 import 'package:ACAC/features/home/history.dart';
+import 'package:ACAC/features/settings/sorting/Favourites.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
@@ -83,7 +84,7 @@ class AccountInfo extends ConsumerWidget with RouteAware {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
                   GestureDetector(
@@ -92,18 +93,57 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                       ref.read(userPageCounter).setCounter(7);
                       Navigator.pushNamed(context, History.id);
                     },
-                    child: const Card(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Column(
-                          children: [
-                            Icon(Icons.timeline_outlined, size: 40),
-                            Text(
-                              'History',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Expanded(
+                      child: const SizedBox(
+                        height: 100,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: Column(
+                              children: [
+                                Icon(Icons.timeline_outlined, size: 40),
+                                Text(
+                                  'History',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.heavyImpact();
+                      ref.read(userPageCounter).setCounter(8);
+                      Navigator.pushNamed(context, Favourites.id);
+                    },
+                    child: Expanded(
+                      child: SizedBox(
+                        height: 100,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Icon(Icons.favorite_outlined, size: 35),
+                                FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    'Favourites',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
