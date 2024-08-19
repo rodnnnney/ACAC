@@ -1,4 +1,5 @@
 import 'package:ACAC/features/home/service/user_api_service.dart';
+import 'package:ACAC/models/ModelProvider.dart';
 import 'package:ACAC/models/User.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -31,4 +32,8 @@ class UserRepository {
   Future<void> updateUser(User updateUser) async {
     return userAPIService.updateUser(updateUser);
   }
+
+// Future<void> addToFavourite(RestaurantInfoCard rest) async {
+//   return userAPIService.addToFavourite(rest);
+// }
 }

@@ -7,12 +7,10 @@ import 'package:ACAC/common/services/getDistance.dart';
 import 'package:ACAC/common/services/route_observer.dart';
 import 'package:ACAC/common/widgets/restaurant_related_ui/home_page_card.dart';
 import 'package:ACAC/common/widgets/ui/welcome_text.dart';
-import 'package:ACAC/features/chat/chat.dart';
 import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
-import 'package:ACAC/features/settings/settings.dart';
 import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -98,41 +96,6 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Welcome(),
-                          const SizedBox(
-                            height: AppTheme.spacing,
-                          ),
-                          Row(
-                            children: [
-                              TopMenuButton(
-                                iconData: Icons.search_outlined,
-                                pathFunction: () {
-                                  Navigator.pushNamed(context, Chat.id);
-                                },
-                                desc: 'Chat',
-                              ),
-                              const SizedBox(width: 10),
-                              TopMenuButton(
-                                iconData: Icons.account_circle,
-                                pathFunction: () {
-                                  Navigator.pushNamed(context, AccountInfo.id);
-                                  ref.read(userPageCounter).setCounter(5);
-                                },
-                                desc: 'Account',
-                              ),
-                              const SizedBox(width: 10),
-                              TopMenuButton(
-                                iconData: Icons.receipt,
-                                pathFunction: () {
-                                  Navigator.pushNamed(context, History.id);
-                                  ref.read(userPageCounter).setCounter(4);
-                                },
-                                desc: 'History',
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: AppTheme.spacing,
-                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

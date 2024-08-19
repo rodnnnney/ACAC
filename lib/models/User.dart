@@ -20,6 +20,7 @@
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, override_on_non_overriding_member, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
+import 'package:collection/collection.dart';
 
 import 'ModelProvider.dart';
 
@@ -29,6 +30,7 @@ class User extends amplify_core.Model {
   final String id;
   final String? _firstName;
   final String? _lastName;
+  final List<String>? _favourites;
   final String? _email;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
@@ -71,6 +73,10 @@ class User extends amplify_core.Model {
     }
   }
 
+  List<String>? get favourites {
+    return _favourites;
+  }
+
   String get email {
     try {
       return _email!;
@@ -96,11 +102,13 @@ class User extends amplify_core.Model {
       {required this.id,
       required firstName,
       required lastName,
+      favourites,
       required email,
       createdAt,
       updatedAt})
       : _firstName = firstName,
         _lastName = lastName,
+        _favourites = favourites,
         _email = email,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
@@ -109,11 +117,15 @@ class User extends amplify_core.Model {
       {String? id,
       required String firstName,
       required String lastName,
+      List<String>? favourites,
       required String email}) {
     return User._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
         firstName: firstName,
         lastName: lastName,
+        favourites: favourites != null
+            ? List<String>.unmodifiable(favourites)
+            : favourites,
         email: email);
   }
 
@@ -128,6 +140,7 @@ class User extends amplify_core.Model {
         id == other.id &&
         _firstName == other._firstName &&
         _lastName == other._lastName &&
+        DeepCollectionEquality().equals(_favourites, other._favourites) &&
         _email == other._email;
   }
 
@@ -142,6 +155,9 @@ class User extends amplify_core.Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("firstName=" + "$_firstName" + ", ");
     buffer.write("lastName=" + "$_lastName" + ", ");
+    buffer.write("favourites=" +
+        (_favourites != null ? _favourites!.toString() : "null") +
+        ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("createdAt=" +
         (_createdAt != null ? _createdAt!.format() : "null") +
@@ -153,22 +169,29 @@ class User extends amplify_core.Model {
     return buffer.toString();
   }
 
-  User copyWith({String? firstName, String? lastName, String? email}) {
+  User copyWith(
+      {String? firstName,
+      String? lastName,
+      List<String>? favourites,
+      String? email}) {
     return User._internal(
         id: id,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
+        favourites: favourites ?? this.favourites,
         email: email ?? this.email);
   }
 
   User copyWithModelFieldValues(
       {ModelFieldValue<String>? firstName,
       ModelFieldValue<String>? lastName,
+      ModelFieldValue<List<String>?>? favourites,
       ModelFieldValue<String>? email}) {
     return User._internal(
         id: id,
         firstName: firstName == null ? this.firstName : firstName.value,
         lastName: lastName == null ? this.lastName : lastName.value,
+        favourites: favourites == null ? this.favourites : favourites.value,
         email: email == null ? this.email : email.value);
   }
 
@@ -176,6 +199,7 @@ class User extends amplify_core.Model {
       : id = json['id'],
         _firstName = json['firstName'],
         _lastName = json['lastName'],
+        _favourites = json['favourites']?.cast<String>(),
         _email = json['email'],
         _createdAt = json['createdAt'] != null
             ? amplify_core.TemporalDateTime.fromString(json['createdAt'])
@@ -188,6 +212,7 @@ class User extends amplify_core.Model {
         'id': id,
         'firstName': _firstName,
         'lastName': _lastName,
+        'favourites': _favourites,
         'email': _email,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
@@ -197,6 +222,7 @@ class User extends amplify_core.Model {
         'id': id,
         'firstName': _firstName,
         'lastName': _lastName,
+        'favourites': _favourites,
         'email': _email,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
@@ -208,6 +234,7 @@ class User extends amplify_core.Model {
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final FIRSTNAME = amplify_core.QueryField(fieldName: "firstName");
   static final LASTNAME = amplify_core.QueryField(fieldName: "lastName");
+  static final FAVOURITES = amplify_core.QueryField(fieldName: "favourites");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static var schema = amplify_core.Model.defineSchema(
       define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
@@ -233,6 +260,14 @@ class User extends amplify_core.Model {
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: User.FAVOURITES,
+        isRequired: false,
+        isArray: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.collection,
+            ofModelName: amplify_core.ModelFieldTypeEnum.string.name)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: User.EMAIL,

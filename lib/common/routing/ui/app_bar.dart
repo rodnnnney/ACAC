@@ -1,6 +1,8 @@
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
+import 'package:ACAC/features/chat/chat.dart';
 import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/maps.dart';
+import 'package:ACAC/features/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -28,50 +30,90 @@ class AppBarBottom extends ConsumerWidget {
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              IconButton(
-                onPressed: () async {
-                  if (watchCounter.counter == 0) {
-                  } else {
-                    updatePage(0, HomePage.id);
-                  }
-                },
-                icon: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: const Icon(
-                    Icons.home,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 40,
-              )
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 40,
-                ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 IconButton(
-                  onPressed: () {
-                    if (watchCounter.counter == 2) {
+                  onPressed: () async {
+                    if (watchCounter.counter == 0) {
                     } else {
-                      updatePage(2, MapScreen.id);
+                      updatePage(0, HomePage.id);
                     }
                   },
                   icon: Container(
                     padding: const EdgeInsets.all(5),
                     child: const Icon(
-                      Icons.map,
+                      Icons.home,
                       color: Colors.grey,
                     ),
                   ),
                 ),
-              ],
+                const SizedBox(
+                  width: 20,
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (watchCounter.counter == 1) {
+                    } else {
+                      updatePage(1, Chat.id);
+                    }
+                  },
+                  icon: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Icon(
+                      Icons.search_outlined,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      if (watchCounter.counter == 2) {
+                      } else {
+                        updatePage(2, MapScreen.id);
+                      }
+                    },
+                    icon: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: const Icon(
+                        Icons.map,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      if (watchCounter.counter == 3) {
+                      } else {
+                        updatePage(3, AccountInfo.id);
+                      }
+                    },
+                    icon: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: const Icon(
+                        Icons.account_circle_outlined,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

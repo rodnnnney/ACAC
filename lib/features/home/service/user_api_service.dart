@@ -1,3 +1,4 @@
+import 'package:ACAC/models/ModelProvider.dart';
 import 'package:ACAC/models/User.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -103,4 +104,16 @@ class UserAPIService {
       safePrint('Update user failed: $error');
     }
   }
+
+// Future<void> addToFavourite(RestaurantInfoCard card) async {
+//   try {
+//     await Amplify.API
+//         .mutate(
+//           request: ModelMutations.create(card),
+//         )
+//         .response;
+//   } on Exception catch (error) {
+//     safePrint('Update user failed: $error');
+//   }
+// }
 }

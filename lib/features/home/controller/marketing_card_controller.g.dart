@@ -7,7 +7,7 @@ part of 'marketing_card_controller.dart';
 // **************************************************************************
 
 String _$marketingCardControllerHash() =>
-    r'7a11cd867e166aea0569c9ec321cf338b86d0589';
+    r'b0bcf582881f4d95b69d01f9ad7bff512076d821';
 
 /// See also [MarketingCardController].
 @ProviderFor(MarketingCardController)

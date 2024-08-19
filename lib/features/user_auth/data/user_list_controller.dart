@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ACAC/features/user_auth/controller/user_repository.dart';
 import 'package:ACAC/models/ModelProvider.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_list_controller.g.dart';
@@ -45,6 +46,19 @@ class UserListController extends _$UserListController {
       final itemsRepository = ref.read(userRepositoryProvider);
       await itemsRepository.deleteUser(user);
 
+      return fetchUsers();
+    });
+  }
+
+  Future<void> addToFavourite(String rest) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final itemsRepository = ref.read(userRepositoryProvider);
+      var userID = await Amplify.Auth.getCurrentUser();
+      User currentUser = await itemsRepository.getUser(userID.userId);
+      List<String> updatedFavorites = [...currentUser.favourites ?? [], rest];
+      User updatedUser = currentUser.copyWith(favourites: updatedFavorites);
+      await itemsRepository.updateUser(updatedUser);
       return fetchUsers();
     });
   }

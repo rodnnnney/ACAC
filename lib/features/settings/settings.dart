@@ -4,9 +4,9 @@ import 'package:ACAC/common/routing/ui/centerNavButton.dart';
 import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
+import 'package:ACAC/features/home/history.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,29 +43,6 @@ class AccountInfo extends ConsumerWidget with RouteAware {
     } on AuthException catch (e) {
       safePrint('Error fetching user attributes: ${e.message}');
     }
-  }
-
-  Center text() {
-    return Center(
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: DefaultTextStyle(
-          style: const TextStyle(fontSize: 15, color: Colors.black),
-          child: AnimatedTextKit(
-            animatedTexts: [
-              FadeAnimatedText('Digital ACAC card?'),
-              FadeAnimatedText('Report a bug🐜?'),
-              FadeAnimatedText('AI integration🤖? '),
-              FadeAnimatedText(
-                  'Does this app make finding ACAC restaurants easier?'),
-              FadeAnimatedText('Is this app easy to use?'),
-              FadeAnimatedText('All feedback is appreciated! '),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   @override
@@ -105,6 +82,35 @@ class AccountInfo extends ConsumerWidget with RouteAware {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.heavyImpact();
+                      ref.read(userPageCounter).setCounter(7);
+                      Navigator.pushNamed(context, History.id);
+                    },
+                    child: const Card(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Column(
+                          children: [
+                            Icon(Icons.timeline_outlined, size: 40),
+                            Text(
+                              'History',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
             Container(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -122,9 +128,12 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                           SizedBox(
                             width: MediaQuery.of(context).size.width *
                                 0.6, // Adjust the width as needed
-                            child: Text(
-                              email,
-                              overflow: TextOverflow.ellipsis,
+                            child: Opacity(
+                              opacity: 0.65,
+                              child: Text(
+                                email,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           )
                         ],
@@ -175,7 +184,7 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                             'Password',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text('*******')
+                          Opacity(opacity: 0.65, child: Text('*******'))
                         ],
                       ),
                       const Spacer(),
@@ -222,9 +231,12 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                             'App Appearance',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text(ref.watch(darkLight).theme
-                              ? 'Dark Mode🌚'
-                              : 'Light Mode🌞'),
+                          Opacity(
+                            opacity: 0.65,
+                            child: Text(ref.watch(darkLight).theme
+                                ? 'Dark Mode🌚'
+                                : 'Light Mode🌞'),
+                          ),
                         ],
                       ),
                       const Spacer(),
@@ -318,9 +330,20 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                             ),
                           ),
                         ),
-                        child: const Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.red),
+                        child: const Row(
+                          children: [
+                            Text(
+                              'Logout',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.logout_outlined,
+                              color: Colors.red,
+                            )
+                          ],
                         ),
                       ),
                     ],
@@ -334,7 +357,10 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        const Text('Reach out below(Tap) : '),
+                        const Opacity(
+                            opacity: 0.65,
+                            child: Text('Reach out '
+                                'below(Tap) : ')),
                         const SizedBox(height: 10),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,

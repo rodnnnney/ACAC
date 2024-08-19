@@ -225,7 +225,6 @@ class OptionCard extends StatelessWidget {
     required this.displayIconData,
     required this.cardColor,
   });
-
   final String displayText;
   final IconData displayIconData;
   final Color cardColor;

@@ -214,7 +214,34 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-              )
+              ),
+              // Positioned(
+              //   right: 10,
+              //   bottom: 10,
+              //   child: GestureDetector(
+              //     onTap: () async {
+              //       await ref
+              //           .read(userListControllerProvider.notifier)
+              //           .addToFavourite(widget.restaurant.restaurantName);
+              //       print('added to favourite');
+              //     },
+              //     child: Container(
+              //       padding: const EdgeInsets.all(5),
+              //       decoration: BoxDecoration(
+              //           color: Colors.white,
+              //           borderRadius: BorderRadius.circular(12)),
+              //       child: const Row(
+              //         children: [
+              //           Icon(Icons.favorite_border),
+              //           SizedBox(
+              //             width: 5,
+              //           ),
+              //           Text('Add to favourite')
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
           Expanded(
