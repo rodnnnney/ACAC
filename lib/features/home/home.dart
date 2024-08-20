@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/common/routing/ui/app_bar.dart';
@@ -11,8 +13,11 @@ import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart'
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
+import 'package:ACAC/features/user_auth/controller/user_repository.dart';
 import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:ACAC/models/User.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,6 +74,13 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
   Widget build(BuildContext context) {
     var restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
     var test = ref.watch(marketingCardControllerProvider);
+    final itemsRepository = ref.read(userRepositoryProvider);
+
+    Future<User> getUserInfo() async {
+      var userID = await Amplify.Auth.getCurrentUser();
+      //User currentUser =
+      return await itemsRepository.getUser(userID.userId);
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -168,20 +180,52 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               //const GradientText(gradText: "ACAC Favourites:"),
                               SizedBox(
                                 height: 170,
-                                child: ListView.builder(
+                                child: ListView.separated(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: 5,
+                                  separatorBuilder: (BuildContext context,
+                                          int index) =>
+                                      SizedBox(width: 10), // Add a separator
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return SizedBox(
-                                      width: 200,
-                                      child: HomePageUserCard(
-                                        restaurantInfoCard:
-                                            restaurantsByTimesVisited[index],
-                                        user: userLocation,
-                                        index: index,
-                                        ref: ref,
-                                      ),
+                                    return FutureBuilder(
+                                      future: getUserInfo(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<User> snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Opacity(
+                                            opacity: 0.2,
+                                            child: Container(
+                                              width: 200,
+                                              height: 130,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color: Colors.grey),
+                                            ),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Text("${snapshot.error}");
+                                        } else {
+                                          return SizedBox(
+                                            width: 200,
+                                            child: HomePageUserCard(
+                                              restaurantInfoCard:
+                                                  restaurantsByTimesVisited[
+                                                      index],
+                                              user: userLocation,
+                                              index: index,
+                                              ref: ref,
+                                              favouriteList: snapshot.data
+                                                      ?.favouriteRestaurants ??
+                                                  [],
+                                              parentSetState: () =>
+                                                  setState(() {}),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     );
                                   },
                                 ),
@@ -198,11 +242,11 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return HomeCard(
-                                        displayIMG:
-                                            sortByCountry[index].displayIMG,
-                                        text: sortByCountry[index].text,
-                                        routeName:
-                                            sortByCountry[index].routeName);
+                                      displayIMG:
+                                          sortByCountry[index].displayIMG,
+                                      text: sortByCountry[index].text,
+                                      routeName: sortByCountry[index].routeName,
+                                    );
                                   },
                                 ),
                               ),

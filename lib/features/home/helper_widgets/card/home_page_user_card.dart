@@ -3,29 +3,42 @@ import 'dart:convert';
 import 'package:ACAC/common/services/getDistance.dart';
 import 'package:ACAC/common/widgets/helper_functions/time_formatter.dart';
 import 'package:ACAC/features/home/home.dart';
+import 'package:ACAC/features/maps/helper_widgets/swipe_up_card.dart';
+import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'additional_data_dbb.dart';
 
-class HomePageUserCard extends StatelessWidget {
-  HomePageUserCard({
-    super.key,
-    required this.restaurantInfoCard,
-    required this.user,
-    required this.index,
-    required this.ref,
-  });
+class HomePageUserCard extends StatefulWidget {
+  HomePageUserCard(
+      {super.key,
+      required this.restaurantInfoCard,
+      required this.user,
+      required this.index,
+      required this.ref,
+      this.favouriteList,
+      this.parentSetState});
 
   final RestaurantInfoCard restaurantInfoCard;
-  final int weekday = DateTime.now().weekday;
-  final GetDistance getDistance = GetDistance();
   final LatLng user;
   final int index;
   final WidgetRef ref;
+  List<String>? favouriteList;
+  Function? parentSetState;
+
+  @override
+  State<HomePageUserCard> createState() => _HomePageUserCardState();
+}
+
+class _HomePageUserCardState extends State<HomePageUserCard> {
+  final int weekday = DateTime.now().weekday;
+
+  final GetDistance getDistance = GetDistance();
 
   Future<String> getDistanceForRestaurant(RestaurantInfoCard restaurant) async {
     if (distanceCache.containsKey(restaurant.id)) {
@@ -33,8 +46,8 @@ class HomePageUserCard extends StatelessWidget {
     }
     // If not cached, make the API call
     String url = await getDistance.createHttpUrl(
-      user.latitude,
-      user.longitude,
+      widget.user.latitude,
+      widget.user.longitude,
       double.parse(restaurant.location.latitude),
       double.parse(restaurant.location.longitude),
     );
@@ -47,15 +60,18 @@ class HomePageUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isFavourite = widget.favouriteList
+            ?.contains(widget.restaurantInfoCard.restaurantName) ??
+        false;
     return GestureDetector(
       onTap: () async {
         String distance = await getDistance.getDistanceForRestaurant(
-            restaurantInfoCard, user);
+            widget.restaurantInfoCard, widget.user);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => AdditionalDataDbb(
-              restaurant: restaurantInfoCard,
+              restaurant: widget.restaurantInfoCard,
               distance: distance,
             ),
           ),
@@ -79,7 +95,7 @@ class HomePageUserCard extends StatelessWidget {
                             topRight: Radius.circular(20),
                             topLeft: Radius.circular(20)),
                         child: CachedNetworkImage(
-                          imageUrl: restaurantInfoCard.imageSrc,
+                          imageUrl: widget.restaurantInfoCard.imageSrc,
                           width: double.infinity,
                           height: 100,
                           fit: BoxFit.cover,
@@ -95,8 +111,8 @@ class HomePageUserCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: FutureBuilder<String>(
-                            future:
-                                getDistanceForRestaurant(restaurantInfoCard),
+                            future: getDistanceForRestaurant(
+                                widget.restaurantInfoCard),
                             builder: (context, snapshot) {
                               return Text(
                                 snapshot.data ??
@@ -121,7 +137,7 @@ class HomePageUserCard extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             child: Center(
                               child: Text(
-                                restaurantInfoCard.rating.toString(),
+                                widget.restaurantInfoCard.rating.toString(),
                                 style: const TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
@@ -143,13 +159,13 @@ class HomePageUserCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              restaurantInfoCard.restaurantName,
+                              widget.restaurantInfoCard.restaurantName,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Row(
                               children: [
                                 Text(
-                                  restaurantInfoCard.address,
+                                  widget.restaurantInfoCard.address,
                                   style: const TextStyle(
                                       fontSize: 12,
                                       overflow: TextOverflow.ellipsis,
@@ -159,15 +175,15 @@ class HomePageUserCard extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              getHour(restaurantInfoCard, weekday),
+                              getHour(widget.restaurantInfoCard, weekday),
                               style: TextStyle(
                                 fontSize: 11,
                                 color: timeColor(
                                   DateTime.now(),
                                   getOpeningTimeSingle(
-                                      weekday, restaurantInfoCard),
+                                      weekday, widget.restaurantInfoCard),
                                   getClosingTimeSingle(
-                                      weekday, restaurantInfoCard),
+                                      weekday, widget.restaurantInfoCard),
                                 ),
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -192,11 +208,31 @@ class HomePageUserCard extends StatelessWidget {
                         bottomRight: Radius.circular(12),
                         topRight: Radius.circular(12))),
                 child: Text(
-                  ' ${index + 1}# Most Popular!',
+                  ' ${widget.index + 1}# Most Popular!',
                   style: const TextStyle(fontSize: 10, color: Colors.white),
                 ),
               ),
-            )
+            ),
+            Positioned(
+              right: 10,
+              top: 10,
+              child: GestureDetector(
+                  onTap: () async {
+                    HapticFeedback.heavyImpact();
+                    isFavourite
+                        ? await widget.ref
+                            .read(userListControllerProvider.notifier)
+                            .removeFromFavourite(
+                                widget.restaurantInfoCard.restaurantName)
+                        : await widget.ref
+                            .read(userListControllerProvider.notifier)
+                            .addToFavourite(
+                                widget.restaurantInfoCard.restaurantName);
+
+                    widget.parentSetState!();
+                  },
+                  child: FavouriteIcon(isFavourite: isFavourite)),
+            ),
           ],
         ),
       ),

@@ -12,13 +12,19 @@ import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/navigation_info_provider.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
+import 'package:ACAC/features/user_auth/controller/user_repository.dart';
+import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:ACAC/models/User.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
+
+import '../../../maps/helper_widgets/swipe_up_card.dart';
 
 class DbbSort extends ConsumerStatefulWidget {
   static const String id = 'card_viewer';
@@ -87,10 +93,16 @@ class DbbSortState extends ConsumerState<DbbSort> {
     RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
     NavInfo nav = provider.Provider.of<NavInfo>(context);
     final watchCounter = ref.watch(userPageCounter);
+    final itemsRepository = ref.read(userRepositoryProvider);
 
     void updatePage(int index, String route) {
       Navigator.pushNamed(context, route);
       ref.read(userPageCounter).setCounter(index);
+    }
+
+    Future<User> getUserInfo() async {
+      var userID = await Amplify.Auth.getCurrentUser();
+      return await itemsRepository.getUser(userID.userId);
     }
 
     return Scaffold(
@@ -149,14 +161,63 @@ class DbbSortState extends ConsumerState<DbbSort> {
                 elevation: 1,
                 child: Column(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: CachedNetworkImage(
-                        imageUrl: filteredRestaurants[index].imageSrc,
-                        width: double.infinity,
-                        height: 130,
-                        fit: BoxFit.cover,
-                      ),
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: CachedNetworkImage(
+                            imageUrl: filteredRestaurants[index].imageSrc,
+                            width: double.infinity,
+                            height: 130,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        FutureBuilder<User>(
+                          future: getUserInfo(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<User> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container();
+                            } else if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            } else if (snapshot.hasData) {
+                              bool isFavourite = snapshot
+                                  .data!.favouriteRestaurants!
+                                  .contains(filteredRestaurants[index]
+                                      .restaurantName);
+                              return Positioned(
+                                right: 10,
+                                top: 10,
+                                child: GestureDetector(
+                                    onTap: () async {
+                                      if (isFavourite) {
+                                        await ref
+                                            .read(userListControllerProvider
+                                                .notifier)
+                                            .removeFromFavourite(
+                                                filteredRestaurants[index]
+                                                    .restaurantName);
+                                      } else {
+                                        await ref
+                                            .read(userListControllerProvider
+                                                .notifier)
+                                            .addToFavourite(
+                                                filteredRestaurants[index]
+                                                    .restaurantName);
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: FavouriteIcon(
+                                      isFavourite: isFavourite,
+                                    )),
+                              );
+                            } else {
+                              return const Text('Something went wrong');
+                            }
+                          },
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10),

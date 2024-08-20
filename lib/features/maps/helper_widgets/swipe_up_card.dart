@@ -7,7 +7,10 @@ import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart'
 import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
+import 'package:ACAC/features/user_auth/controller/user_repository.dart';
+import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/ModelProvider.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +47,7 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
     PolyInfo maps = provider.Provider.of<PolyInfo>(context);
     RestaurantInfo data = provider.Provider.of<RestaurantInfo>(context);
     NavInfo nav = provider.Provider.of<NavInfo>(context);
+    final itemsRepository = ref.read(userRepositoryProvider);
 
     void updatePage(int index, String route) {
       Navigator.pushNamed(context, route);
@@ -80,6 +84,11 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
       distanceCache[restaurant.id] = distance;
 
       return distance;
+    }
+
+    Future<User> getUserInfo() async {
+      var userID = await Amplify.Auth.getCurrentUser();
+      return await itemsRepository.getUser(userID.userId);
     }
 
     return GestureDetector(
@@ -133,7 +142,44 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                       },
                     ),
                   ),
-                )
+                ),
+                FutureBuilder<User>(
+                  future: getUserInfo(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<User> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    } else if (snapshot.hasData) {
+                      bool isFavourite = snapshot.data!.favouriteRestaurants!
+                          .contains(widget.restaurant.restaurantName);
+                      return Positioned(
+                        right: 10,
+                        top: 10,
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (isFavourite) {
+                              await ref
+                                  .read(userListControllerProvider.notifier)
+                                  .removeFromFavourite(
+                                      widget.restaurant.restaurantName);
+                            } else {
+                              await ref
+                                  .read(userListControllerProvider.notifier)
+                                  .addToFavourite(
+                                      widget.restaurant.restaurantName);
+                            }
+                            setState(() {});
+                          },
+                          child: FavouriteIcon(isFavourite: isFavourite),
+                        ),
+                      );
+                    } else {
+                      return const Text('Something went wrong');
+                    }
+                  },
+                ),
               ],
             ),
             Padding(
@@ -265,6 +311,29 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class FavouriteIcon extends StatelessWidget {
+  const FavouriteIcon({
+    super.key,
+    required this.isFavourite,
+  });
+
+  final bool isFavourite;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.grey.withOpacity(0.75)),
+      child: Icon(
+        isFavourite ? Icons.favorite : Icons.favorite_outline,
+        color: isFavourite ? Colors.red : Colors.white,
       ),
     );
   }

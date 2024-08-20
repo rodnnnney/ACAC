@@ -1,3 +1,4 @@
+import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/common/routing/ui/app_bar.dart';
 import 'package:ACAC/common/routing/ui/centerNavButton.dart';
@@ -93,22 +94,22 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                       ref.read(userPageCounter).setCounter(7);
                       Navigator.pushNamed(context, History.id);
                     },
-                    child: Expanded(
-                      child: const SizedBox(
-                        height: 100,
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: Column(
-                              children: [
-                                Icon(Icons.timeline_outlined, size: 40),
-                                Text(
-                                  'History',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
+                    child: const SizedBox(
+                      height: 100,
+                      width: 120,
+                      child: Card(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Column(
+                            children: [
+                              Icon(Icons.timeline_outlined,
+                                  size: 40, color: AppTheme.kGreen2),
+                              Text(
+                                'History',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -120,29 +121,31 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                       ref.read(userPageCounter).setCounter(8);
                       Navigator.pushNamed(context, Favourites.id);
                     },
-                    child: Expanded(
-                      child: SizedBox(
-                        height: 100,
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 4,
+                    child: const SizedBox(
+                      height: 100,
+                      width: 120,
+                      child: Card(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 4,
+                              ),
+                              Icon(
+                                Icons.favorite_outlined,
+                                size: 35,
+                                color: Colors.redAccent,
+                              ),
+                              FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  'Favourites',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Icon(Icons.favorite_outlined, size: 35),
-                                FittedBox(
-                                  fit: BoxFit.fitWidth,
-                                  child: Text(
-                                    'Favourites',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

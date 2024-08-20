@@ -99,7 +99,7 @@ class _HistoryState extends ConsumerState<Favourites> {
                     return Text("${snapshot.error}");
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return Container();
                   } else if (snapshot.hasData) {
                     return SizedBox(
                       width: MediaQuery.of(context).size.width,

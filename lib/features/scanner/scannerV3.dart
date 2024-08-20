@@ -171,8 +171,10 @@ class _AppState extends ConsumerState<App> {
   }
 
   Future<void> _scan(AsyncValue<List<RestaurantInfoCard>> cardList) async {
+    safePrint('Starting to scan');
+
     try {
-      await BarcodeScanner.scan(
+      var test = await BarcodeScanner.scan(
         options: ScanOptions(
           strings: {
             'cancel': _cancelController.text,
@@ -188,12 +190,15 @@ class _AppState extends ConsumerState<App> {
           ),
         ),
       );
-      if (scanResult != null) {
+      if (test.rawContent.isNotEmpty) {
         cardList.when(
           data: (list) async {
+            safePrint(list);
+            safePrint('scanning');
             var matchingCard = list.firstWhere(
-              (card) => card.scannerDataMatch == scanResult?.rawContent,
+              (card) => card.scannerDataMatch == test.rawContent,
             );
+            safePrint(matchingCard);
             await sendData(matchingCard);
           },
           error: (error, stackTrace) {
