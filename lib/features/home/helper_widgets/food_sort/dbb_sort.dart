@@ -183,7 +183,7 @@ class DbbSortState extends ConsumerState<DbbSort> {
                               return Text("${snapshot.error}");
                             } else if (snapshot.hasData) {
                               bool isFavourite = snapshot
-                                  .data!.favouriteRestaurants!
+                                  .data!.favouriteRestaurants
                                   .contains(filteredRestaurants[index]
                                       .restaurantName);
                               return Positioned(

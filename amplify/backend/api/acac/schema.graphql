@@ -14,7 +14,7 @@ type User @model @auth(rules: [{ allow: public }]) {
     firstName: String!
     lastName: String!
     #favouriteRestaurants:[RestaurantInfoCard] @hasMany
-    favouriteRestaurants: [String]
+    favouriteRestaurants: [String]!
     email: AWSEmail!
 }
 

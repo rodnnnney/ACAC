@@ -40,13 +40,15 @@ class UserAPIService {
 
       final response = await Amplify.API.query(request: request).response;
 
+      safePrint(response);
       return response.data!;
     } on Exception catch (error) {
       safePrint('getUser failed: $error');
       return User(
           firstName: "Deleted User",
           email: "Error fetching email",
-          lastName: 'Delete User');
+          lastName: 'Delete User',
+          favouriteRestaurants: ['']);
     }
   }
 

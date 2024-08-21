@@ -24,8 +24,6 @@ class Apis {
       'firstName': firstName,
       'lastName': lastName,
       'owner': "$id::$firstName",
-      'updatedAt': formattedDateTime.toString(),
-      '__typename': 'User',
     });
 
     final response = await http.put(url, headers: headers, body: body);

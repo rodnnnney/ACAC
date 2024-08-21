@@ -78,7 +78,6 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
 
     Future<User> getUserInfo() async {
       var userID = await Amplify.Auth.getCurrentUser();
-      //User currentUser =
       return await itemsRepository.getUser(userID.userId);
     }
 
@@ -114,13 +113,29 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 15,
                               ),
-                              const Row(
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Featured:", style: AppTheme.styling),
-                                  Text("Items Found: 2",
+                                  const Text("Featured:",
                                       style: AppTheme.styling),
+                                  GestureDetector(
+                                    // onTap: () {
+                                    //   Navigator.pushReplacement(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => DiscountCard(
+                                    //         firstName: 'Rimuru',
+                                    //         lastName: 'Tempest',
+                                    //         restaurantInfoCard:
+                                    //             restaurantsByTimesVisited[0],
+                                    //       ),
+                                    //     ),
+                                    //   );
+                                    // },
+                                    child: const Text("Items Found: 2",
+                                        style: AppTheme.styling),
+                                  ),
                                 ],
                               ),
                               const SizedBox(
@@ -183,9 +198,9 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                 child: ListView.separated(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: 5,
-                                  separatorBuilder: (BuildContext context,
-                                          int index) =>
-                                      SizedBox(width: 10), // Add a separator
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const SizedBox(width: 10),
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return FutureBuilder(

@@ -80,9 +80,10 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(30)),
                           ),
                           child: const Icon(
                             Icons.question_mark,
@@ -170,42 +171,7 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      showHelp
-                          ? Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                color: Color(0xffFFA3A5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(12),
-                                ),
-                              ),
-                              child: const Column(
-                                children: [
-                                  Text(
-                                    'Use your real name',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      'This will be the name shown on your '
-                                      'ACAC membership card and cannot be '
-                                      'changed!',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
+                      showHelp ? const HelpBox() : Container(),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: newPassword,
@@ -378,6 +344,48 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class HelpBox extends StatelessWidget {
+  const HelpBox({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.red.withOpacity(0.55), width: 1),
+        color: Colors.red.withOpacity(0.5),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Use your real name!',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            'This will be the name shown on your '
+            'ACAC membership card and cannot be '
+            'changed!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 12, color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
     );
   }

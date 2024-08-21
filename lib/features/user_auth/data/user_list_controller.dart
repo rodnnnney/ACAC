@@ -30,7 +30,11 @@ class UserListController extends _$UserListController {
     required String lastName,
     required String email,
   }) async {
-    final user = User(firstName: firstName, lastName: lastName, email: email);
+    final user = User(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        favouriteRestaurants: []);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final userRepository = ref.read(userRepositoryProvider);

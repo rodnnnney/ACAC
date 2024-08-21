@@ -135,18 +135,6 @@ class _SignInCustomState extends State<SignInCustom> {
                                 const TextStyle(fontWeight: FontWeight.w600),
                             speed: const Duration(milliseconds: 250),
                           ),
-                          // TypewriterAnimatedText(
-                          //   ('Welcome Back in korean'),
-                          //   speed: const Duration(milliseconds: 250),
-                          // ),
-                          // TypewriterAnimatedText(
-                          //   ('Welcome Back Vietnamese'),
-                          //   speed: const Duration(milliseconds: 250),
-                          // ),
-                          // TypewriterAnimatedText(
-                          //   ('Welcome Back in Mandarin'),
-                          //   speed: const Duration(milliseconds: 250),
-                          // ),
                         ],
                         repeatForever: true,
                       ),
@@ -231,8 +219,7 @@ class _SignInCustomState extends State<SignInCustom> {
                             backgroundColor: WidgetStateColor.transparent,
                             padding: WidgetStateProperty.all(EdgeInsets.zero)),
                         onPressed: () => widget.state.changeStep(
-                          AuthenticatorStep.confirmSignInNewPassword,
-                          //TODO SOMETHING ELSE
+                          AuthenticatorStep.resetPassword,
                         ),
                         child: RichText(
                           text: const TextSpan(

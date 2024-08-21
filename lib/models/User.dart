@@ -73,8 +73,17 @@ class User extends amplify_core.Model {
     }
   }
 
-  List<String>? get favouriteRestaurants {
-    return _favouriteRestaurants;
+  List<String> get favouriteRestaurants {
+    try {
+      return _favouriteRestaurants!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
   String get email {
@@ -102,7 +111,7 @@ class User extends amplify_core.Model {
       {required this.id,
       required firstName,
       required lastName,
-      favouriteRestaurants,
+      required favouriteRestaurants,
       required email,
       createdAt,
       updatedAt})
@@ -117,7 +126,7 @@ class User extends amplify_core.Model {
       {String? id,
       required String firstName,
       required String lastName,
-      List<String>? favouriteRestaurants,
+      required List<String> favouriteRestaurants,
       required String email}) {
     return User._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
@@ -274,7 +283,7 @@ class User extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: User.FAVOURITERESTAURANTS,
-        isRequired: false,
+        isRequired: true,
         isArray: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.collection,

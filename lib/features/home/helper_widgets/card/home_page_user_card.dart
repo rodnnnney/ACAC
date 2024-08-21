@@ -107,7 +107,7 @@ class _HomePageUserCardState extends State<HomePageUserCard> {
                         child: Container(
                           padding: const EdgeInsets.all(2),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(0.75),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: FutureBuilder<String>(
@@ -217,21 +217,22 @@ class _HomePageUserCardState extends State<HomePageUserCard> {
               right: 10,
               top: 10,
               child: GestureDetector(
-                  onTap: () async {
-                    HapticFeedback.heavyImpact();
-                    isFavourite
-                        ? await widget.ref
-                            .read(userListControllerProvider.notifier)
-                            .removeFromFavourite(
-                                widget.restaurantInfoCard.restaurantName)
-                        : await widget.ref
-                            .read(userListControllerProvider.notifier)
-                            .addToFavourite(
-                                widget.restaurantInfoCard.restaurantName);
+                onTap: () async {
+                  HapticFeedback.heavyImpact();
+                  isFavourite
+                      ? await widget.ref
+                          .read(userListControllerProvider.notifier)
+                          .removeFromFavourite(
+                              widget.restaurantInfoCard.restaurantName)
+                      : await widget.ref
+                          .read(userListControllerProvider.notifier)
+                          .addToFavourite(
+                              widget.restaurantInfoCard.restaurantName);
 
-                    widget.parentSetState!();
-                  },
-                  child: FavouriteIcon(isFavourite: isFavourite)),
+                  widget.parentSetState!();
+                },
+                child: FavouriteIcon(isFavourite: isFavourite),
+              ),
             ),
           ],
         ),
