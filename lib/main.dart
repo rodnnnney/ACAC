@@ -16,7 +16,6 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
-
 import 'amplifyconfiguration.dart';
 import 'common/providers/riverpod_light_dark.dart';
 import 'common/routing/routes.dart';
