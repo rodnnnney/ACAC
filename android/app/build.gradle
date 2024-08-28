@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.example.ACAC"
+    namespace "com.mobile.acac"
     compileSdk flutter.compileSdkVersion
     ndkVersion "25.1.8937393"
 
@@ -47,7 +47,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.ACAC"
+        applicationId "com.mobile.acac"
         minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
         versionCode 1
