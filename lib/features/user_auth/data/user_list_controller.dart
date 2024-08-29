@@ -61,16 +61,13 @@ class UserListController extends _$UserListController {
       var userID = await Amplify.Auth.getCurrentUser();
       User currentUser = await itemsRepository.getUser(userID.userId);
       if (currentUser.favouriteRestaurants == null ||
-          currentUser.favouriteRestaurants!.isEmpty) {
-        safePrint('Doing this thing');
-
+          currentUser.favouriteRestaurants.isEmpty) {
         User updatedUser = currentUser.copyWith(favouriteRestaurants: [rest]);
         await itemsRepository.updateUser(updatedUser);
-        print(updatedUser);
       } else {
         if (!currentUser.favouriteRestaurants!.contains(rest)) {
           List<String> updatedFavorites = [
-            ...?currentUser.favouriteRestaurants,
+            ...currentUser.favouriteRestaurants,
             rest
           ];
           User updatedUser =
@@ -90,7 +87,7 @@ class UserListController extends _$UserListController {
       User currentUser = await itemsRepository.getUser(authUser.userId);
 
       bool isAlreadyFavorite =
-          currentUser.favouriteRestaurants?.any((r) => r == restName) ?? false;
+          currentUser.favouriteRestaurants.any((r) => r == restName) ?? false;
 
       if (!isAlreadyFavorite) {
         // Create a new list with the existing favorites and the new restaurant
@@ -124,16 +121,13 @@ class UserListController extends _$UserListController {
       User currentUser = await itemsRepository.getUser(userID.userId);
 
       // Create a new list without the restaurant to be removed
-      List<String> updatedFavorites = currentUser.favouriteRestaurants
-              ?.where((r) => r != restName)
-              .toList() ??
-          [];
+      List<String> updatedFavorites =
+          currentUser.favouriteRestaurants.where((r) => r != restName).toList();
 
       User updatedUser =
           currentUser.copyWith(favouriteRestaurants: updatedFavorites);
       await itemsRepository.updateUser(updatedUser);
 
-      safePrint("DBB user after update: ${updatedUser.favouriteRestaurants}");
       return fetchUsers();
     });
   }

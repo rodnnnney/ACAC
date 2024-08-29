@@ -39,8 +39,6 @@ class UserAPIService {
           authorizationMode: APIAuthorizationType.apiKey);
 
       final response = await Amplify.API.query(request: request).response;
-
-      safePrint(response);
       return response.data!;
     } on Exception catch (error) {
       safePrint('getUser failed: $error');
@@ -51,22 +49,6 @@ class UserAPIService {
           favouriteRestaurants: ['']);
     }
   }
-
-  // Future<Post> getPost(String postId) async {
-  //   try {
-  //     final request = ModelQueries.get(
-  //       Post.classType,
-  //       PostModelIdentifier(id: postId),
-  //     );
-  //     final response = await Amplify.API.query(request: request).response;
-  //
-  //     final post = response.data!;
-  //     return post;
-  //   } on Exception catch (error) {
-  //     safePrint('getPost failed: $error');
-  //     rethrow;
-  //   }
-  // }
 
   Future<void> deleteUser(User user) async {
     try {
@@ -107,16 +89,4 @@ class UserAPIService {
       safePrint('Update user failed: $error');
     }
   }
-
-// Future<void> addToFavourite(RestaurantInfoCard card) async {
-//   try {
-//     await Amplify.API
-//         .mutate(
-//           request: ModelMutations.create(card),
-//         )
-//         .response;
-//   } on Exception catch (error) {
-//     safePrint('Update user failed: $error');
-//   }
-// }
 }

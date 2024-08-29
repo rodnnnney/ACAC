@@ -23,15 +23,6 @@ class AccountInfo extends ConsumerWidget with RouteAware {
   String name = '';
   LaunchLink launchLink = LaunchLink();
 
-  Future<void> signOutCurrentUser() async {
-    final result = await Amplify.Auth.signOut();
-    if (result is CognitoCompleteSignOut) {
-      safePrint('Sign out completed successfully');
-    } else if (result is CognitoFailedSignOut) {
-      safePrint('Error signing user out: ${result.exception.message}');
-    }
-  }
-
   Future<void> fetchUserInfo() async {
     try {
       final result = await Amplify.Auth.fetchUserAttributes();
@@ -44,6 +35,24 @@ class AccountInfo extends ConsumerWidget with RouteAware {
       }
     } on AuthException catch (e) {
       safePrint('Error fetching user attributes: ${e.message}');
+    }
+  }
+
+  Future<void> signOutCurrentUser() async {
+    final result = await Amplify.Auth.signOut();
+    if (result is CognitoCompleteSignOut) {
+      safePrint('Sign out completed successfully');
+    } else if (result is CognitoFailedSignOut) {
+      safePrint('Error signing user out: ${result.exception.message}');
+    }
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await Amplify.Auth.deleteUser();
+      safePrint('Delete user succeeded');
+    } on AuthException catch (e) {
+      safePrint('Delete user failed with error: $e');
     }
   }
 
@@ -345,50 +354,22 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                   ),
                   const SizedBox(height: 15),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        onPressed: () async {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return ConfirmQuit(
-                                  destination: signOutCurrentUser,
-                                  title: 'Confirm Sign Out',
-                                  subtitle:
-                                      'Are you sure you want to sign out?',
-                                  actionButton: 'Sign Out',
-                                );
-                              });
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(Colors.transparent),
-                          shape:
-                              WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(
-                                  color: Colors.red,
-                                  width: 1.0), // Border color and width
-                            ),
-                          ),
-                        ),
-                        child: const Row(
-                          children: [
-                            Text(
-                              'Logout',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.logout_outlined,
-                              color: Colors.red,
-                            )
-                          ],
-                        ),
+                      StyledLogoutActionButton(
+                        buttonText: 'Logout',
+                        iconData: Icons.logout_outlined,
+                        action: signOutCurrentUser,
+                        warningTextH1: 'Confirm '
+                            'Sign Out',
+                        warningTextH2: 'Are you sure you want '
+                            'to sign out?',
+                        actionButtonText: 'Sign Out',
                       ),
+                      DeleteAccountForever(
+                        ref: ref,
+                        action: deleteUser,
+                      )
                     ],
                   ),
                   const SizedBox(height: 30),
@@ -442,6 +423,234 @@ class AccountInfo extends ConsumerWidget with RouteAware {
         ),
       ),
       bottomNavigationBar: AppBarBottom(id: AccountInfo.id),
+    );
+  }
+}
+
+class DeleteAccountForever extends StatelessWidget {
+  const DeleteAccountForever({
+    super.key,
+    required this.ref,
+    required this.action,
+  });
+
+  final Future<void> Function() action;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController confirmText = TextEditingController();
+    return TextButton(
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter localState) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor:
+                      ref.watch(darkLight).theme ? Colors.grey : Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize
+                          .min, // Adjust the column size dynamically
+                      children: [
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.warning,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Delete account',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Text('Deleting your account is '
+                            'an irreversible action, '
+                            'type "I understand" to continue'),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: confirmText,
+                          decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 20),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.roundedRadius),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color(0xff2E2E2E), width: 2),
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.roundedRadius),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: Colors.red, width: 1),
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.roundedRadius),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: Colors.red, width: 2),
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.roundedRadius),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ref.watch(darkLight).theme
+                                    ? Colors.grey
+                                    : Colors.white,
+                                foregroundColor: Colors.black,
+                                side: const BorderSide(
+                                    color: Colors.black, width: 1),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ref.watch(darkLight).theme
+                                    ? Colors.grey
+                                    : Colors.white,
+                                foregroundColor: Colors.red,
+                                side: const BorderSide(
+                                    color: Colors.red, width: 1),
+                              ),
+                              onPressed: () {
+                                if (confirmText.text.trim() == 'I understand') {
+                                  action();
+                                } else {
+                                  const ResponsePopUp(
+                                    response: 'Bad input',
+                                    location: DelightSnackbarPosition.top,
+                                    icon: Icons.error,
+                                    color: Colors.redAccent,
+                                  ).showToast(ctx);
+                                }
+                              },
+                              child: const Text('Delete Account'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: const BorderSide(
+                color: Colors.red, width: 1.0), // Border color and width
+          ),
+        ),
+      ),
+      child: const Row(
+        children: [
+          Text(
+            'Delete Account',
+            style: TextStyle(color: Colors.red),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Icon(
+            Icons.delete_forever_outlined,
+            color: Colors.red,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class StyledLogoutActionButton extends StatelessWidget {
+  const StyledLogoutActionButton(
+      {super.key,
+      required this.buttonText,
+      required this.iconData,
+      required this.action,
+      required this.warningTextH1,
+      required this.warningTextH2,
+      required this.actionButtonText});
+
+  final String buttonText;
+  final IconData iconData;
+  final Future<void> Function() action;
+  final String warningTextH1;
+  final String warningTextH2;
+  final String actionButtonText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ConfirmQuit(
+                destination: action,
+                title: 'Confirm Sign Out',
+                subtitle: 'Are you sure you want to sign out?',
+                actionButton: 'Sign Out',
+              );
+            });
+      },
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: const BorderSide(
+                color: Colors.red, width: 1.0), // Border color and width
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Text(
+            buttonText,
+            style: const TextStyle(color: Colors.red),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Icon(
+            iconData,
+            color: Colors.red,
+          )
+        ],
+      ),
     );
   }
 }

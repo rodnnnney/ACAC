@@ -5,13 +5,15 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignInCustom extends StatefulWidget {
-  SignInCustom({super.key, required this.state});
+  const SignInCustom({super.key, required this.state});
 
-  AuthenticatorState state;
+  final AuthenticatorState state;
 
   @override
   State<SignInCustom> createState() => _SignInCustomState();
@@ -283,6 +285,17 @@ class _SignInCustomState extends State<SignInCustom> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(child: TermsAndPoliciesText()),
+                    ],
+                  ),
+                ),
                 // Padding(
                 //   padding: const EdgeInsets.all(20),
                 //   child: Container(
@@ -333,6 +346,67 @@ class _SignInCustomState extends State<SignInCustom> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TermsAndPoliciesText extends StatelessWidget {
+  const TermsAndPoliciesText({super.key});
+
+  Future<void> _launchURL(String url) async {
+    Uri parsed = Uri.parse(url);
+    if (await canLaunchUrl(parsed)) {
+      await launchUrl(parsed);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        text: 'By clicking sign in you are agreeing to our ',
+        style: TextStyle(
+          color: Colors.black.withOpacity(0.5),
+          fontSize: 11,
+        ),
+        children: [
+          TextSpan(
+            text: 'Terms of Service',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              decoration: TextDecoration.underline,
+              fontSize: 11,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                _launchURL(
+                    'https://acacpicturesgenerealbucket.s3.amazonaws.com/ACAC+Mobile+App+Terms+of+Service.pdf');
+              },
+          ),
+          TextSpan(
+            text: ' and ',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              fontSize: 11,
+            ),
+          ),
+          TextSpan(
+            text: 'Privacy Policy',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              decoration: TextDecoration.underline,
+              fontSize: 11,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                _launchURL('https://acacpicturesgenerealbucket.s3.amazonaws'
+                    '.com/Privacy+Policy-3.pdf');
+              },
+          ),
+        ],
       ),
     );
   }

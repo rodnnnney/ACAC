@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AppTheme {
   static const cacheDuration = Duration(hours: 1);
@@ -14,6 +15,9 @@ class AppTheme {
   static const double spacing = 10;
 
   static const double headerTwo = 18;
+
+  static const LatLng backUpLocation =
+      LatLng(45.3873261757469, -75.69588214536877);
 
   static const TextStyle styling = TextStyle(
       fontFamily: 'helveticanowtext',

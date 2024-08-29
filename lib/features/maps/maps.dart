@@ -1,3 +1,4 @@
+import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
 import 'package:ACAC/common/routing/ui/app_bar.dart';
 import 'package:ACAC/common/routing/ui/centerNavButton.dart';
@@ -8,6 +9,7 @@ import 'package:ACAC/common/widgets/helper_functions/markers.dart';
 import 'package:ACAC/features/maps/helper_widgets/info_card.dart';
 import 'package:ACAC/features/maps/helper_widgets/swipe_up_menu.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -51,18 +53,61 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
 
   Future<void> _initializeLocation() async {
     try {
-      LatLng userLocation = await location.find();
+      LocationStatus status = await location.checkLocationStatus();
+      safePrint(status);
+
+      switch (status) {
+        case LocationStatus.enabled:
+          LatLng userLocation = await location.find();
+          if (mounted) {
+            setState(() {
+              isLocationLoaded = true;
+              userPosition = userLocation;
+            });
+          }
+          break;
+        case LocationStatus.serviceDisabled:
+        case LocationStatus.permissionDenied:
+        case LocationStatus.permissionDeniedForever:
+          if (mounted) {
+            setState(() {
+              isLocationLoaded = true;
+              userPosition = AppTheme.backUpLocation;
+            });
+          }
+          break;
+        //Odd edge case when you set simulator location to none
+        case LocationStatus.other:
+          try {
+            LatLng userLocation =
+                await location.find().timeout(const Duration(seconds: 5));
+            if (mounted) {
+              setState(() {
+                isLocationLoaded = true;
+                userPosition = userLocation;
+              });
+            }
+          } catch (e) {
+            safePrint(e);
+            if (mounted) {
+              setState(() {
+                isLocationLoaded = true;
+                userPosition = AppTheme.backUpLocation;
+              });
+            }
+          }
+      }
+      await _initializeMarkers();
+      safePrint('Location and markers initialized');
+    } catch (e) {
+      safePrint('Error initializing location: $e');
       if (mounted) {
         setState(() {
           isLocationLoaded = true;
-          userPosition = userLocation;
+          userPosition = AppTheme.backUpLocation;
         });
       }
       await _initializeMarkers();
-      print('Location and markers initialized');
-    } catch (e) {
-      print('Error initializing location: $e');
-      // Handle the error appropriately
     }
   }
 
@@ -88,9 +133,15 @@ class _MapScreenState extends ConsumerState<MapScreen> with RouteAware {
             position: userPosition,
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-            infoWindow: const InfoWindow(
-                title: 'Current location!',
-                snippet: 'This is where you are right now!'),
+            infoWindow: InfoWindow(
+              title: userPosition == AppTheme.backUpLocation
+                  ? 'Default Location'
+                  : 'Current '
+                      'Location',
+              snippet: userPosition == AppTheme.backUpLocation
+                  ? 'Unable to get your location'
+                  : 'This is where you are right now!',
+            ),
           ),
         );
 
