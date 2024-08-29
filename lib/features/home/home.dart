@@ -14,6 +14,7 @@ import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
 import 'package:ACAC/features/user_auth/controller/user_repository.dart';
+import 'package:ACAC/features/user_auth/data/cache_user.dart';
 import 'package:ACAC/models/MarketingCard.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/models/User.dart';
@@ -72,9 +73,10 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    var restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
-    var test = ref.watch(marketingCardControllerProvider);
+    final restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
+    final test = ref.watch(marketingCardControllerProvider);
     final itemsRepository = ref.read(userRepositoryProvider);
+    final userObject = ref.watch(currentUserProvider);
 
     Future<User> getUserInfo() async {
       var userID = await Amplify.Auth.getCurrentUser();
@@ -193,58 +195,73 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const Text("ACAC Favourites:",
                                   style: AppTheme.styling),
                               //const GradientText(gradText: "ACAC Favourites:"),
-                              SizedBox(
-                                height: 170,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: 5,
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                          const SizedBox(width: 10),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return FutureBuilder(
-                                      future: getUserInfo(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<User> snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Opacity(
-                                            opacity: 0.2,
-                                            child: Container(
-                                              width: 200,
-                                              height: 130,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: Colors.grey),
-                                            ),
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          return Text("${snapshot.error}");
-                                        } else {
-                                          return SizedBox(
-                                            width: 200,
-                                            child: HomePageUserCard(
-                                              restaurantInfoCard:
-                                                  restaurantsByTimesVisited[
-                                                      index],
-                                              user: userLocation,
-                                              index: index,
-                                              ref: ref,
-                                              favouriteList: snapshot.data
-                                                      ?.favouriteRestaurants ??
-                                                  [],
-                                              parentSetState: () =>
-                                                  setState(() {}),
-                                            ),
-                                          );
-                                        }
+                              userObject.when(
+                                data: (user) {
+                                  return SizedBox(
+                                    height: 170,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 5,
+                                      separatorBuilder:
+                                          (BuildContext context, int index) =>
+                                              const SizedBox(width: 10),
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return FutureBuilder(
+                                          future: getUserInfo(),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<User> snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return Opacity(
+                                                opacity: 0.2,
+                                                child: Container(
+                                                  width: 200,
+                                                  height: 130,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      color: Colors.grey),
+                                                ),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return Text("${snapshot.error}");
+                                            } else {
+                                              return SizedBox(
+                                                width: 200,
+                                                child: HomePageUserCard(
+                                                  restaurantInfoCard:
+                                                      restaurantsByTimesVisited[
+                                                          index],
+                                                  user: userLocation,
+                                                  index: index,
+                                                  ref: ref,
+                                                  favouriteList: snapshot.data
+                                                          ?.favouriteRestaurants ??
+                                                      [],
+                                                  parentSetState: () =>
+                                                      setState(() {}),
+                                                  currentUser: user,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        );
                                       },
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
+                                error: (Object error, StackTrace stackTrace) {
+                                  safePrint('An error occurred: $error');
+                                  return Text('An error occurred: $error');
+                                },
+                                loading: () {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                },
                               ),
+
                               const SizedBox(
                                 height: 20,
                               ),

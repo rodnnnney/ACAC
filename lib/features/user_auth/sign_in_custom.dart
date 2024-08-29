@@ -8,6 +8,7 @@ import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignInCustom extends StatefulWidget {
@@ -292,7 +293,33 @@ class _SignInCustomState extends State<SignInCustom> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Center(child: TermsAndPoliciesText()),
+                      const Center(
+                        child: TermsAndPoliciesText(),
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          try {
+                            await dotenv.load(fileName: ".env");
+                            String username = dotenv.get('GUEST_NAME');
+                            String password = dotenv.get('GUEST_PASSWORD');
+                            await Amplify.Auth.signIn(
+                              username: username,
+                              password: password,
+                            );
+                          } catch (e) {
+                            safePrint('Sign-in failed: $e');
+                          }
+                        },
+                        child: Text(
+                          'Guest Sign-In',
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(0.5),
+                              fontSize: 12),
+                        ),
+                      )
                     ],
                   ),
                 ),

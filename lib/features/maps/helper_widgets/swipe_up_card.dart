@@ -14,6 +14,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
@@ -23,9 +24,13 @@ import '../service/navigation_info_provider.dart';
 class SwipeUpCard extends ConsumerStatefulWidget {
   final RestaurantInfoCard restaurant;
   final LatLng userPosition;
+  final User user;
 
   const SwipeUpCard(
-      {super.key, required this.restaurant, required this.userPosition});
+      {super.key,
+      required this.restaurant,
+      required this.userPosition,
+      required this.user});
 
   @override
   ConsumerState<SwipeUpCard> createState() => _SwipeUpCardState();
@@ -152,29 +157,33 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     } else if (snapshot.hasData) {
-                      bool isFavourite = snapshot.data!.favouriteRestaurants!
+                      bool isFavourite = snapshot.data!.favouriteRestaurants
                           .contains(widget.restaurant.restaurantName);
-                      return Positioned(
-                        right: 10,
-                        top: 10,
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (isFavourite) {
-                              await ref
-                                  .read(userListControllerProvider.notifier)
-                                  .removeFromFavourite(
-                                      widget.restaurant.restaurantName);
-                            } else {
-                              await ref
-                                  .read(userListControllerProvider.notifier)
-                                  .addToFavourite(
-                                      widget.restaurant.restaurantName);
-                            }
-                            setState(() {});
-                          },
-                          child: FavouriteIcon(isFavourite: isFavourite),
-                        ),
-                      );
+                      return widget.user.id == dotenv.get("GUEST_ID")
+                          ? Container()
+                          : Positioned(
+                              right: 10,
+                              top: 10,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  if (isFavourite) {
+                                    await ref
+                                        .read(
+                                            userListControllerProvider.notifier)
+                                        .removeFromFavourite(
+                                            widget.restaurant.restaurantName);
+                                  } else {
+                                    await ref
+                                        .read(
+                                            userListControllerProvider.notifier)
+                                        .addToFavourite(
+                                            widget.restaurant.restaurantName);
+                                  }
+                                  setState(() {});
+                                },
+                                child: FavouriteIcon(isFavourite: isFavourite),
+                              ),
+                            );
                     } else {
                       return const Text('Something went wrong');
                     }

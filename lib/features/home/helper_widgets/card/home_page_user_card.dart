@@ -6,27 +6,32 @@ import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/helper_widgets/swipe_up_card.dart';
 import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:ACAC/models/User.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'additional_data_dbb.dart';
 
 class HomePageUserCard extends StatefulWidget {
-  HomePageUserCard(
-      {super.key,
-      required this.restaurantInfoCard,
-      required this.user,
-      required this.index,
-      required this.ref,
-      this.favouriteList,
-      this.parentSetState});
+  HomePageUserCard({
+    super.key,
+    required this.restaurantInfoCard,
+    required this.user,
+    required this.index,
+    required this.currentUser,
+    required this.ref,
+    this.favouriteList,
+    this.parentSetState,
+  });
 
   final RestaurantInfoCard restaurantInfoCard;
   final LatLng user;
   final int index;
+  final User currentUser;
   final WidgetRef ref;
   List<String>? favouriteList;
   Function? parentSetState;
@@ -213,27 +218,29 @@ class _HomePageUserCardState extends State<HomePageUserCard> {
                 ),
               ),
             ),
-            Positioned(
-              right: 10,
-              top: 10,
-              child: GestureDetector(
-                onTap: () async {
-                  HapticFeedback.heavyImpact();
-                  isFavourite
-                      ? await widget.ref
-                          .read(userListControllerProvider.notifier)
-                          .removeFromFavourite(
-                              widget.restaurantInfoCard.restaurantName)
-                      : await widget.ref
-                          .read(userListControllerProvider.notifier)
-                          .addToFavourite(
-                              widget.restaurantInfoCard.restaurantName);
+            widget.currentUser.id == dotenv.get('GUEST_ID')
+                ? Container()
+                : Positioned(
+                    right: 10,
+                    top: 10,
+                    child: GestureDetector(
+                      onTap: () async {
+                        HapticFeedback.heavyImpact();
+                        isFavourite
+                            ? await widget.ref
+                                .read(userListControllerProvider.notifier)
+                                .removeFromFavourite(
+                                    widget.restaurantInfoCard.restaurantName)
+                            : await widget.ref
+                                .read(userListControllerProvider.notifier)
+                                .addToFavourite(
+                                    widget.restaurantInfoCard.restaurantName);
 
-                  widget.parentSetState!();
-                },
-                child: FavouriteIcon(isFavourite: isFavourite),
-              ),
-            ),
+                        widget.parentSetState!();
+                      },
+                      child: FavouriteIcon(isFavourite: isFavourite),
+                    ),
+                  ),
           ],
         ),
       ),

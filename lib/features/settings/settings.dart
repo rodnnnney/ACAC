@@ -7,36 +7,20 @@ import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
 import 'package:ACAC/features/home/history.dart';
 import 'package:ACAC/features/settings/sorting/Favourites.dart';
+import 'package:ACAC/features/user_auth/data/cache_user.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountInfo extends ConsumerWidget with RouteAware {
   static String id = 'Account_screen';
   AccountInfo({super.key});
-  String feedbackText = '';
   bool isSwitched = false;
-  String email = '';
-  String name = '';
-  LaunchLink launchLink = LaunchLink();
-
-  Future<void> fetchUserInfo() async {
-    try {
-      final result = await Amplify.Auth.fetchUserAttributes();
-      for (final element in result) {
-        if (element.userAttributeKey.toString() == 'email') {
-          email = element.value.toString();
-        } else if (element.userAttributeKey.toString() == 'name') {
-          name = element.value.toString();
-        }
-      }
-    } on AuthException catch (e) {
-      safePrint('Error fetching user attributes: ${e.message}');
-    }
-  }
+  final LaunchLink launchLink = LaunchLink();
 
   Future<void> signOutCurrentUser() async {
     final result = await Amplify.Auth.signOut();
@@ -58,372 +42,374 @@ class AccountInfo extends ConsumerWidget with RouteAware {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userObject = ref.watch(currentUserProvider);
     return Scaffold(
-      body: FutureBuilder(
-        future: fetchUserInfo(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error'),
-              );
-            } else {
-              return buildLayout(context, ref);
-            }
-          }
-        },
-      ),
-    );
-  }
-
-  Widget buildLayout(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CenterNavWidget(
-        ref: ref,
-      ),
-      appBar: AppBar(
-        title: const Text('Account Settings'),
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      HapticFeedback.heavyImpact();
-                      ref.read(userPageCounter).setCounter(7);
-                      Navigator.pushNamed(context, History.id);
-                    },
-                    child: const SizedBox(
-                      height: 100,
-                      width: 120,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Column(
-                            children: [
-                              Icon(Icons.timeline_outlined,
-                                  size: 40, color: AppTheme.kGreen2),
-                              Text(
-                                'History',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      HapticFeedback.heavyImpact();
-                      ref.read(userPageCounter).setCounter(8);
-                      Navigator.pushNamed(context, Favourites.id);
-                    },
-                    child: const SizedBox(
-                      height: 100,
-                      width: 120,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Icon(
-                                Icons.favorite_outlined,
-                                size: 35,
-                                color: Colors.redAccent,
-                              ),
-                              FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Text(
-                                  'Favourites',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+        body: userObject.when(
+      data: (user) {
+        return Scaffold(
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: CenterNavWidget(
+            ref: ref,
+          ),
+          appBar: AppBar(
+            title: const Text('Account Settings'),
+          ),
+          body: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                (user.id == dotenv.get('GUEST_ID'))
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                HapticFeedback.heavyImpact();
+                                ref.read(userPageCounter).setCounter(7);
+                                Navigator.pushNamed(context, History.id);
+                              },
+                              child: const SizedBox(
+                                height: 100,
+                                width: 120,
+                                child: Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    child: Column(
+                                      children: [
+                                        Icon(Icons.timeline_outlined,
+                                            size: 40, color: AppTheme.kGreen2),
+                                        Text(
+                                          'History',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Email',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width *
-                                0.6, // Adjust the width as needed
-                            child: Opacity(
-                              opacity: 0.65,
-                              child: Text(
-                                email,
-                                overflow: TextOverflow.ellipsis,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                HapticFeedback.heavyImpact();
+                                ref.read(userPageCounter).setCounter(8);
+                                Navigator.pushNamed(context, Favourites.id);
+                              },
+                              child: const SizedBox(
+                                height: 100,
+                                width: 120,
+                                child: Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 4,
+                                        ),
+                                        Icon(
+                                          Icons.favorite_outlined,
+                                          size: 35,
+                                          color: Colors.redAccent,
+                                        ),
+                                        FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            'Favourites',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const Spacer(),
-                      TextButton(
-                        style: ButtonStyle(
-                          elevation: WidgetStateProperty.all(0),
-                        ),
-                        onPressed: () {
-                          const ResponsePopUp(
-                            response: 'Coming Soon...😂',
-                            location: DelightSnackbarPosition.top,
-                            icon: Icons.error_outline,
-                            color: Colors.redAccent,
-                          ).showToast(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: ref.watch(darkLight).theme
-                                  ? Colors.white
-                                  : Colors.black,
-                              width: 1,
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            'Change',
-                            style: TextStyle(
-                              color: ref.watch(darkLight).theme
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
+                            )
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Password',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Opacity(opacity: 0.65, child: Text('*******'))
-                        ],
-                      ),
-                      const Spacer(),
-                      TextButton(
-                        style: ButtonStyle(
-                          elevation: WidgetStateProperty.all(0),
-                        ),
-                        onPressed: () {
-                          const ResponsePopUp(
-                            response: 'Coming Soon...😂',
-                            location: DelightSnackbarPosition.top,
-                            icon: Icons.error_outline,
-                            color: Colors.redAccent,
-                          ).showToast(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: ref.watch(darkLight).theme
-                                ? Border.all(color: Colors.white, width: 1)
-                                : Border.all(color: Colors.black, width: 1),
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            'Change',
-                            style: TextStyle(
-                                color: ref.watch(darkLight).theme
-                                    ? Colors.white
-                                    : Colors.black),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'App Appearance',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Opacity(
-                            opacity: 0.65,
-                            child: Text(ref.watch(darkLight).theme
-                                ? 'Dark Mode🌚'
-                                : 'Light Mode🌞'),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
                       Row(
                         children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Email',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width *
+                                    0.6, // Adjust the width as needed
+                                child: Opacity(
+                                  opacity: 0.65,
+                                  child: Text(
+                                    (user.id == dotenv.get('GUEST_ID'))
+                                        ? 'guestaccount@gmail.com'
+                                            ''
+                                        : user.email,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          const Spacer(),
                           TextButton(
                             style: ButtonStyle(
                               elevation: WidgetStateProperty.all(0),
-                              padding: WidgetStateProperty.all(EdgeInsets.zero),
                             ),
                             onPressed: () {
-                              ref.watch(darkLight).theme == false
-                                  ? null
-                                  : ref.read(darkLight).toggleThemeOff();
+                              const ResponsePopUp(
+                                response: 'Coming Soon...😂',
+                                location: DelightSnackbarPosition.top,
+                                icon: Icons.error_outline,
+                                color: Colors.redAccent,
+                              ).showToast(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                border: ref.watch(darkLight.notifier).theme
-                                    ? null
-                                    : Border.all(color: Colors.black, width: 1),
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              child: Icon(Icons.light_mode,
+                                border: Border.all(
                                   color: ref.watch(darkLight).theme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                'Change',
+                                style: TextStyle(
+                                  color: ref.watch(darkLight).theme
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Password',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Opacity(opacity: 0.65, child: Text('*******'))
+                            ],
+                          ),
+                          const Spacer(),
                           TextButton(
                             style: ButtonStyle(
-                                elevation: WidgetStateProperty.all(0),
-                                padding:
-                                    WidgetStateProperty.all(EdgeInsets.zero)),
+                              elevation: WidgetStateProperty.all(0),
+                            ),
                             onPressed: () {
-                              ref.watch(darkLight).theme
-                                  ? null
-                                  : ref
-                                      .read(darkLight.notifier)
-                                      .toggleThemeOn();
+                              const ResponsePopUp(
+                                response: 'Coming Soon...😂',
+                                location: DelightSnackbarPosition.top,
+                                icon: Icons.error_outline,
+                                color: Colors.redAccent,
+                              ).showToast(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: ref.watch(darkLight).theme
-                                      ? Border.all(
-                                          color: Colors.white, width: 1)
-                                      : null
-                                  //borderRadius: BorderRadius.circular(8),
-                                  ),
+                                borderRadius: BorderRadius.circular(8),
+                                border: ref.watch(darkLight).theme
+                                    ? Border.all(color: Colors.white, width: 1)
+                                    : Border.all(color: Colors.black, width: 1),
+                              ),
                               padding: const EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.dark_mode,
-                                color: ref.watch(darkLight).theme
-                                    ? Colors.white
-                                    : Colors.black,
+                              child: Text(
+                                'Change',
+                                style: TextStyle(
+                                    color: ref.watch(darkLight).theme
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                             ),
-                          )
+                          ),
                         ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      StyledLogoutActionButton(
-                        buttonText: 'Logout',
-                        iconData: Icons.logout_outlined,
-                        action: signOutCurrentUser,
-                        warningTextH1: 'Confirm '
-                            'Sign Out',
-                        warningTextH2: 'Are you sure you want '
-                            'to sign out?',
-                        actionButtonText: 'Sign Out',
                       ),
-                      DeleteAccountForever(
-                        ref: ref,
-                        action: deleteUser,
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Questions or Concerns?',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        const Opacity(
-                            opacity: 0.65,
-                            child: Text('Reach out '
-                                'below(Tap) : ')),
-                        const SizedBox(height: 10),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.heavyImpact();
-                                  launchLink.launchURL(
-                                      'https://www.instagram.com/asiancanadians_carleton/');
+                              const Text(
+                                'App Appearance',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Opacity(
+                                opacity: 0.65,
+                                child: Text(ref.watch(darkLight).theme
+                                    ? 'Dark Mode🌚'
+                                    : 'Light Mode🌞'),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          Row(
+                            children: [
+                              TextButton(
+                                style: ButtonStyle(
+                                  elevation: WidgetStateProperty.all(0),
+                                  padding:
+                                      WidgetStateProperty.all(EdgeInsets.zero),
+                                ),
+                                onPressed: () {
+                                  ref.watch(darkLight).theme == false
+                                      ? null
+                                      : ref.read(darkLight).toggleThemeOff();
                                 },
-                                child: Image.asset(
-                                  'images/ig2.png',
-                                  width: 50,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: ref.watch(darkLight.notifier).theme
+                                        ? null
+                                        : Border.all(
+                                            color: Colors.black, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  child: Icon(Icons.light_mode,
+                                      color: ref.watch(darkLight).theme
+                                          ? Colors.white
+                                          : Colors.black),
                                 ),
                               ),
-                              const SizedBox(width: 30),
-                              GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.heavyImpact();
-                                  launchLink.launchEmail(
-                                      'asiancanadianscarleton@gmail.com');
+                              TextButton(
+                                style: ButtonStyle(
+                                    elevation: WidgetStateProperty.all(0),
+                                    padding: WidgetStateProperty.all(
+                                        EdgeInsets.zero)),
+                                onPressed: () {
+                                  ref.watch(darkLight).theme
+                                      ? null
+                                      : ref
+                                          .read(darkLight.notifier)
+                                          .toggleThemeOn();
                                 },
-                                child: Image.asset(
-                                  'images/gmail.png',
-                                  width: 50,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: ref.watch(darkLight).theme
+                                          ? Border.all(
+                                              color: Colors.white, width: 1)
+                                          : null
+                                      //borderRadius: BorderRadius.circular(8),
+                                      ),
+                                  padding: const EdgeInsets.all(10),
+                                  child: Icon(
+                                    Icons.dark_mode,
+                                    color: ref.watch(darkLight).theme
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                 ),
                               )
-                            ])
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          StyledLogoutActionButton(
+                            buttonText: 'Logout',
+                            iconData: Icons.logout_outlined,
+                            action: signOutCurrentUser,
+                            warningTextH1: 'Confirm '
+                                'Sign Out',
+                            warningTextH2: 'Are you sure you want '
+                                'to sign out?',
+                            actionButtonText: 'Sign Out',
+                          ),
+                          (user.id == dotenv.get('GUEST_ID'))
+                              ? Container()
+                              : DeleteAccountForever(
+                                  ref: ref,
+                                  action: deleteUser,
+                                )
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      Center(
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Questions or Concerns?',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const Opacity(
+                                opacity: 0.65,
+                                child: Text('Reach out '
+                                    'below(Tap) : ')),
+                            const SizedBox(height: 10),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.heavyImpact();
+                                      launchLink.launchURL(
+                                          'https://www.instagram.com/asiancanadians_carleton/');
+                                    },
+                                    child: Image.asset(
+                                      'images/ig2.png',
+                                      width: 50,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 30),
+                                  GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.heavyImpact();
+                                      launchLink.launchEmail(
+                                          'asiancanadianscarleton@gmail.com');
+                                    },
+                                    child: Image.asset(
+                                      'images/gmail.png',
+                                      width: 50,
+                                    ),
+                                  )
+                                ])
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: AppBarBottom(id: AccountInfo.id),
-    );
+          ),
+          bottomNavigationBar: AppBarBottom(id: AccountInfo.id),
+        );
+      },
+      error: (Object error, StackTrace stackTrace) {
+        safePrint('An error occurred: $error');
+        return Text('An error occurred: $error');
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator());
+      },
+    ));
   }
 }
 
