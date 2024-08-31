@@ -1,4 +1,4 @@
-<h1 align="center">ACAC+</h1>
+<h1 align="center">ACAC</h1>
 
 <p align="center">
   <img src="https://acacpicturesgenerealbucket.s3.amazonaws.com/acacAppImages/logo1+2.png" alt="App Logo" width="150" height="150">
