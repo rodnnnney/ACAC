@@ -1,4 +1,5 @@
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -62,7 +63,11 @@ class ConfirmQuit extends ConsumerWidget {
                 side: const BorderSide(color: Colors.red, width: 1)),
             onPressed: () {
               HapticFeedback.heavyImpact();
-              destination();
+              try {
+                destination();
+              } catch (e) {
+                safePrint("Error has occurred: e");
+              }
             },
             child: Text(actionButton),
           ),

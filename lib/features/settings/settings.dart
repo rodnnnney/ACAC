@@ -340,6 +340,7 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                             warningTextH2: 'Are you sure you want '
                                 'to sign out?',
                             actionButtonText: 'Sign Out',
+                            ref: ref,
                           ),
                           (user.id == dotenv.get('GUEST_ID'))
                               ? Container()
@@ -588,7 +589,8 @@ class StyledLogoutActionButton extends StatelessWidget {
       required this.action,
       required this.warningTextH1,
       required this.warningTextH2,
-      required this.actionButtonText});
+      required this.actionButtonText,
+      required this.ref});
 
   final String buttonText;
   final IconData iconData;
@@ -596,6 +598,7 @@ class StyledLogoutActionButton extends StatelessWidget {
   final String warningTextH1;
   final String warningTextH2;
   final String actionButtonText;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
@@ -605,7 +608,10 @@ class StyledLogoutActionButton extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return ConfirmQuit(
-                destination: action,
+                destination: () {
+                  action();
+                  ref.read(userPageCounter.notifier).setCounter(-1);
+                },
                 title: 'Confirm Sign Out',
                 subtitle: 'Are you sure you want to sign out?',
                 actionButton: 'Sign Out',
