@@ -14,8 +14,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
+
 import 'amplifyconfiguration.dart';
 import 'common/providers/riverpod_light_dark.dart';
 import 'common/routing/routes.dart';
@@ -29,6 +31,10 @@ void main() async {
   try {
     await _configureAmplify();
     Gemini.init(apiKey: dotenv.get('GEMINI_API_KEY'));
+    OneSignal.initialize("bbcead6f-8903-483f-ae3f-a7458ac04443");
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal.Notifications.requestPermission(true);
   } on AmplifyAlreadyConfiguredException {
     debugPrint('Amplify configuration failed.');
   }
