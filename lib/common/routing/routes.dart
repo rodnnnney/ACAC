@@ -1,3 +1,4 @@
+import 'package:ACAC/features/admin/admin_home.dart';
 import 'package:ACAC/features/chat/chat.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_rating.dart';
 import 'package:ACAC/features/home/history.dart';
@@ -22,6 +23,7 @@ final appRoutes = <String, WidgetBuilder>{
     return SortedByRating(type: args);
   },
   App.id: (context) => const App(),
-  Favourites.id: (context) => Favourites()
+  Favourites.id: (context) => Favourites(),
+  AdminHome.id: (context) => AdminHome()
   //BarcodeScannerPageView.id: (context) => BarcodeScannerPageView()
 };

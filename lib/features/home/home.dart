@@ -9,6 +9,7 @@ import 'package:ACAC/common/services/getDistance.dart';
 import 'package:ACAC/common/services/route_observer.dart';
 import 'package:ACAC/common/widgets/restaurant_related_ui/home_page_card.dart';
 import 'package:ACAC/common/widgets/ui/welcome_text.dart';
+import 'package:ACAC/features/admin/admin_home.dart';
 import 'package:ACAC/features/home/helper_widgets/card/home_page_user_card.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_country.dart';
 import 'package:ACAC/features/home/helper_widgets/food_sort/sort_by_food_type.dart';
@@ -22,6 +23,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -108,7 +110,28 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Welcome(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Welcome(),
+                              FutureBuilder<User>(
+                                  future: getUserInfo(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Container();
+                                    } else if (snapshot.hasError) {
+                                      return Container();
+                                    } else {
+                                      bool show = (snapshot.data?.id ==
+                                          dotenv.get('ADMIN_ID'));
+                                      return show
+                                          ? const AdminButton()
+                                          : Container();
+                                    }
+                                  })
+                            ],
+                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -360,6 +383,26 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
         id: HomePage.id,
       ),
     );
+  }
+}
+
+class AdminButton extends StatelessWidget {
+  const AdminButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AdminHome.id);
+        },
+        style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(AppTheme.kGreen2)),
+        child: const Text(
+          'Admin Console',
+          style: TextStyle(color: Colors.white),
+        ));
   }
 }
 
