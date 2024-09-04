@@ -9,9 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FirstTimeSignIn extends ConsumerStatefulWidget {
-  static String id = 'First_Time';
+  const FirstTimeSignIn({super.key, required this.email});
 
-  FirstTimeSignIn({super.key});
+  final String email;
 
   @override
   ConsumerState<FirstTimeSignIn> createState() => _FirstTimeSignInState();
@@ -22,7 +22,6 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
   late TextEditingController newPassword2;
   late TextEditingController firstName;
   late TextEditingController lastName;
-  String email = '';
   bool obscureText = true;
   Loading loading = Loading();
   Apis apis = Apis();
@@ -263,7 +262,9 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                               WidgetStateProperty.all(Colors.transparent),
                           padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         child: const Text('Back to Sign In'),
                       ),
                     ),
@@ -282,20 +283,19 @@ class _FirstTimeSignInState extends ConsumerState<FirstTimeSignIn> {
                           } else if (newPassword.text == newPassword2.text) {
                             if (newPassword.text.length >= 8) {
                               loading.showLoadingDialog(context);
+
                               await Amplify.Auth.confirmSignIn(
                                 confirmationValue: newPassword.text,
                               );
-                              var data = await Amplify.Auth.getCurrentUser();
-                              final result =
-                                  await Amplify.Auth.fetchUserAttributes();
-                              for (final element in result) {
-                                if (element.userAttributeKey.toString() ==
-                                    'email') {
-                                  email = element.value.toString();
-                                }
-                              }
-                              await apis.cognito2DynamoDBB(firstName.text,
-                                  lastName.text, email, data.userId);
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) async {
+                                try {
+                                  AuthUser data =
+                                      await Amplify.Auth.getCurrentUser();
+                                  await apis.cognito2DynamoDBB(firstName.text,
+                                      lastName.text, widget.email, data.userId);
+                                } catch (e) {}
+                              });
                             } else {
                               return const ResponsePopUp(
                                 color: Colors.red,

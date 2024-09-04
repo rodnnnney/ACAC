@@ -95,6 +95,7 @@ class _AppState extends ConsumerState<App> {
     AsyncValue<List<RestaurantInfoCard>> cardList =
         ref.watch(restaurantInfoCardListProvider);
     final userObject = ref.watch(currentUserProvider);
+    ;
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(

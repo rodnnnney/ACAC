@@ -342,12 +342,12 @@ class AccountInfo extends ConsumerWidget with RouteAware {
                             actionButtonText: 'Sign Out',
                             ref: ref,
                           ),
-                          (user.id == dotenv.get('GUEST_ID'))
-                              ? Container()
-                              : DeleteAccountForever(
-                                  ref: ref,
-                                  action: deleteUser,
-                                )
+                          // (user.id == dotenv.get('GUEST_ID'))
+                          //     ? Container()
+                          //     : DeleteAccountForever(
+                          //         ref: ref,
+                          //         action: deleteUser,
+                          //       )
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -608,9 +608,10 @@ class StyledLogoutActionButton extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return ConfirmQuit(
-                destination: () {
+                destination: () async {
                   action();
                   ref.read(userPageCounter.notifier).setCounter(-1);
+                  // await ref.read(cacheUserProvider.notifier).refresh();
                 },
                 title: 'Confirm Sign Out',
                 subtitle: 'Are you sure you want to sign out?',

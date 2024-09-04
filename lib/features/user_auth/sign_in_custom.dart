@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'firstTimeSignIn.dart';
+
 class SignInCustom extends StatefulWidget {
   const SignInCustom({super.key, required this.state});
 
@@ -37,26 +39,40 @@ Future<void> signInUser(String username, String password, BuildContext context,
       password: password,
     );
 
-    debugPrint(result.nextStep.toString());
-    switch (result.nextStep.signInStep) {
-      case AuthSignInStep.resetPassword:
-      case AuthSignInStep.confirmSignInWithCustomChallenge:
-      case AuthSignInStep.confirmSignUp:
-      case AuthSignInStep.done:
-        await Amplify.Auth.signIn(
-          username: username,
-          password: password,
+    safePrint(result);
+
+    if (result.nextStep.signInStep ==
+        AuthSignInStep.confirmSignInWithNewPassword) {
+      if (context.mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FirstTimeSignIn(
+              email: username,
+            ),
+          ),
         );
-      case AuthSignInStep.continueSignInWithMfaSelection:
-      case AuthSignInStep.continueSignInWithTotpSetup:
-      case AuthSignInStep.confirmSignInWithSmsMfaCode:
-      case AuthSignInStep.confirmSignInWithTotpMfaCode:
-      case AuthSignInStep.confirmSignInWithNewPassword:
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
-        state.changeStep(AuthenticatorStep.confirmSignInNewPassword);
+      }
     }
+    // switch (result.nextStep.signInStep) {
+    //   case AuthSignInStep.resetPassword:
+    //   case AuthSignInStep.confirmSignInWithCustomChallenge:
+    //   case AuthSignInStep.confirmSignUp:
+    //   case AuthSignInStep.done:
+    //     await Amplify.Auth.signIn(
+    //       username: username,
+    //       password: password,
+    //     );
+    //   case AuthSignInStep.continueSignInWithMfaSelection:
+    //   case AuthSignInStep.continueSignInWithTotpSetup:
+    //   case AuthSignInStep.confirmSignInWithSmsMfaCode:
+    //   case AuthSignInStep.confirmSignInWithTotpMfaCode:
+    //   case AuthSignInStep.confirmSignInWithNewPassword:
+    //     if (context.mounted) {
+    //       Navigator.pop(context);
+    //     }
+    //     state.changeStep(AuthenticatorStep.confirmSignInNewPassword);
+    // }
   } on AuthException catch (e) {
     debugPrint(e.toString());
     if (e is UserNotFoundException) {

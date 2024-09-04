@@ -168,6 +168,7 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
     int weekday = now.weekday;
     final itemsRepository = ref.read(userRepositoryProvider);
     final userObject = ref.watch(currentUserProvider);
+    ;
 
     // Future<User> getUserInfo() async {
     //   AuthUser userID = await Amplify.Auth.getCurrentUser();

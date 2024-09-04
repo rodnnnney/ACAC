@@ -16,11 +16,11 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:provider/provider.dart';
+
 import 'amplifyconfiguration.dart';
 import 'common/providers/riverpod_light_dark.dart';
 import 'common/routing/routes.dart';
 import 'common/services/route_observer.dart';
-import 'features/user_auth/firstTimeSignIn.dart';
 import 'models/ModelProvider.dart';
 
 void main() async {
@@ -62,7 +62,6 @@ class MyApp extends ConsumerWidget {
           case AuthenticatorStep.signIn:
             return SignInCustom(state: state);
           case AuthenticatorStep.confirmSignInNewPassword:
-            return FirstTimeSignIn();
           case AuthenticatorStep.loading:
           case AuthenticatorStep.onboarding:
           case AuthenticatorStep.signUp:
