@@ -19,17 +19,18 @@ class RestaurantListController extends _$RestaurantListController {
     return _fetchRestaurant();
   }
 
-  Future<void> addRestaurant({
-    required String userFirstName,
-    required String userLastName,
-    required String restaurantName,
-    required String email,
-  }) async {
+  Future<void> addRestaurant(
+      {required String userFirstName,
+      required String userLastName,
+      required String restaurantName,
+      required String email,
+      required int average}) async {
     final restaurant = Restaurant(
       firstName: userFirstName,
       lastName: userLastName,
       restaurant: restaurantName,
       email: email,
+      averagePrice: average,
     );
 
     state = const AsyncValue.loading();

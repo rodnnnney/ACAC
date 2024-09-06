@@ -2,27 +2,29 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 # input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Restaurant @model @auth(rules: [{ allow: owner}]) {
+type Restaurant @model @auth(rules: [
+    { allow: public, operations: [read]},
+    { allow: owner, operations: [create, update, delete, read] } ]) {
     id: ID!
     firstName: String!
     lastName: String!
     restaurant: String!
+    averagePrice: Int!
     email: AWSEmail!
 }
-type User @model @auth(rules: [{ allow: public }]) {
+type User @model @auth(rules: [
+    { allow: public, operations: [read]},
+    { allow: owner, operations: [create, update, delete, read] }
+]) {
     id: ID!
     firstName: String!
     lastName: String!
-    #favouriteRestaurants:[RestaurantInfoCard] @hasMany
     favouriteRestaurants: [String]!
     email: AWSEmail!
 }
 
 type RestaurantInfoCard @model @auth(rules: [{ allow: public }]) {
     id: ID!
-    #userID: ID @index(name: "byUser")
-    #userID: ID! @index(name: "byUser", sortKeyFields: ["id"])
-    #user: User @belongsTo(fields: ["userID"])
     restaurantName: String!
     location: LatLong!
     address: String!
@@ -65,7 +67,7 @@ type LatLong{
     longitude: String!
 }
 
-type MarketingCard @model @auth(rules: [{ allow: public}, {allow: owner}]){
+type MarketingCard @model @auth(rules: [{ allow: public}]){
     imageUrl: String!
     headerText: String!
     descriptionText: String!

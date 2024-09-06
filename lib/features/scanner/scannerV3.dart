@@ -55,15 +55,20 @@ class _AppState extends ConsumerState<App> {
   }
 
   Future<void> sendData(RestaurantInfoCard scannedRestaurant, User user) async {
-    await ref
-        .read(restaurantInfoCardListProvider.notifier)
-        .updateRestInfo(scannedRestaurant);
-    await ref.read(restaurantListControllerProvider.notifier).addRestaurant(
+    String? numericCuisineType = scannedRestaurant.cuisineType.firstWhere(
+        (element) => int.tryParse(element) != null,
+        orElse: () => '0');
+    Future.wait([
+      ref
+          .read(restaurantInfoCardListProvider.notifier)
+          .updateRestInfo(scannedRestaurant),
+      ref.read(restaurantListControllerProvider.notifier).addRestaurant(
           restaurantName: scannedRestaurant.restaurantName,
           email: user.email,
           userFirstName: user.firstName,
           userLastName: user.lastName,
-        );
+          average: int.parse(numericCuisineType))
+    ]);
     if (mounted) {
       handleScan(scannedRestaurant, user.firstName, user.lastName);
     }

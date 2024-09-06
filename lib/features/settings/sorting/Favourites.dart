@@ -265,7 +265,7 @@ class _HistoryState extends ConsumerState<Favourites> {
                       ),
                     );
                   } else {
-                    return Text('data');
+                    return const Text('data');
                   }
                 },
               ),

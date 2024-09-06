@@ -13,7 +13,8 @@ class RestaurantAPIService {
 
   Future<List<Restaurant>> getRestaurants() async {
     try {
-      final request = ModelQueries.list(Restaurant.classType);
+      final request = ModelQueries.list(Restaurant.classType,
+          authorizationMode: APIAuthorizationType.apiKey);
       final response = await Amplify.API.query(request: request).response;
 
       final spaces = response.data?.items;

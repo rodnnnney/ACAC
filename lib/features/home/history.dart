@@ -22,7 +22,7 @@ import 'package:provider/provider.dart' as provider;
 class History extends ConsumerStatefulWidget {
   static String id = '/history';
 
-  History({super.key});
+  const History({super.key});
 
   @override
   ConsumerState<History> createState() => _HistoryState();

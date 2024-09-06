@@ -30,6 +30,7 @@ class Restaurant extends amplify_core.Model {
   final String? _firstName;
   final String? _lastName;
   final String? _restaurant;
+  final int? _averagePrice;
   final String? _email;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
@@ -85,6 +86,19 @@ class Restaurant extends amplify_core.Model {
     }
   }
 
+  int get averagePrice {
+    try {
+      return _averagePrice!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
+  }
+
   String get email {
     try {
       return _email!;
@@ -111,12 +125,14 @@ class Restaurant extends amplify_core.Model {
       required firstName,
       required lastName,
       required restaurant,
+      required averagePrice,
       required email,
       createdAt,
       updatedAt})
       : _firstName = firstName,
         _lastName = lastName,
         _restaurant = restaurant,
+        _averagePrice = averagePrice,
         _email = email,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
@@ -126,12 +142,14 @@ class Restaurant extends amplify_core.Model {
       required String firstName,
       required String lastName,
       required String restaurant,
+      required int averagePrice,
       required String email}) {
     return Restaurant._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
         firstName: firstName,
         lastName: lastName,
         restaurant: restaurant,
+        averagePrice: averagePrice,
         email: email);
   }
 
@@ -147,6 +165,7 @@ class Restaurant extends amplify_core.Model {
         _firstName == other._firstName &&
         _lastName == other._lastName &&
         _restaurant == other._restaurant &&
+        _averagePrice == other._averagePrice &&
         _email == other._email;
   }
 
@@ -162,6 +181,9 @@ class Restaurant extends amplify_core.Model {
     buffer.write("firstName=" + "$_firstName" + ", ");
     buffer.write("lastName=" + "$_lastName" + ", ");
     buffer.write("restaurant=" + "$_restaurant" + ", ");
+    buffer.write("averagePrice=" +
+        (_averagePrice != null ? _averagePrice!.toString() : "null") +
+        ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("createdAt=" +
         (_createdAt != null ? _createdAt!.format() : "null") +
@@ -177,12 +199,14 @@ class Restaurant extends amplify_core.Model {
       {String? firstName,
       String? lastName,
       String? restaurant,
+      int? averagePrice,
       String? email}) {
     return Restaurant._internal(
         id: id,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
         restaurant: restaurant ?? this.restaurant,
+        averagePrice: averagePrice ?? this.averagePrice,
         email: email ?? this.email);
   }
 
@@ -190,12 +214,15 @@ class Restaurant extends amplify_core.Model {
       {ModelFieldValue<String>? firstName,
       ModelFieldValue<String>? lastName,
       ModelFieldValue<String>? restaurant,
+      ModelFieldValue<int>? averagePrice,
       ModelFieldValue<String>? email}) {
     return Restaurant._internal(
         id: id,
         firstName: firstName == null ? this.firstName : firstName.value,
         lastName: lastName == null ? this.lastName : lastName.value,
         restaurant: restaurant == null ? this.restaurant : restaurant.value,
+        averagePrice:
+            averagePrice == null ? this.averagePrice : averagePrice.value,
         email: email == null ? this.email : email.value);
   }
 
@@ -204,6 +231,7 @@ class Restaurant extends amplify_core.Model {
         _firstName = json['firstName'],
         _lastName = json['lastName'],
         _restaurant = json['restaurant'],
+        _averagePrice = (json['averagePrice'] as num?)?.toInt(),
         _email = json['email'],
         _createdAt = json['createdAt'] != null
             ? amplify_core.TemporalDateTime.fromString(json['createdAt'])
@@ -217,6 +245,7 @@ class Restaurant extends amplify_core.Model {
         'firstName': _firstName,
         'lastName': _lastName,
         'restaurant': _restaurant,
+        'averagePrice': _averagePrice,
         'email': _email,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
@@ -227,6 +256,7 @@ class Restaurant extends amplify_core.Model {
         'firstName': _firstName,
         'lastName': _lastName,
         'restaurant': _restaurant,
+        'averagePrice': _averagePrice,
         'email': _email,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
@@ -239,6 +269,8 @@ class Restaurant extends amplify_core.Model {
   static final FIRSTNAME = amplify_core.QueryField(fieldName: "firstName");
   static final LASTNAME = amplify_core.QueryField(fieldName: "lastName");
   static final RESTAURANT = amplify_core.QueryField(fieldName: "restaurant");
+  static final AVERAGEPRICE =
+      amplify_core.QueryField(fieldName: "averagePrice");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static var schema = amplify_core.Model.defineSchema(
       define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
@@ -246,6 +278,9 @@ class Restaurant extends amplify_core.Model {
     modelSchemaDefinition.pluralName = "Restaurants";
 
     modelSchemaDefinition.authRules = [
+      amplify_core.AuthRule(
+          authStrategy: amplify_core.AuthStrategy.PUBLIC,
+          operations: const [amplify_core.ModelOperation.READ]),
       amplify_core.AuthRule(
           authStrategy: amplify_core.AuthStrategy.OWNER,
           ownerField: "owner",
@@ -278,6 +313,12 @@ class Restaurant extends amplify_core.Model {
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: Restaurant.AVERAGEPRICE,
+        isRequired: true,
+        ofType:
+            amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: Restaurant.EMAIL,
