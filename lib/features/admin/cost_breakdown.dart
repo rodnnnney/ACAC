@@ -1,6 +1,6 @@
 import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/widgets/helper_functions/location.dart';
-import 'package:ACAC/features/admin/utils.dart';
+import 'package:ACAC/features/admin/helper_ui/utils.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/models/Restaurant.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';

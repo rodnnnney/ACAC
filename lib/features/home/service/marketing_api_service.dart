@@ -33,11 +33,13 @@ class MarketingApiService {
 
   Future<void> deleteMarketingCard(MarketingCard marketingCard) async {
     try {
-      await Amplify.API
+      var result = await Amplify.API
           .mutate(
-            request: ModelMutations.delete(marketingCard),
+            request: ModelMutations.delete(marketingCard,
+                authorizationMode: APIAuthorizationType.apiKey),
           )
           .response;
+      safePrint(result);
     } on Exception catch (error) {
       safePrint('Delete marketing card failed: $error');
     }

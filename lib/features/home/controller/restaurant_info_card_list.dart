@@ -31,10 +31,20 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
 
       return _fetchRestaurant();
     });
+  }
 
-    // Update the state
+  // Delete Restaurant Card method
+  Future<void> deleteRestaurantInfo(RestaurantInfoCard restaurant) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final restaurantRepository =
+          ref.read(restaurantInfoCardRepositoryProvider);
+      await restaurantRepository.delete(restaurant);
+      return _fetchRestaurant();
+    });
   }
 }
+
 // Future<void> addRestaurantInfo({
 //   required String userFirstName,
 //   required String userLastName,

@@ -30,4 +30,9 @@ class RestaurantInfoCardRepository {
     return restaurantInfoCardAPIService
         .updateRestaurantVisit(updatedRestaurant);
   }
+
+  Future<void> delete(RestaurantInfoCard updatedRestaurant) async {
+    return restaurantInfoCardAPIService
+        .deleteRestaurantInfoCard(updatedRestaurant);
+  }
 }

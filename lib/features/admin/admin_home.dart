@@ -1,4 +1,6 @@
-import 'package:ACAC/features/admin/utils.dart';
+import 'package:ACAC/common/consts/globals.dart';
+import 'package:ACAC/features/admin/helper_ui/utils.dart';
+import 'package:ACAC/features/admin/restaurant_card_view.dart';
 import 'package:ACAC/features/home/controller/restaurant_list_controller.dart';
 import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/ModelProvider.dart';
@@ -9,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'cost_breakdown.dart';
 import 'helper_ui/AdminCard.dart';
 import 'helper_ui/TimeFilter.dart';
+import 'marketing_card_page.dart';
 
 class AdminHome extends ConsumerStatefulWidget {
   static const String id = '/Admin_home';
@@ -49,6 +52,79 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(child: Text('Error: $error')),
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RestaurantCardView(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppTheme.kGreen2,
+                      ),
+                      child: const Text('Restaurant Cards',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MarketingCardsView(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppTheme.kGreen2,
+                      ),
+                      child: const Text('Marketing Cards',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                // Expanded(
+                //   child: Container(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(8),
+                //       color: AppTheme.kGreen2,
+                //     ),
+                //     child: const Text('ACAC Events',
+                //         style: TextStyle(color: Colors.white)),
+                //   ),
+                // )
+              ],
+            )
           ],
         ),
       ),
