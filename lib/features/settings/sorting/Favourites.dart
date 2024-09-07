@@ -33,16 +33,6 @@ late String distance;
 UserLocation location = UserLocation();
 List<RestaurantInfoCard> allInfoCards = [];
 
-RestaurantInfoCard getInfo(
-    List<RestaurantInfoCard> infoList, String checkName) {
-  for (var info in infoList) {
-    if (info.restaurantName == checkName) {
-      return info;
-    }
-  }
-  throw ErrorDescription('${checkName} not found');
-}
-
 // Function to fetch user's current location
 Future<LatLng> getLocation() async {
   return await location.find();

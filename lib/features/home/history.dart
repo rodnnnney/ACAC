@@ -5,6 +5,7 @@ import 'package:ACAC/common/routing/ui/app_bar.dart';
 import 'package:ACAC/common/routing/ui/centerNavButton.dart';
 import 'package:ACAC/common/services/restaurant_provider.dart';
 import 'package:ACAC/common/widgets/helper_functions/location.dart';
+import 'package:ACAC/features/admin/utils.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/features/home/controller/restaurant_list_controller.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
@@ -38,17 +39,6 @@ String formatDateString(String dateTimeString) {
   DateTime adjustedDateTime = dateTime.subtract(const Duration(hours: 4));
   String formattedDate = DateFormat('MMMM d, yyyy').format(adjustedDateTime);
   return formattedDate;
-}
-
-// Function to retrieve restaurant card information
-RestaurantInfoCard getInfo(
-    List<RestaurantInfoCard> infoList, String checkName) {
-  for (var info in infoList) {
-    if (info.restaurantName == checkName) {
-      return info;
-    }
-  }
-  throw ErrorDescription('${checkName} not found');
 }
 
 // Function to fetch user's current location
