@@ -67,7 +67,9 @@ type LatLong{
     longitude: String!
 }
 
-type MarketingCard @model @auth(rules: [ { allow: public, operations: [create, update, delete, read]}])
+type MarketingCard @model @auth(rules: [
+    {allow : owner}
+    { allow: public, operations: [create, update, delete, read]}])
 {
     imageUrl: String!
     headerText: String!

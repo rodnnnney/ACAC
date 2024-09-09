@@ -50,8 +50,8 @@ android {
         applicationId "com.mobile.acac"
         minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 2
-        versionName "1.0.5"
+        versionCode 4
+        versionName "1.0.6"
     }
 
     signingConfigs {

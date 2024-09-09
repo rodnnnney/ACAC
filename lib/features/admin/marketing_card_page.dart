@@ -1,8 +1,11 @@
+import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/features/home/controller/marketing_card_controller.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'helper_ui/new_marketing_card.dart';
 
 class MarketingCardsView extends ConsumerStatefulWidget {
   const MarketingCardsView({super.key});
@@ -26,6 +29,30 @@ class _HistoryState extends ConsumerState<MarketingCardsView> {
               .compareTo(b.createdAt!.getDateTimeInUtc());
         });
         return Scaffold(
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewMarketingCard(),
+                  ));
+            },
+            child: SizedBox(
+              height: 60,
+              width: 60,
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: AppTheme.kGreen2,
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+            ),
+          ),
           appBar: AppBar(
             title: const Text('Marketing Cards'),
             centerTitle: true,
@@ -105,8 +132,6 @@ class _HistoryState extends ConsumerState<MarketingCardsView> {
                                                   marketingCardList[index]);
                                               await marketing.delete(
                                                   marketingCardList[index]);
-                                              // ref.invalidate(
-                                              //     marketingCardControllerProvider);
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(8),
