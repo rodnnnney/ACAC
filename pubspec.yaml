@@ -53,6 +53,8 @@ dependencies:
   permission_handler: ^11.3.1
   fl_chart: ^0.69.0
   image_picker: ^1.1.2
+  google_places_flutter: ^2.0.9
+  file_picker: ^8.0.7
 
 
 dev_dependencies:
@@ -84,8 +86,6 @@ flutter:
     - 'assets/'
     - images/
     - .env
-    - env.text
-
   fonts:
     - family: helveticanowtext
       fonts:

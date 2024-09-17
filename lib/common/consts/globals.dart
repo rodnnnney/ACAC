@@ -11,8 +11,11 @@ class AppTheme {
 
   static const Color kWhite = Color(0xffFDFFFC);
 
+  static const Color kAlertRed = Colors.redAccent;
+
   static const double roundedRadius = 12;
   static const double spacing = 10;
+  static const double round = 8;
 
   static const double headerTwo = 18;
 

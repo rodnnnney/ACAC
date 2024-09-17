@@ -1,3 +1,5 @@
+import 'package:ACAC/common/consts/globals.dart';
+import 'package:ACAC/features/admin/new_restaurant_card.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +26,18 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
               .compareTo(b.createdAt!.getDateTimeInUtc());
         });
         return Scaffold(
+          floatingActionButton: AddCardGreenPlusButton(
+            destination: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NewRestaurantCard(),
+                ),
+              );
+            },
+          ),
           appBar: AppBar(
-            title: const Text('Marketing Cards'),
+            title: const Text('Restaurant Cards'),
             centerTitle: true,
           ),
           body: SafeArea(
@@ -124,6 +136,36 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text('Error: $error')),
+    );
+  }
+}
+
+class AddCardGreenPlusButton extends StatelessWidget {
+  final VoidCallback destination;
+
+  const AddCardGreenPlusButton({
+    super.key,
+    required this.destination,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: destination,
+      child: SizedBox(
+        height: 60,
+        width: 60,
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              color: AppTheme.kGreen2, borderRadius: BorderRadius.circular(8)),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'helper_ui/new_marketing_card.dart';
+import 'new_marketing_card.dart';
 
 class MarketingCardsView extends ConsumerStatefulWidget {
   const MarketingCardsView({super.key});
@@ -32,10 +32,11 @@ class _HistoryState extends ConsumerState<MarketingCardsView> {
           floatingActionButton: GestureDetector(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewMarketingCard(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NewMarketingCard(),
+                ),
+              );
             },
             child: SizedBox(
               height: 60,
