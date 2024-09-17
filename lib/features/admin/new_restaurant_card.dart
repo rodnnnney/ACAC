@@ -4,6 +4,9 @@ import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/widgets/ui/CustomCheckBox.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/features/admin/helper_ui/PreviewImagePick.dart';
+import 'package:ACAC/features/admin/helper_ui/restaurant_category.dart';
+import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -24,6 +27,8 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   late TextEditingController gMapsTextController;
   Prediction locationPrediction = Prediction();
 
+  List<PropertyTag> tags = [];
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +43,99 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
     descriptionTextController.dispose();
     gMapsTextController.dispose();
     super.dispose();
+  }
+
+  void filterTagSetup(List<String> infoTag) {
+    // Clear old tags before adding new ones
+    tags.clear();
+
+    for (String filterTag in infoTag) {
+      String tagDescription = '';
+      Color cardColor = Colors.transparent;
+      Color textColor = Colors.black;
+
+      switch (filterTag.toLowerCase()) {
+        case 'chinese':
+          tagDescription = 'Chinese 🇨🇳';
+          cardColor = Colors.red;
+          textColor = Colors.white;
+          break;
+        case 'vietnamese':
+          tagDescription = 'Vietnamese 🇻🇳';
+          cardColor = const Color(0xff7BAE7F);
+          textColor = Colors.white;
+          break;
+        case 'japanese':
+          tagDescription = 'Japanese 🇯🇵';
+          cardColor = Colors.transparent;
+          textColor = Colors.black87;
+          break;
+        case 'korean':
+          tagDescription = 'Korean 🇰🇷';
+          cardColor = const Color(0xffB8E1FF);
+          textColor = Colors.white;
+          break;
+        case 'desert':
+          tagDescription = 'Desert 🍦';
+          cardColor = const Color(0xffE5D4ED);
+          textColor = Colors.white;
+          break;
+        case 'fried chicken':
+          tagDescription = 'Fried Chicken 🍗';
+          cardColor = const Color(0xffE3D888);
+          textColor = Colors.white;
+          break;
+        case 'bubble tea':
+          tagDescription = 'Bubble Tea 🧋';
+          cardColor = const Color(0xff95D7AE);
+          textColor = Colors.white;
+          break;
+        case 'noodle':
+          tagDescription = 'Noodles 🍜';
+          cardColor = const Color(0xffE2F1AF);
+          textColor = Colors.black87;
+          break;
+        case '10':
+          tagDescription = '\$~10💵';
+          cardColor = const Color(0xff7BAE7F);
+          textColor = Colors.white;
+          break;
+        case '15':
+          tagDescription = '\$~15💵';
+          cardColor = const Color(0xff7BAE7F);
+          textColor = Colors.white;
+          break;
+        case '20':
+          tagDescription = '\$~20💵';
+          cardColor = const Color(0xff7BAE7F);
+          textColor = Colors.white;
+          break;
+        case '25':
+          tagDescription = '\$~25💵';
+          cardColor = const Color(0xff7BAE7F);
+          textColor = Colors.white;
+          break;
+        default:
+          continue;
+      }
+
+      // Check if the tag is already present in the list
+      if (!tags.any((tag) => tag.tagDescription == tagDescription)) {
+        // Add the tag only if it's not already present
+        tags.add(PropertyTag(
+          tagDescription: tagDescription,
+          cardColor: cardColor,
+          textColor: textColor,
+        ));
+      }
+    }
+  }
+
+  void updateRestaurantCategories(List<String> newCategories) {
+    setState(() {
+      restaurantCategories = newCategories;
+      filterTagSetup(restaurantCategories);
+    });
   }
 
   // 1. restaurantName: restaurantName, ✅
@@ -64,6 +162,8 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   File? dish1;
   File? dish2;
   File? dish3;
+
+  List<String> restaurantCategories = [];
 
   Future<void> pickImage() async {
     final result = await FilePicker.platform.pickFiles(
@@ -95,10 +195,13 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                       context: context,
                       builder: (BuildContext ctx) {
                         return ConfirmQuit(
-                          destination: () {},
-                          title: '',
-                          subtitle: '',
-                          actionButton: '',
+                          destination: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          title: 'Confirm Quit',
+                          subtitle: 'All progress will be lost',
+                          actionButton: 'Quit',
                         );
                         // final data = await getPlaceDetails(
                         //     locationPrediction.placeId!);
@@ -114,6 +217,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                     iconData: Icons.close,
                   ),
                 ),
+                const Text('Create Restaurant'),
                 GestureDetector(
                   // onTap: () async {
                   //   if (restaurantPreview.path != '' &&
@@ -182,21 +286,21 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                     onImagePicked: (file) => setState(() => dish1 = file),
                     label: 'Dish 1',
                     height: 100,
-                    width: 100,
+                    width: (MediaQuery.of(context).size.width / 3) - 10,
                   ),
                   ImagePickerPreview(
                     imageFile: dish2,
                     onImagePicked: (file) => setState(() => dish2 = file),
                     label: 'Dish 2',
                     height: 100,
-                    width: 100,
+                    width: (MediaQuery.of(context).size.width / 3) - 10,
                   ),
                   ImagePickerPreview(
                     imageFile: dish3,
                     onImagePicked: (file) => setState(() => dish3 = file),
                     label: 'Dish 3',
                     height: 100,
-                    width: 100,
+                    width: (MediaQuery.of(context).size.width / 3) - 10,
                   ),
                 ],
               ),
@@ -244,17 +348,41 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                     ),
                     const SizedBox(height: 16),
                     GestureDetector(
-                      onTap: () {
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (BuildContext context) {
-                        //       return RestaurantCategory();
-                        //     });
+                      onTap: () async {
+                        safePrint(restaurantCategories);
+                        final response = await editProperty(
+                          context: context,
+                          restaurantCategories: restaurantCategories,
+                        );
+                        if (response.isNotEmpty) {
+                          updateRestaurantCategories(response);
+                        }
                       },
                       child: Container(
-                        child: Text('Button'),
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: AppTheme.kGreen2,
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                        child: const Text(
+                          '+ Add Restaurant Tags',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    tags.isNotEmpty
+                        ? SizedBox(
+                            height: 40,
+                            child: ListView.builder(
+                              itemCount: tags.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return tags[index];
+                              },
+                            ),
+                          )
+                        : Container(),
                     const SizedBox(
                       height: 200,
                     )
