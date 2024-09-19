@@ -346,22 +346,25 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                             context, SortedByRating.id,
                                             arguments: "RATING");
                                       },
+                                      iconData: Icons.star,
                                     ),
                                     NoImgCard(
-                                      text: 'Combined Times Visited',
+                                      text: 'Trending',
                                       routeName: (BuildContext, String) {
                                         Navigator.pushNamed(
                                             context, SortedByRating.id,
                                             arguments: "VISIT");
                                       },
+                                      iconData: Icons.trending_up,
                                     ),
                                     NoImgCard(
-                                      text: 'Alphabetical',
+                                      text: 'Alpha',
                                       routeName: (BuildContext, String) {
                                         Navigator.pushNamed(
                                             context, SortedByRating.id,
                                             arguments: "ALPHA");
                                       },
+                                      iconData: Icons.abc,
                                     ),
                                   ],
                                 ),

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class HomeCard extends StatelessWidget {
-  HomeCard({
+  const HomeCard({
     super.key,
     required this.displayIMG,
     required this.text,
@@ -33,8 +33,7 @@ class HomeCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: displayIMG,
                     fit: BoxFit.cover,
-                    width:
-                        double.infinity, // Ensure the image takes up the full
+                    width: double.infinity,
                     // width
                   ),
                 ),
@@ -47,6 +46,7 @@ class HomeCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center, // Center the text
               ),
+              const SizedBox(height: 5)
             ],
           ),
         ),
@@ -56,14 +56,15 @@ class HomeCard extends StatelessWidget {
 }
 
 class NoImgCard extends StatelessWidget {
-  const NoImgCard({
-    super.key,
-    required this.text,
-    required this.routeName,
-  });
+  const NoImgCard(
+      {super.key,
+      required this.text,
+      required this.routeName,
+      required this.iconData});
 
   final String text;
   final Function(BuildContext, String) routeName;
+  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +77,28 @@ class NoImgCard extends StatelessWidget {
         child: SizedBox(
           width: 120,
           height: 130,
-          child: Center(
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10, right: 10, left: 10, bottom: 5),
+                  child: Icon(
+                    iconData,
+                    size: 50,
+                  ),
+                ),
               ),
-              textAlign: TextAlign.center, // Center the text
-            ),
+              Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center, // Center the text
+              ),
+              const SizedBox(height: 5)
+            ],
           ),
         ),
       ),

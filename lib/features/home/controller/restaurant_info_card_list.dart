@@ -43,52 +43,49 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
       return _fetchRestaurant();
     });
   }
-}
 
-// Future<void> addRestaurantInfo({
-//   required String userFirstName,
-//   required String userLastName,
-//   required String restaurantName,
-//   required String email,
-//   required String x,
-//   required String y,
-//   required double rating,
-//   required int reviewNum,
-// }) async {
-//   final restaurantDetails = RestaurantInfoCard(
-//       restaurantName: '',
-//       location: LatLong(latitude: x, longitude: y),
-//       address: '',
-//       imageSrc: '',
-//       imageLogo: '',
-//       scannerDataMatch: '',
-//       hours: Time(
-//         monday: StartStop(start: '', stop: ''),
-//         tuesday: StartStop(start: '', stop: ''),
-//         wednesday: StartStop(start: '', stop: ''),
-//         thursday: StartStop(start: '', stop: ''),
-//         friday: StartStop(start: '', stop: ''),
-//         saturday: StartStop(start: '', stop: ''),
-//         sunday: StartStop(start: '', stop: ''),
-//       ),
-//       rating: rating,
-//       cuisineType: [],
-//       reviewNum: reviewNum,
-//       discounts: [],
-//       discountPercent: '',
-//       phoneNumber: '',
-//       gMapsLink: '',
-//       websiteLink: '',
-//       topRatedItemsImgSrc: [],
-//       topRatedItemsName: [],
-//       timesVisited: 0);
-//
-//   state = const AsyncValue.loading();
-//
-//   state = await AsyncValue.guard(() async {
-//     final restaurantRepository =
-//         ref.read(restaurantInfoCardRepositoryProvider);
-//     await restaurantRepository.add(restaurantDetails);
-//     return fetchRestaurant();
-//   });
-// }
+  Future<void> addRestaurantInfo({
+    required String restaurantName,
+    required String restaurantAddress,
+    required String restaurantImageSrc,
+    required String restaurantImageLogo,
+    required List<String> restaurantAttributes,
+    required LatLong latLng,
+    required Time restaurantHours,
+    required double restaurantRatings,
+    required int numRestaurantReviews,
+    required String restaurantDiscountPercentage,
+    required List<String> restaurantTopItemName,
+    required List<String> restaurantTopItemImage,
+  }) async {
+    final restaurantDetails = RestaurantInfoCard(
+      restaurantName: restaurantName,
+      location: latLng,
+      address: restaurantAddress,
+      imageSrc: restaurantImageSrc,
+      imageLogo: restaurantImageLogo,
+      scannerDataMatch: '',
+      hours: restaurantHours,
+      rating: restaurantRatings,
+      cuisineType: restaurantAttributes,
+      reviewNum: numRestaurantReviews,
+      discounts: [],
+      discountPercent: restaurantDiscountPercentage,
+      phoneNumber: '',
+      gMapsLink: '',
+      websiteLink: '',
+      topRatedItemsImgSrc: restaurantTopItemImage,
+      topRatedItemsName: restaurantTopItemName,
+      timesVisited: 0,
+    );
+
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      final restaurantRepository =
+          ref.read(restaurantInfoCardRepositoryProvider);
+      await restaurantRepository.add(restaurantDetails);
+      return _fetchRestaurant();
+    });
+  }
+}

@@ -5,14 +5,18 @@ import 'package:ACAC/common/widgets/ui/CustomCheckBox.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/features/admin/helper_ui/PreviewImagePick.dart';
 import 'package:ACAC/features/admin/helper_ui/restaurant_category.dart';
+import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'helper_ui/gmaps_api.dart';
 
 class NewRestaurantCard extends ConsumerStatefulWidget {
   const NewRestaurantCard({super.key});
@@ -22,9 +26,10 @@ class NewRestaurantCard extends ConsumerStatefulWidget {
 }
 
 class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
-  late TextEditingController RestaurantNameController;
+  late TextEditingController restaurantNameController;
   late TextEditingController descriptionTextController;
   late TextEditingController gMapsTextController;
+  late TextEditingController discountController;
   Prediction locationPrediction = Prediction();
 
   List<PropertyTag> tags = [];
@@ -32,16 +37,18 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   @override
   void initState() {
     super.initState();
-    RestaurantNameController = TextEditingController();
+    restaurantNameController = TextEditingController();
     descriptionTextController = TextEditingController();
     gMapsTextController = TextEditingController();
+    discountController = TextEditingController();
   }
 
   @override
   void dispose() {
-    RestaurantNameController.dispose();
+    restaurantNameController.dispose();
     descriptionTextController.dispose();
     gMapsTextController.dispose();
+    discountController.dispose();
     super.dispose();
   }
 
@@ -146,16 +153,16 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   // 6. scannerDataMatch: '', ✅
   // 7. hours: Time ✅
   // 8. rating: rating, ✅
-  // 9. cuisineType: [], ❌
+  // 9. cuisineType: [], ✅
   // 10. reviewNum: reviewNum,  ✅
   // 11. discounts: [],
-  // 12. discountPercent: '',
+  // 12. discountPercent: '',   ✅
   // 13. phoneNumber: '', ✅
   // 14. gMapsLink: '',  ✅
   // 15. websiteLink: '',✅
-  // 16. topRatedItemsImgSrc: [], ❌
-  // 17. topRatedItemsName: [], ❌
-  // timesVisited: 0,
+  // 16. topRatedItemsImgSrc: [], ✅
+  // 17. topRatedItemsName: [],✅
+  // timesVisited: 0,   ✅
 
   File? restaurantPreview;
   File? restaurantLogo;
@@ -180,6 +187,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
 
   @override
   Widget build(BuildContext context) {
+    final restaurant = ref.read(restaurantInfoCardListProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -203,12 +211,6 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                           subtitle: 'All progress will be lost',
                           actionButton: 'Quit',
                         );
-                        // final data = await getPlaceDetails(
-                        //     locationPrediction.placeId!);
-                        // safePrint(data);
-                        //
-                        // final obj = parseOpeningHours(data);
-                        // safePrint(obj);
                       },
                     );
                   },
@@ -219,39 +221,55 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                 ),
                 const Text('Create Restaurant'),
                 GestureDetector(
-                  // onTap: () async {
-                  //   if (restaurantPreview.path != '' &&
-                  //       RestaurantNameController.text.isNotEmpty &&
-                  //       descriptionTextController.text.isNotEmpty) {
-                  //     try {
-                  //       FocusScope.of(context).unfocus();
-                  //       HapticFeedback.heavyImpact();
-                  //       // Upload file using Amplify Storage
-                  //       final result = await Amplify.Storage.uploadFile(
-                  //         path: StoragePath.fromString(
-                  //             'public/${_restaurant.uri.pathSegments.last}'),
-                  //         // onProgress: (progress) {
-                  //         //   safePrint(
-                  //         //       'Fraction completed: ${progress.fractionCompleted}');
-                  //         // },
-                  //         localFile: AWSFile.fromPath(_restaurant.path),
-                  //       ).result;
-                  //       await marketing.addMarketingCard(
-                  //           imageUrl:
-                  //               ('${dotenv.get("S3PATH")}${result.uploadedItem.path}'),
-                  //           headerText: RestaurantNameController.text,
-                  //           descriptionText: descriptionTextController.text);
-                  //       safePrint(
-                  //           'Successfully uploaded file: ${result.uploadedItem.path}');
-                  //       if (context.mounted) {
-                  //         Navigator.pop(context);
-                  //       }
-                  //     } on StorageException catch (e) {
-                  //       safePrint(e.message);
-                  //     }
-                  //   }
-                  //   return;
-                  // },
+                  onTap: () async {
+                    try {
+                      final restaurantInfoObject = await getRestaurantDetails(
+                          locationPrediction.placeId!);
+                      print(restaurantInfoObject);
+
+                      // final restaurantReviews = restaurantInfoObject['rating'];
+                      // safePrint(restaurantReviews); // double
+
+                      // final totalRestaurantReviews =
+                      //     restaurantInfoObject['number_of_reviews'];
+                      // //safePrint(totalRestaurantReviews); //int
+                      //
+                      // final restaurantHours =
+                      //     convertToTime(restaurantInfoObject["opening_hours"]);
+                      // FocusScope.of(context).unfocus();
+
+                      HapticFeedback.heavyImpact();
+                      // Upload file using Amplify Storage
+
+                      // final result = await Amplify.Storage.uploadFile(
+                      //   path: StoragePath.fromString(
+                      //       'public/${restaurantPreview?.uri.pathSegments.last}'),
+                      //   localFile: AWSFile.fromPath(restaurantPreview!.path),
+                      // ).result;
+                      //
+                      // await restaurant.addRestaurantInfo(
+                      //     restaurantName: restaurantNameController.text.trim(),
+                      //     restaurantAddress: '',
+                      //     restaurantImageSrc: '',
+                      //     restaurantImageLogo: '',
+                      //     restaurantAttributes: [],
+                      //     latLng: LatLong(latitude: '', longitude: ''),
+                      //     restaurantHours: restaurantHours,
+                      //     restaurantRatings: 1.0,
+                      //     numRestaurantReviews: 100,
+                      //     restaurantDiscountPercentage: '10',
+                      //     restaurantTopItemName: [],
+                      //     restaurantTopItemImage: []);
+
+                      // safePrint(
+                      //     'Successfully uploaded file: ${result.uploadedItem.path}');
+                      // if (context.mounted) {
+                      //   Navigator.pop(context);
+                      // }
+                    } on StorageException catch (e) {
+                      safePrint(e.message);
+                    }
+                  },
                   child: const CustomCheckBox(
                     color: AppTheme.kGreen2,
                     iconData: Icons.check,
@@ -311,7 +329,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                   children: [
                     const SizedBox(height: 16),
                     TextFormField(
-                      controller: RestaurantNameController,
+                      controller: restaurantNameController,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         labelText: 'Restaurant Name',
@@ -383,6 +401,27 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                             ),
                           )
                         : Container(),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: discountController,
+                      textCapitalization: TextCapitalization.sentences,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Discount Percentage',
+                        labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xff2E2E2E), width: 2),
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 200,
                     )
