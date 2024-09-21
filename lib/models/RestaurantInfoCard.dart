@@ -28,6 +28,8 @@ import 'ModelProvider.dart';
 class RestaurantInfoCard extends amplify_core.Model {
   static const classType = const _RestaurantInfoCardModelType();
   final String id;
+  final String? _googlePlacesId;
+  final String? _gMapsTextInput;
   final String? _restaurantName;
   final LatLong? _location;
   final String? _address;
@@ -59,6 +61,32 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   RestaurantInfoCardModelIdentifier get modelIdentifier {
     return RestaurantInfoCardModelIdentifier(id: id);
+  }
+
+  String get googlePlacesId {
+    try {
+      return _googlePlacesId!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
+  }
+
+  String get gMapsTextInput {
+    try {
+      return _gMapsTextInput!;
+    } catch (e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
+    }
   }
 
   String get restaurantName {
@@ -296,6 +324,8 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   const RestaurantInfoCard._internal(
       {required this.id,
+      required googlePlacesId,
+      required gMapsTextInput,
       required restaurantName,
       required location,
       required address,
@@ -316,7 +346,9 @@ class RestaurantInfoCard extends amplify_core.Model {
       required timesVisited,
       createdAt,
       updatedAt})
-      : _restaurantName = restaurantName,
+      : _googlePlacesId = googlePlacesId,
+        _gMapsTextInput = gMapsTextInput,
+        _restaurantName = restaurantName,
         _location = location,
         _address = address,
         _imageSrc = imageSrc,
@@ -339,6 +371,8 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   factory RestaurantInfoCard(
       {String? id,
+      required String googlePlacesId,
+      required String gMapsTextInput,
       required String restaurantName,
       required LatLong location,
       required String address,
@@ -359,6 +393,8 @@ class RestaurantInfoCard extends amplify_core.Model {
       required int timesVisited}) {
     return RestaurantInfoCard._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
+        googlePlacesId: googlePlacesId,
+        gMapsTextInput: gMapsTextInput,
         restaurantName: restaurantName,
         location: location,
         address: address,
@@ -396,6 +432,8 @@ class RestaurantInfoCard extends amplify_core.Model {
     if (identical(other, this)) return true;
     return other is RestaurantInfoCard &&
         id == other.id &&
+        _googlePlacesId == other._googlePlacesId &&
+        _gMapsTextInput == other._gMapsTextInput &&
         _restaurantName == other._restaurantName &&
         _location == other._location &&
         _address == other._address &&
@@ -428,6 +466,8 @@ class RestaurantInfoCard extends amplify_core.Model {
 
     buffer.write("RestaurantInfoCard {");
     buffer.write("id=" + "$id" + ", ");
+    buffer.write("googlePlacesId=" + "$_googlePlacesId" + ", ");
+    buffer.write("gMapsTextInput=" + "$_gMapsTextInput" + ", ");
     buffer.write("restaurantName=" + "$_restaurantName" + ", ");
     buffer.write("location=" +
         (_location != null ? _location!.toString() : "null") +
@@ -477,7 +517,9 @@ class RestaurantInfoCard extends amplify_core.Model {
   }
 
   RestaurantInfoCard copyWith(
-      {String? restaurantName,
+      {String? googlePlacesId,
+      String? gMapsTextInput,
+      String? restaurantName,
       LatLong? location,
       String? address,
       String? imageSrc,
@@ -497,6 +539,8 @@ class RestaurantInfoCard extends amplify_core.Model {
       int? timesVisited}) {
     return RestaurantInfoCard._internal(
         id: id,
+        googlePlacesId: googlePlacesId ?? this.googlePlacesId,
+        gMapsTextInput: gMapsTextInput ?? this.gMapsTextInput,
         restaurantName: restaurantName ?? this.restaurantName,
         location: location ?? this.location,
         address: address ?? this.address,
@@ -518,7 +562,9 @@ class RestaurantInfoCard extends amplify_core.Model {
   }
 
   RestaurantInfoCard copyWithModelFieldValues(
-      {ModelFieldValue<String>? restaurantName,
+      {ModelFieldValue<String>? googlePlacesId,
+      ModelFieldValue<String>? gMapsTextInput,
+      ModelFieldValue<String>? restaurantName,
       ModelFieldValue<LatLong>? location,
       ModelFieldValue<String>? address,
       ModelFieldValue<String>? imageSrc,
@@ -538,6 +584,10 @@ class RestaurantInfoCard extends amplify_core.Model {
       ModelFieldValue<int>? timesVisited}) {
     return RestaurantInfoCard._internal(
         id: id,
+        googlePlacesId:
+            googlePlacesId == null ? this.googlePlacesId : googlePlacesId.value,
+        gMapsTextInput:
+            gMapsTextInput == null ? this.gMapsTextInput : gMapsTextInput.value,
         restaurantName:
             restaurantName == null ? this.restaurantName : restaurantName.value,
         location: location == null ? this.location : location.value,
@@ -572,6 +622,8 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   RestaurantInfoCard.fromJson(Map<String, dynamic> json)
       : id = json['id'],
+        _googlePlacesId = json['googlePlacesId'],
+        _gMapsTextInput = json['gMapsTextInput'],
         _restaurantName = json['restaurantName'],
         _location = json['location'] != null
             ? json['location']['serializedData'] != null
@@ -610,6 +662,8 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'googlePlacesId': _googlePlacesId,
+        'gMapsTextInput': _gMapsTextInput,
         'restaurantName': _restaurantName,
         'location': _location?.toJson(),
         'address': _address,
@@ -634,6 +688,8 @@ class RestaurantInfoCard extends amplify_core.Model {
 
   Map<String, Object?> toMap() => {
         'id': id,
+        'googlePlacesId': _googlePlacesId,
+        'gMapsTextInput': _gMapsTextInput,
         'restaurantName': _restaurantName,
         'location': _location,
         'address': _address,
@@ -661,6 +717,10 @@ class RestaurantInfoCard extends amplify_core.Model {
       MODEL_IDENTIFIER =
       amplify_core.QueryModelIdentifier<RestaurantInfoCardModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
+  static final GOOGLEPLACESID =
+      amplify_core.QueryField(fieldName: "googlePlacesId");
+  static final GMAPSTEXTINPUT =
+      amplify_core.QueryField(fieldName: "gMapsTextInput");
   static final RESTAURANTNAME =
       amplify_core.QueryField(fieldName: "restaurantName");
   static final LOCATION = amplify_core.QueryField(fieldName: "location");
@@ -703,6 +763,18 @@ class RestaurantInfoCard extends amplify_core.Model {
     ];
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: RestaurantInfoCard.GOOGLEPLACESID,
+        isRequired: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+        key: RestaurantInfoCard.GMAPSTEXTINPUT,
+        isRequired: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.RESTAURANTNAME,

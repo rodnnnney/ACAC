@@ -1,6 +1,6 @@
 import 'package:ACAC/models/ModelProvider.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 Map<String, dynamic> getStatusWithColor(
     DateTime currentTime, String openTimeStr, String closeTimeStr) {
@@ -79,21 +79,33 @@ Color timeColor(DateTime currentTime, String openTimeStr, String closeTimeStr) {
     return Colors.red;
   }
 
+  if (openTimeStr.toLowerCase() == 'open 24 hours' ||
+      closeTimeStr.toLowerCase() == 'open 24 hours') {
+    return Colors.green;
+  }
+
   // Helper function to safely parse TimeOfDay
   TimeOfDay? parseTimeOfDaySafely(String timeStr) {
     try {
       return parseTimeOfDay(timeStr);
     } catch (e) {
+      safePrint(e);
       return null; // Return null if parsing fails
     }
   }
 
+  safePrint(openTimeStr);
+  safePrint(closeTimeStr);
   // Parse the opening and closing times
   TimeOfDay? openTime = parseTimeOfDaySafely(openTimeStr);
   TimeOfDay? closeTime = parseTimeOfDaySafely(closeTimeStr);
+  //
+  // TimeOfDay? openTime = parseTimeOfDaySafely(openTimeStr);
+  // TimeOfDay? closeTime = parseTimeOfDaySafely(closeTimeStr);
 
   // If times cannot be parsed, assume closed
   if (openTime == null || closeTime == null) {
+    safePrint('Error parsing time');
     return Colors.red;
   }
 
@@ -132,13 +144,33 @@ Color timeColor(DateTime currentTime, String openTimeStr, String closeTimeStr) {
 }
 
 TimeOfDay parseTimeOfDay(String timeString) {
-  try {
-    final format = DateFormat('h:mm a');
-    final DateTime dateTime = format.parse(timeString);
-    return TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
-  } catch (e) {
+  // Remove any extra whitespace and convert to uppercase
+  timeString = timeString.trim().toUpperCase();
+
+  // Use regex to match time format
+  final RegExp timeRegex = RegExp(r'^(\d{1,2}):(\d{2})\s*(AM|PM)$');
+  final match = timeRegex.firstMatch(timeString);
+
+  if (match == null) {
     throw FormatException('Invalid time format: $timeString');
   }
+
+  int hour = int.parse(match.group(1)!);
+  final int minute = int.parse(match.group(2)!);
+  final String amPm = match.group(3)!;
+
+  // Handle AM/PM
+  if (amPm == 'PM' && hour != 12) {
+    hour += 12;
+  } else if (amPm == 'AM' && hour == 12) {
+    hour = 0;
+  }
+
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+    throw FormatException('Invalid time: $timeString');
+  }
+
+  return TimeOfDay(hour: hour, minute: minute);
 }
 
 Future<Map<String, dynamic>> getCurrentStatusWithColor(
@@ -217,31 +249,50 @@ String getHours(List<RestaurantInfoCard> rest, int index, int weekday) {
 }
 
 String getHour(RestaurantInfoCard rest, int weekday) {
+  String start = "";
+  String stop = "";
+
+  // Extract the start and stop times based on the weekday
   switch (weekday) {
     case 1:
-      return ('${rest.hours.monday.start} - '
-          '${rest.hours.monday.stop}');
+      start = rest.hours.monday.start;
+      stop = rest.hours.monday.stop;
+      break;
     case 2:
-      return ('${rest.hours.tuesday.start} - '
-          '${rest.hours.tuesday.stop}');
+      start = rest.hours.tuesday.start;
+      stop = rest.hours.tuesday.stop;
+      break;
     case 3:
-      return ('${rest.hours.wednesday.start} - '
-          '${rest.hours.wednesday.stop}');
+      start = rest.hours.wednesday.start;
+      stop = rest.hours.wednesday.stop;
+      break;
     case 4:
-      return ('${rest.hours.thursday.start} - '
-          '${rest.hours.thursday.stop}');
+      start = rest.hours.thursday.start;
+      stop = rest.hours.thursday.stop;
+      break;
     case 5:
-      return ('${rest.hours.friday.start} - '
-          '${rest.hours.friday.stop}');
+      start = rest.hours.friday.start;
+      stop = rest.hours.friday.stop;
+      break;
     case 6:
-      return ('${rest.hours.saturday.start} - '
-          '${rest.hours.saturday.stop}');
+      start = rest.hours.saturday.start;
+      stop = rest.hours.saturday.stop;
+      break;
     case 7:
-      return ('${rest.hours.sunday.start} - '
-          '${rest.hours.sunday.stop}');
+      start = rest.hours.sunday.start;
+      stop = rest.hours.sunday.stop;
+      break;
     default:
       return "Closed";
   }
+
+  // Check if the restaurant is open 24 hours
+  if (start == "Open 24 hours" && stop == "Open 24 hours") {
+    return "Open 24 hours";
+  }
+
+  // Return the formatted hours for non-24-hour days
+  return '$start - $stop';
 }
 
 String getHoursSingle(RestaurantInfoCard rest, int weekday) {

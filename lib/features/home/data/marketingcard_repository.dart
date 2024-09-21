@@ -24,4 +24,8 @@ class MarketingCardRepository {
   Future<void> deleteMarketingCard(MarketingCard marketingCard) async {
     return restaurantAPIService.deleteMarketingCard(marketingCard);
   }
+
+  Future<void> editMarketingCard(MarketingCard marketingCard) async {
+    return restaurantAPIService.editMarketingCard(marketingCard);
+  }
 }

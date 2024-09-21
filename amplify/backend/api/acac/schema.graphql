@@ -25,6 +25,8 @@ type User @model @auth(rules: [
 
 type RestaurantInfoCard @model @auth(rules: [{ allow: public }]) {
     id: ID!
+    googlePlacesId: String!
+    gMapsTextInput: String!
     restaurantName: String!
     location: LatLong!
     address: String!

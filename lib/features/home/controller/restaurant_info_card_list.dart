@@ -61,6 +61,8 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
     required String restaurantDiscountPercentage,
     required List<String> restaurantTopItemName,
     required List<String> restaurantTopItemImage,
+    required String googleMapsId,
+    required String googleMapsTextBox,
   }) async {
     final restaurantDetails = RestaurantInfoCard(
       restaurantName: restaurantName,
@@ -80,6 +82,8 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
       topRatedItemsImgSrc: restaurantTopItemImage,
       topRatedItemsName: restaurantTopItemName,
       timesVisited: 0,
+      googlePlacesId: googleMapsId,
+      gMapsTextInput: googleMapsTextBox,
     );
 
     state = const AsyncValue.loading();

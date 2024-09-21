@@ -65,6 +65,7 @@ class ConfirmQuit extends ConsumerWidget {
               HapticFeedback.heavyImpact();
               try {
                 destination();
+                Navigator.pop(context);
               } catch (e) {
                 safePrint("Error has occurred: e");
               }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ACAC/common/consts/globals.dart';
+import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
 import 'package:ACAC/features/admin/new_restaurant_card.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
@@ -26,7 +27,8 @@ class RestaurantCardView extends ConsumerStatefulWidget {
 class _HistoryState extends ConsumerState<RestaurantCardView> {
   @override
   Widget build(BuildContext context) {
-    var test = ref.watch(restaurantInfoCardListProvider);
+    var restaurantCards = ref.watch(restaurantInfoCardListProvider);
+    final restaurant = ref.read(restaurantInfoCardListProvider.notifier);
     final ScreenshotController screenshotController = ScreenshotController();
 
     Future<void> captureAndSave() async {
@@ -68,9 +70,9 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
       }
     }
 
-    return test.when(
-      data: (marketingCardList) {
-        marketingCardList.sort((a, b) {
+    return restaurantCards.when(
+      data: (restaurantCardList) {
+        restaurantCardList.sort((a, b) {
           if (a.createdAt == null || b.createdAt == null) return 0;
           return a.createdAt!
               .getDateTimeInUtc()
@@ -99,7 +101,7 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
                     width: MediaQuery.of(context).size.width,
                     height: 600,
                     child: ListView.builder(
-                      itemCount: marketingCardList.length,
+                      itemCount: restaurantCardList.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -120,7 +122,7 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
                                             radius: 32,
                                             backgroundImage:
                                                 CachedNetworkImageProvider(
-                                                    marketingCardList[index]
+                                                    restaurantCardList[index]
                                                         .imageLogo),
                                           ),
                                           const SizedBox(
@@ -131,7 +133,7 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                marketingCardList[index]
+                                                restaurantCardList[index]
                                                     .restaurantName,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
@@ -147,8 +149,9 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
                                           IconButton(
                                               onPressed: () {
                                                 final code = PrettyQrView.data(
-                                                  data: marketingCardList[index]
-                                                      .id,
+                                                  data:
+                                                      restaurantCardList[index]
+                                                          .id,
                                                   errorCorrectLevel:
                                                       QrErrorCorrectLevel.H,
                                                   decoration:
@@ -157,7 +160,7 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
                                                         PrettyQrDecorationImage(
                                                             image:
                                                                 CachedNetworkImageProvider(
-                                                              marketingCardList[
+                                                              restaurantCardList[
                                                                       index]
                                                                   .imageLogo,
                                                             ),
@@ -267,27 +270,67 @@ class _HistoryState extends ConsumerState<RestaurantCardView> {
                                                     Icons.qr_code_rounded),
                                               )),
                                           const SizedBox(width: 10),
-                                          Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey
-                                                    .withOpacity(0.3),
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child:
-                                                const Icon(Icons.edit_outlined),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewRestaurantCard(
+                                                    card: restaurantCardList[
+                                                        index],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: const Icon(
+                                                  Icons.edit_outlined),
+                                            ),
                                           ),
                                           const SizedBox(width: 10),
-                                          Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: Colors.redAccent
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child: const Icon(
-                                              Icons.delete_outline,
-                                              color: Colors.redAccent,
+                                          GestureDetector(
+                                            onTap: () async {
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext ctx) {
+                                                  return ConfirmQuit(
+                                                    destination: () async {
+                                                      safePrint(
+                                                          "Deleting ${restaurantCardList[index]}");
+                                                      await restaurant
+                                                          .deleteRestaurantInfo(
+                                                              restaurantCardList[
+                                                                  index]);
+                                                    },
+                                                    title: 'Confirm Delete',
+                                                    subtitle:
+                                                        'This card will be '
+                                                        'delete forever',
+                                                    actionButton: 'Confirm',
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.redAccent
+                                                      .withOpacity(0.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: const Icon(
+                                                Icons.delete_outline,
+                                                color: Colors.redAccent,
+                                              ),
                                             ),
                                           )
                                         ],

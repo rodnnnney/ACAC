@@ -182,13 +182,16 @@ class _HomePageUserCardState extends State<HomePageUserCard> {
                             Text(
                               getHour(widget.restaurantInfoCard, weekday),
                               style: TextStyle(
-                                fontSize: 11,
                                 color: timeColor(
                                   DateTime.now(),
                                   getOpeningTimeSingle(
-                                      weekday, widget.restaurantInfoCard),
+                                    weekday,
+                                    widget.restaurantInfoCard,
+                                  ),
                                   getClosingTimeSingle(
-                                      weekday, widget.restaurantInfoCard),
+                                    weekday,
+                                    widget.restaurantInfoCard,
+                                  ),
                                 ),
                               ),
                               overflow: TextOverflow.ellipsis,

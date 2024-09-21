@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:ACAC/models/StartStop.dart';
 import 'package:ACAC/models/Time.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 String apikey = dotenv.get("GOOGLE_MAPS_API_KEY");
 
@@ -77,10 +81,17 @@ Time convertWeekdayListToTime(List<dynamic> weekdayList) {
 }
 
 StartStop parseStartStop(String dayText) {
-  final timeRange = dayText.split(": ")[1]; // Extract time range
-  final times = timeRange.split(" – "); // Split using the proper dash
+  final timeRange = dayText.split(": ")[1].trim(); // Extract the time range
+  if (timeRange.toLowerCase() == "open 24 hours") {
+    return StartStop(start: "Open 24 hours", stop: "Open 24 hours"); // Consider
+    // 24-hour range
+  }
+  // For regular hours
+  final times = timeRange.split(" – "); // Split using the dash
   return StartStop(
-      start: times[0].trim(), stop: times[1].trim()); // Trim spaces
+    start: times[0].trim(),
+    stop: times[1].trim(),
+  );
 }
 
 Time convertToTime(List<dynamic> weekdayText) {
@@ -93,4 +104,24 @@ Time convertToTime(List<dynamic> weekdayText) {
     saturday: parseStartStop(weekdayText[5]),
     sunday: parseStartStop(weekdayText[6]),
   );
+}
+
+Future<File?> downloadAndSaveImage(String imageUrl) async {
+  try {
+    final response = await http.get(Uri.parse(imageUrl));
+    if (response.statusCode == 200) {
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName = path.basename(imageUrl);
+      final file = File('${directory.path}/$fileName');
+      await file.writeAsBytes(response.bodyBytes);
+      safePrint('Image successfully downloaded and saved: ${file.path}');
+      return file;
+    } else {
+      safePrint('Failed to load image. Status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    safePrint('Error downloading image: $e');
+    return null;
+  }
 }

@@ -418,16 +418,18 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        SizedBox(
-                          height: 40,
-                          child: ListView.builder(
-                            itemCount: tags.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return tags[index];
-                            },
-                          ),
-                        ),
+                        tags.isNotEmpty
+                            ? SizedBox(
+                                height: 40,
+                                child: ListView.builder(
+                                  itemCount: tags.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return tags[index];
+                                  },
+                                ),
+                              )
+                            : Container(),
                         const SizedBox(height: 12),
                         CardRestInfoCard(place: widget.restaurant),
                         const SizedBox(height: 12),

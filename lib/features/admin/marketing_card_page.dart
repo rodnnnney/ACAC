@@ -1,10 +1,12 @@
 import 'package:ACAC/common/consts/globals.dart';
+import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
 import 'package:ACAC/features/home/controller/marketing_card_controller.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'helper_ui/utils.dart';
 import 'new_marketing_card.dart';
 
 class MarketingCardsView extends ConsumerStatefulWidget {
@@ -116,23 +118,58 @@ class _HistoryState extends ConsumerState<MarketingCardsView> {
                                       ),
                                       Row(
                                         children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey
-                                                    .withOpacity(0.3),
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child:
-                                                const Icon(Icons.edit_outlined),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewMarketingCard(
+                                                          card:
+                                                              marketingCardList[
+                                                                  index]),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: const Icon(
+                                                  Icons.edit_outlined),
+                                            ),
                                           ),
                                           const SizedBox(width: 10),
                                           GestureDetector(
                                             onTap: () async {
-                                              safePrint(
-                                                  marketingCardList[index]);
-                                              await marketing.delete(
-                                                  marketingCardList[index]);
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext ctx) {
+                                                  return ConfirmQuit(
+                                                    destination: () async {
+                                                      safePrint(
+                                                          marketingCardList[
+                                                              index]);
+                                                      await removeFile(
+                                                          marketingCardList[
+                                                                  index]
+                                                              .imageUrl);
+                                                      await marketing.delete(
+                                                          marketingCardList[
+                                                              index]);
+                                                    },
+                                                    title: 'Confirm Delete',
+                                                    subtitle:
+                                                        'This card will be '
+                                                        'delete forever',
+                                                    actionButton: 'Confirm',
+                                                  );
+                                                },
+                                              );
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(8),

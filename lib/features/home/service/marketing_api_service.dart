@@ -59,4 +59,21 @@ class MarketingApiService {
       safePrint('Add Marketing Card failed: $error');
     }
   }
+
+  Future<void> editMarketingCard(MarketingCard updatedMarketingCard) async {
+    try {
+      final request = ModelMutations.update(updatedMarketingCard,
+          authorizationMode: APIAuthorizationType.apiKey);
+      final response = await Amplify.API.mutate(request: request).response;
+
+      final updatedCard = response.data;
+      if (updatedCard == null) {
+        safePrint('Edit Marketing Card errors: ${response.errors}');
+        return;
+      }
+      safePrint('Successfully updated Marketing Card: ${updatedCard.id}');
+    } on ApiException catch (e) {
+      safePrint('Edit Marketing Card failed: $e');
+    }
+  }
 }

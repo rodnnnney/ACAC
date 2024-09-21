@@ -7,7 +7,7 @@ import 'package:ACAC/features/admin/helper_ui/PreviewImagePick.dart';
 import 'package:ACAC/features/admin/helper_ui/restaurant_category.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
-import 'package:ACAC/models/LatLong.dart';
+import 'package:ACAC/models/ModelProvider.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -20,34 +20,94 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'helper_ui/gmaps_api.dart';
 
 class NewRestaurantCard extends ConsumerStatefulWidget {
-  const NewRestaurantCard({super.key});
+  const NewRestaurantCard({
+    super.key,
+    this.card,
+  });
+
+  final RestaurantInfoCard? card;
 
   @override
   ConsumerState<NewRestaurantCard> createState() => _NewRestaurantCardState();
 }
 
 class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
+  bool isEditMode = false;
+
   late TextEditingController restaurantNameController;
   late TextEditingController descriptionTextController;
   late TextEditingController gMapsTextController;
   late TextEditingController discountController;
+  late TextEditingController discountDescriptionController;
   late TextEditingController dish1Title;
   late TextEditingController dish2Title;
   late TextEditingController dish3Title;
   Prediction locationPrediction = Prediction();
-
   List<PropertyTag> tags = [];
+  File? restaurantPreview;
+  File? restaurantLogo;
+  File? dish1;
+  File? dish2;
+  File? dish3;
+  List<String> restaurantCategories = [];
 
   @override
   void initState() {
     super.initState();
-    restaurantNameController = TextEditingController();
-    descriptionTextController = TextEditingController();
-    gMapsTextController = TextEditingController();
-    discountController = TextEditingController();
-    dish1Title = TextEditingController();
-    dish2Title = TextEditingController();
-    dish3Title = TextEditingController();
+    if (widget.card != null) {
+      isEditMode = true;
+      gMapsTextController =
+          TextEditingController(text: widget.card!.restaurantName);
+      restaurantNameController =
+          TextEditingController(text: widget.card!.restaurantName);
+      discountController =
+          TextEditingController(text: widget.card!.discountPercent);
+      discountController =
+          TextEditingController(text: widget.card!.discountPercent);
+      discountDescriptionController =
+          TextEditingController(text: widget.card!.discountDescription);
+      dish1Title =
+          TextEditingController(text: widget.card!.topRatedItemsName[0]);
+      dish2Title =
+          TextEditingController(text: widget.card!.topRatedItemsName[1]);
+      dish3Title =
+          TextEditingController(text: widget.card!.topRatedItemsName[2]);
+      restaurantCategories = widget.card!.cuisineType;
+      updateRestaurantCategories(restaurantCategories);
+      pullAllImages();
+    } else {
+      restaurantNameController = TextEditingController();
+      descriptionTextController = TextEditingController();
+      gMapsTextController = TextEditingController();
+      discountController = TextEditingController();
+      discountDescriptionController = TextEditingController();
+      dish1Title = TextEditingController();
+      dish2Title = TextEditingController();
+      dish3Title = TextEditingController();
+    }
+  }
+
+  Future<void> pullAllImages() async {
+    List<File?> files = await Future.wait([
+      downloadAndSaveImage(widget.card!.imageSrc),
+      downloadAndSaveImage(widget.card!.imageLogo),
+      downloadAndSaveImage(widget.card!.topRatedItemsImgSrc[0]),
+      downloadAndSaveImage(widget.card!.topRatedItemsImgSrc[1]),
+      downloadAndSaveImage(widget.card!.topRatedItemsImgSrc[2]),
+    ]);
+    setState(() {
+      restaurantPreview = files[0];
+      restaurantLogo = files[1];
+      if (files[2] != null) {
+        dish1 = files[3];
+      }
+      if (files[3] != null) {
+        dish2 = files[3];
+      }
+      if (files[4] != null) {
+        dish3 = files[4];
+      }
+    });
   }
 
   @override
@@ -183,14 +243,6 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   // 17. topRatedItemsName: [],✅
   // timesVisited: 0,   ✅
 
-  File? restaurantPreview;
-  File? restaurantLogo;
-  File? dish1;
-  File? dish2;
-  File? dish3;
-
-  List<String> restaurantCategories = [];
-
   Future<void> pickImage() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -207,7 +259,6 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   @override
   Widget build(BuildContext context) {
     final restaurant = ref.read(restaurantInfoCardListProvider.notifier);
-    const gmapsLink = 'https://www.google.com/maps/place/?q=place_id:';
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -225,7 +276,6 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                         return ConfirmQuit(
                           destination: () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
                           },
                           title: 'Confirm Quit',
                           subtitle: 'All progress will be lost',
@@ -239,7 +289,9 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                     iconData: Icons.close,
                   ),
                 ),
-                const Text('Create Restaurant'),
+                isEditMode
+                    ? const Text('Edit Restaurant')
+                    : const Text('Create Restaurant'),
                 GestureDetector(
                   onTap: () async {
                     try {
@@ -310,6 +362,8 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                           restaurantDiscountPercentage: discountController.text,
                           restaurantTopItemName: [
                             dish1Title.text,
+                            dish2Title.text,
+                            dish3Title.text
                           ],
                           restaurantTopItemImage: [
                             "$S3path${results[2]!}",
@@ -318,10 +372,12 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                           ],
                           restaurantPhoneNumber: phoneNumber.toString(),
                           websiteUrl: websiteUrl.toString(),
-                          restaurantDiscountDescription: 'Test',
+                          restaurantDiscountDescription:
+                              discountDescriptionController.text,
                           restaurantGoogleMapsLink:
-                              "$gmapsLink${locationPrediction.placeId}");
-
+                              "${AppTheme.gmapsLink}${locationPrediction.placeId}",
+                          googleMapsId: locationPrediction.placeId!,
+                          googleMapsTextBox: locationPrediction.description!);
                       safePrint('Successfully uploaded file: $results');
                       if (context.mounted) {
                         Navigator.pop(context);
@@ -351,16 +407,16 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                   children: [
                     const SizedBox(height: 16),
                     const Row(
-                      children: [Text('Search Restaurant')],
+                      children: [Text('Search Restaurant*')],
                     ),
                     GooglePlaceAutoCompleteTextField(
                       containerHorizontalPadding: 10,
                       textEditingController: gMapsTextController,
                       googleAPIKey: dotenv.get("GOOGLE_MAPS_API_KEY"),
                       itemClick: (prediction) {
-                        // if (prediction.description != null) {
-                        //   gMapsTextController.text = prediction.description!;
-                        // }
+                        if (prediction.description != null) {
+                          gMapsTextController.text = prediction.description!;
+                        }
                         setState(() {
                           locationPrediction = prediction;
                         });
@@ -371,7 +427,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                       controller: restaurantNameController,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
-                        labelText: 'Restaurant Name',
+                        labelText: 'Restaurant Name*',
                         labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         contentPadding:
@@ -405,7 +461,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                           borderRadius: BorderRadius.circular(AppTheme.round),
                         ),
                         child: const Text(
-                          '+ Add Restaurant Tags',
+                          '+ Add Restaurant Tags*',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -423,13 +479,33 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                             ),
                           )
                         : Container(),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: discountController,
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: 'Discount Percentage',
+                        labelText: 'Discount Percentage*',
+                        labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xff2E2E2E), width: 2),
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: discountDescriptionController,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: 'Discount Description',
                         labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         contentPadding:
@@ -454,13 +530,13 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                 imageFile: restaurantPreview,
                 onImagePicked: (file) =>
                     setState(() => restaurantPreview = file),
-                label: 'Restaurant Preview',
+                label: 'Restaurant Preview*',
               ),
               const SizedBox(height: 10),
               ImagePickerPreview(
                 imageFile: restaurantLogo,
                 onImagePicked: (file) => setState(() => restaurantLogo = file),
-                label: 'Restaurant Logo',
+                label: 'Restaurant Logo*',
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -468,21 +544,21 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                   ImagePickerPreview(
                     imageFile: dish1,
                     onImagePicked: (file) => setState(() => dish1 = file),
-                    label: 'Dish 1',
+                    label: 'Dish 1*',
                     height: 100,
                     width: (MediaQuery.of(context).size.width / 3) - 10,
                   ),
                   ImagePickerPreview(
                     imageFile: dish2,
                     onImagePicked: (file) => setState(() => dish2 = file),
-                    label: 'Dish 2',
+                    label: 'Dish 2*',
                     height: 100,
                     width: (MediaQuery.of(context).size.width / 3) - 10,
                   ),
                   ImagePickerPreview(
                     imageFile: dish3,
                     onImagePicked: (file) => setState(() => dish3 = file),
-                    label: 'Dish 3',
+                    label: 'Dish 3*',
                     height: 100,
                     width: (MediaQuery.of(context).size.width / 3) - 10,
                   ),
@@ -499,7 +575,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                       controller: dish1Title,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
-                        labelText: 'Dish 1 Name',
+                        labelText: 'Dish 1 Name*',
                         labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         contentPadding:
@@ -521,7 +597,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                       controller: dish2Title,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
-                        labelText: 'Dish 2 Name',
+                        labelText: 'Dish 2 Name*',
                         labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         contentPadding:
@@ -543,7 +619,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                       controller: dish3Title,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
-                        labelText: 'Dish 3 Name',
+                        labelText: 'Dish 3 Name*',
                         labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         contentPadding:

@@ -1,6 +1,7 @@
 import 'package:ACAC/models/Restaurant.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/models/User.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/cupertino.dart';
 
 enum TimePeriod { day, week, month, threeMonths, sixMonths, year, allTime }
@@ -161,4 +162,33 @@ RestaurantInfoCard getInfo(
     }
   }
   throw ErrorDescription('$checkName not found');
+}
+
+Future<void> removeFile(String file) async {
+  try {
+    String publicPrefix = 'public/';
+    String fileName =
+        file.substring(file.indexOf(publicPrefix) + publicPrefix.length);
+    safePrint(fileName);
+    final result = await Amplify.Storage.remove(
+      path: StoragePath.fromString("public/$fileName"),
+    ).result;
+    safePrint('Removed file: ${result.removedItem.path}');
+  } on StorageException catch (e) {
+    safePrint(e.message);
+  }
+}
+
+Future<void> remove() async {
+  try {
+    final result = await Amplify.Storage.removeMany(
+      paths: [
+        const StoragePath.fromString('public/file-1.txt'),
+        const StoragePath.fromString('public/file-2.txt'),
+      ],
+    ).result;
+    safePrint('Removed files: ${result.removedItems}');
+  } on StorageException catch (e) {
+    safePrint(e.message);
+  }
 }

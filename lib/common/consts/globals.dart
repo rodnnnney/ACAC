@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AppTheme {
   static const cacheDuration = Duration(hours: 1);
+  static const gmapsLink = 'https://www.google.com/maps/place/?q=place_id:';
 
   static const Color kDarkGreen = Color(0xff14342B);
   static const Color kGreen = Color(0xff60935D);

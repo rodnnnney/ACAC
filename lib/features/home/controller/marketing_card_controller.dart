@@ -47,4 +47,13 @@ class MarketingCardController extends _$MarketingCardController {
       return _fetchMarketingCards();
     });
   }
+
+  Future<void> edit(MarketingCard updatedCard) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final marketingCardRepository = ref.read(marketingCardRepositoryProvider);
+      await marketingCardRepository.editMarketingCard(updatedCard);
+      return _fetchMarketingCards();
+    });
+  }
 }
