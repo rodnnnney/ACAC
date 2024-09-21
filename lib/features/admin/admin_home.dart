@@ -16,15 +16,15 @@ import 'marketing_card_page.dart';
 class AdminHome extends ConsumerStatefulWidget {
   static const String id = '/Admin_home';
 
-  const AdminHome({Key? key}) : super(key: key);
+  const AdminHome({super.key});
 
   @override
   ConsumerState<AdminHome> createState() => _AdminHomeState();
 }
 
 class _AdminHomeState extends ConsumerState<AdminHome> {
-  TimePeriod time = TimePeriod.week;
-  int hovered = 0;
+  TimePeriod time = TimePeriod.threeMonths;
+  int hovered = 2;
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
 
   @override
@@ -78,8 +78,10 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                         borderRadius: BorderRadius.circular(8),
                         color: AppTheme.kGreen2,
                       ),
-                      child: const Text('Restaurant Cards',
-                          style: TextStyle(color: Colors.white)),
+                      child: const Text(
+                        'Restaurant Cards',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),

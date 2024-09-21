@@ -27,6 +27,7 @@ Future<Map<String, dynamic>> getRestaurantDetails(String placeId) async {
           result['formatted_phone_number'] ?? 'No phone number available',
       'opening_hours': result['opening_hours']?['weekday_text'] ??
           'No opening hours available',
+      'address': result['formatted_address']
     };
     return restaurantDetails;
   } else {

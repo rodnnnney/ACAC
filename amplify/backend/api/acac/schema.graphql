@@ -35,7 +35,7 @@ type RestaurantInfoCard @model @auth(rules: [{ allow: public }]) {
     rating: Float!
     cuisineType: [String]!
     reviewNum: Int!
-    discounts: [String]!
+    discountDescription: String!
     discountPercent: String!
     phoneNumber: String!
     gMapsLink: String!

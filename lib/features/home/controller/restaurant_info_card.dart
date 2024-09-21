@@ -35,8 +35,13 @@ class RestaurantInfoCardAPIService {
 
   Future<void> addRestaurantInfoCard(RestaurantInfoCard restaurant) async {
     try {
-      final request = ModelMutations.create(restaurant);
-      final response = await Amplify.API.mutate(request: request).response;
+      final request = ModelMutations.create(restaurant,
+          authorizationMode: APIAuthorizationType.apiKey);
+      final response = await Amplify.API
+          .mutate(
+            request: request,
+          )
+          .response;
 
       final createdTrip = response.data;
       if (createdTrip == null) {

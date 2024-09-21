@@ -68,87 +68,81 @@ class _HistoryState extends ConsumerState<CostBreakdown> {
         child: Column(
           children: [
             Expanded(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 600,
-                child: ListView.builder(
-                  itemCount: filteredRestList.length,
-                  itemBuilder: (context, index) {
-                    //
-                    Restaurant restaurant = filteredRestList[index];
-                    RestaurantInfoCard card =
-                        getInfo(allInfoCards, restaurant.restaurant);
-                    final timesVisited = filteredRestList
-                        .where((r) => r.restaurant == restaurant.restaurant)
-                        .length;
-                    final revGenerated = revenueMap[restaurant.restaurant];
+              child: ListView.builder(
+                itemCount: filteredRestList.length,
+                itemBuilder: (context, index) {
+                  Restaurant restaurant = filteredRestList[index];
+                  RestaurantInfoCard card =
+                      getInfo(allInfoCards, restaurant.restaurant);
+                  final timesVisited = filteredRestList
+                      .where((r) => r.restaurant == restaurant.restaurant)
+                      .length;
+                  final revGenerated = revenueMap[restaurant.restaurant];
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Card(
-                        elevation: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 10),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 32,
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(
-                                                card.imageLogo),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            card.restaurantName,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "Times Visited: ${timesVisited.toString()}",
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        "+ \$${revGenerated?.toStringAsFixed(2)}",
-                                        style: const TextStyle(
-                                            color: AppTheme.kGreen2,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 32,
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                              card.imageLogo),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          card.restaurantName,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      "Times Visited: ${timesVisited.toString()}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      "+ \$${revGenerated?.toStringAsFixed(2)}",
+                                      style: const TextStyle(
+                                          color: AppTheme.kGreen2,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

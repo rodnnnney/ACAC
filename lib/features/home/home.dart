@@ -93,7 +93,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
       ),
       body: restaurantData.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: $error')),
+          error: (error, stack) => Center(child: Text('Error:${stack}')),
           data: (allInfoCards) {
             final restaurantsByTimesVisited =
                 List<RestaurantInfoCard>.from(allInfoCards)
@@ -224,7 +224,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     height: 170,
                                     child: ListView.separated(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: 5,
+                                      itemCount: 0,
                                       separatorBuilder:
                                           (BuildContext context, int index) =>
                                               const SizedBox(width: 10),

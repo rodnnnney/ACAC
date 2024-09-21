@@ -7,6 +7,7 @@ import 'package:ACAC/features/admin/helper_ui/PreviewImagePick.dart';
 import 'package:ACAC/features/admin/helper_ui/restaurant_category.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
+import 'package:ACAC/models/LatLong.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   late TextEditingController descriptionTextController;
   late TextEditingController gMapsTextController;
   late TextEditingController discountController;
+  late TextEditingController dish1Title;
+  late TextEditingController dish2Title;
+  late TextEditingController dish3Title;
   Prediction locationPrediction = Prediction();
 
   List<PropertyTag> tags = [];
@@ -41,6 +45,9 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
     descriptionTextController = TextEditingController();
     gMapsTextController = TextEditingController();
     discountController = TextEditingController();
+    dish1Title = TextEditingController();
+    dish2Title = TextEditingController();
+    dish3Title = TextEditingController();
   }
 
   @override
@@ -49,6 +56,9 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
     descriptionTextController.dispose();
     gMapsTextController.dispose();
     discountController.dispose();
+    dish1Title.dispose();
+    dish2Title.dispose();
+    dish3Title.dispose();
     super.dispose();
   }
 
@@ -145,6 +155,15 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
     });
   }
 
+  Future<String?> _uploadFile(String path, File? file) async {
+    if (file == null) return null;
+    final result = await Amplify.Storage.uploadFile(
+      path: StoragePath.fromString(path),
+      localFile: AWSFile.fromPath(file.path),
+    ).result;
+    return result.uploadedItem.path;
+  }
+
   // 1. restaurantName: restaurantName, ✅
   // 2. location: LatLong(latitude: x, longitude: y), ✅
   // 3. address: '', ✅
@@ -188,6 +207,7 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
   @override
   Widget build(BuildContext context) {
     final restaurant = ref.read(restaurantInfoCardListProvider.notifier);
+    const gmapsLink = 'https://www.google.com/maps/place/?q=place_id:';
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -225,47 +245,87 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                     try {
                       final restaurantInfoObject = await getRestaurantDetails(
                           locationPrediction.placeId!);
-                      print(restaurantInfoObject);
+                      final S3path = dotenv.get("S3PATH");
+                      //getting address
+                      final restaurantAddress = restaurantInfoObject['address'];
+                      int comma = restaurantAddress.toString().indexOf(',');
+                      safePrint(
+                          restaurantAddress.toString().substring(0, comma));
+                      // getting lat lng
+                      final latitude = locationPrediction.lat;
+                      final longitude = locationPrediction.lng;
 
-                      // final restaurantReviews = restaurantInfoObject['rating'];
+                      safePrint(restaurantInfoObject);
+
+                      final websiteUrl = restaurantInfoObject['website'];
+                      final phoneNumber = restaurantInfoObject['phone_number'];
+
+                      //('${dotenv.get("S3PATH")}${result.uploadedItem.path}'),
+
+                      final restaurantRating = restaurantInfoObject['rating'];
                       // safePrint(restaurantReviews); // double
 
-                      // final totalRestaurantReviews =
-                      //     restaurantInfoObject['number_of_reviews'];
+                      final totalRestaurantReviews =
+                          restaurantInfoObject['number_of_reviews'];
                       // //safePrint(totalRestaurantReviews); //int
                       //
-                      // final restaurantHours =
-                      //     convertToTime(restaurantInfoObject["opening_hours"]);
+                      final restaurantHours =
+                          convertToTime(restaurantInfoObject["opening_hours"]);
                       // FocusScope.of(context).unfocus();
 
                       HapticFeedback.heavyImpact();
                       // Upload file using Amplify Storage
 
-                      // final result = await Amplify.Storage.uploadFile(
-                      //   path: StoragePath.fromString(
-                      //       'public/${restaurantPreview?.uri.pathSegments.last}'),
-                      //   localFile: AWSFile.fromPath(restaurantPreview!.path),
-                      // ).result;
-                      //
-                      // await restaurant.addRestaurantInfo(
-                      //     restaurantName: restaurantNameController.text.trim(),
-                      //     restaurantAddress: '',
-                      //     restaurantImageSrc: '',
-                      //     restaurantImageLogo: '',
-                      //     restaurantAttributes: [],
-                      //     latLng: LatLong(latitude: '', longitude: ''),
-                      //     restaurantHours: restaurantHours,
-                      //     restaurantRatings: 1.0,
-                      //     numRestaurantReviews: 100,
-                      //     restaurantDiscountPercentage: '10',
-                      //     restaurantTopItemName: [],
-                      //     restaurantTopItemImage: []);
+                      final uploadTasks = [
+                        _uploadFile(
+                            'public/${restaurantPreview?.uri.pathSegments.last}',
+                            restaurantPreview),
+                        _uploadFile(
+                            'public/${restaurantLogo?.uri.pathSegments.last}',
+                            restaurantLogo),
+                        _uploadFile(
+                            'public/${dish1?.uri.pathSegments.last}', dish1),
+                        _uploadFile(
+                            'public/${dish2?.uri.pathSegments.last}', dish2),
+                        _uploadFile(
+                            'public/${dish3?.uri.pathSegments.last}', dish3),
+                      ];
 
-                      // safePrint(
-                      //     'Successfully uploaded file: ${result.uploadedItem.path}');
-                      // if (context.mounted) {
-                      //   Navigator.pop(context);
-                      // }
+                      final results = await Future.wait(uploadTasks);
+
+                      safePrint(results);
+
+                      await restaurant.addRestaurantInfo(
+                          restaurantName: restaurantNameController.text.trim(),
+                          restaurantAddress:
+                              restaurantAddress.toString().substring(0, comma),
+                          restaurantImageSrc: "$S3path${results[0]!}",
+                          restaurantImageLogo: "$S3path${results[1]!}",
+                          restaurantAttributes: restaurantCategories,
+                          latLng: LatLong(
+                              latitude: latitude!, longitude: longitude!),
+                          restaurantHours: restaurantHours,
+                          restaurantRatings: restaurantRating,
+                          numRestaurantReviews: totalRestaurantReviews,
+                          restaurantDiscountPercentage: discountController.text,
+                          restaurantTopItemName: [
+                            dish1Title.text,
+                          ],
+                          restaurantTopItemImage: [
+                            "$S3path${results[2]!}",
+                            "$S3path${results[3]!}",
+                            "$S3path${results[4]!}",
+                          ],
+                          restaurantPhoneNumber: phoneNumber.toString(),
+                          websiteUrl: websiteUrl.toString(),
+                          restaurantDiscountDescription: 'Test',
+                          restaurantGoogleMapsLink:
+                              "$gmapsLink${locationPrediction.placeId}");
+
+                      safePrint('Successfully uploaded file: $results');
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
                     } on StorageException catch (e) {
                       safePrint(e.message);
                     }
@@ -284,49 +344,28 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
         child: SafeArea(
           child: Column(
             children: [
-              ImagePickerPreview(
-                imageFile: restaurantPreview,
-                onImagePicked: (file) =>
-                    setState(() => restaurantPreview = file),
-                label: 'Restaurant Preview',
-              ),
-              const SizedBox(height: 10),
-              ImagePickerPreview(
-                imageFile: restaurantLogo,
-                onImagePicked: (file) => setState(() => restaurantLogo = file),
-                label: 'Restaurant Logo',
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ImagePickerPreview(
-                    imageFile: dish1,
-                    onImagePicked: (file) => setState(() => dish1 = file),
-                    label: 'Dish 1',
-                    height: 100,
-                    width: (MediaQuery.of(context).size.width / 3) - 10,
-                  ),
-                  ImagePickerPreview(
-                    imageFile: dish2,
-                    onImagePicked: (file) => setState(() => dish2 = file),
-                    label: 'Dish 2',
-                    height: 100,
-                    width: (MediaQuery.of(context).size.width / 3) - 10,
-                  ),
-                  ImagePickerPreview(
-                    imageFile: dish3,
-                    onImagePicked: (file) => setState(() => dish3 = file),
-                    label: 'Dish 3',
-                    height: 100,
-                    width: (MediaQuery.of(context).size.width / 3) - 10,
-                  ),
-                ],
-              ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 16),
+                    const Row(
+                      children: [Text('Search Restaurant')],
+                    ),
+                    GooglePlaceAutoCompleteTextField(
+                      containerHorizontalPadding: 10,
+                      textEditingController: gMapsTextController,
+                      googleAPIKey: dotenv.get("GOOGLE_MAPS_API_KEY"),
+                      itemClick: (prediction) {
+                        // if (prediction.description != null) {
+                        //   gMapsTextController.text = prediction.description!;
+                        // }
+                        setState(() {
+                          locationPrediction = prediction;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: restaurantNameController,
@@ -346,23 +385,6 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                           borderRadius: BorderRadius.circular(AppTheme.round),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Row(
-                      children: [Text('Search Restaurant')],
-                    ),
-                    GooglePlaceAutoCompleteTextField(
-                      containerHorizontalPadding: 10,
-                      textEditingController: gMapsTextController,
-                      googleAPIKey: dotenv.get("GOOGLE_MAPS_API_KEY"),
-                      itemClick: (prediction) {
-                        if (prediction.description != null) {
-                          gMapsTextController.text = prediction.description!;
-                        }
-                        setState(() {
-                          locationPrediction = prediction;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16),
                     GestureDetector(
@@ -422,11 +444,125 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 200,
-                    )
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              ImagePickerPreview(
+                imageFile: restaurantPreview,
+                onImagePicked: (file) =>
+                    setState(() => restaurantPreview = file),
+                label: 'Restaurant Preview',
+              ),
+              const SizedBox(height: 10),
+              ImagePickerPreview(
+                imageFile: restaurantLogo,
+                onImagePicked: (file) => setState(() => restaurantLogo = file),
+                label: 'Restaurant Logo',
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ImagePickerPreview(
+                    imageFile: dish1,
+                    onImagePicked: (file) => setState(() => dish1 = file),
+                    label: 'Dish 1',
+                    height: 100,
+                    width: (MediaQuery.of(context).size.width / 3) - 10,
+                  ),
+                  ImagePickerPreview(
+                    imageFile: dish2,
+                    onImagePicked: (file) => setState(() => dish2 = file),
+                    label: 'Dish 2',
+                    height: 100,
+                    width: (MediaQuery.of(context).size.width / 3) - 10,
+                  ),
+                  ImagePickerPreview(
+                    imageFile: dish3,
+                    onImagePicked: (file) => setState(() => dish3 = file),
+                    label: 'Dish 3',
+                    height: 100,
+                    width: (MediaQuery.of(context).size.width / 3) - 10,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: dish1Title,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: 'Dish 1 Name',
+                        labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xff2E2E2E), width: 2),
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    TextFormField(
+                      controller: dish2Title,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: 'Dish 2 Name',
+                        labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xff2E2E2E), width: 2),
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    TextFormField(
+                      controller: dish3Title,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: 'Dish 3 Name',
+                        labelStyle: const TextStyle(color: Color(0xff2E2E2E)),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xff2E2E2E), width: 2),
+                          borderRadius: BorderRadius.circular(AppTheme.round),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 6,
               ),
             ],
           ),

@@ -263,6 +263,7 @@ class DbbSortState extends ConsumerState<DbbSort> {
                                       ConnectionState.waiting) {
                                     return const CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
+                                    safePrint(snapshot.error);
                                     return Text('Error: ${snapshot.error}');
                                   } else {
                                     var status = snapshot.data?['status'] ??

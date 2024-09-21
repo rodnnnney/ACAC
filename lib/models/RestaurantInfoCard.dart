@@ -38,7 +38,7 @@ class RestaurantInfoCard extends amplify_core.Model {
   final double? _rating;
   final List<String>? _cuisineType;
   final int? _reviewNum;
-  final List<String>? _discounts;
+  final String? _discountDescription;
   final String? _discountPercent;
   final String? _phoneNumber;
   final String? _gMapsLink;
@@ -192,9 +192,9 @@ class RestaurantInfoCard extends amplify_core.Model {
     }
   }
 
-  List<String> get discounts {
+  String get discountDescription {
     try {
-      return _discounts!;
+      return _discountDescription!;
     } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages
@@ -320,7 +320,7 @@ class RestaurantInfoCard extends amplify_core.Model {
       required rating,
       required cuisineType,
       required reviewNum,
-      required discounts,
+      required discountDescription,
       required discountPercent,
       required phoneNumber,
       required gMapsLink,
@@ -341,7 +341,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         _rating = rating,
         _cuisineType = cuisineType,
         _reviewNum = reviewNum,
-        _discounts = discounts,
+        _discountDescription = discountDescription,
         _discountPercent = discountPercent,
         _phoneNumber = phoneNumber,
         _gMapsLink = gMapsLink,
@@ -365,7 +365,7 @@ class RestaurantInfoCard extends amplify_core.Model {
       required double rating,
       required List<String> cuisineType,
       required int reviewNum,
-      required List<String> discounts,
+      required String discountDescription,
       required String discountPercent,
       required String phoneNumber,
       required String gMapsLink,
@@ -388,9 +388,7 @@ class RestaurantInfoCard extends amplify_core.Model {
             ? List<String>.unmodifiable(cuisineType)
             : cuisineType,
         reviewNum: reviewNum,
-        discounts: discounts != null
-            ? List<String>.unmodifiable(discounts)
-            : discounts,
+        discountDescription: discountDescription,
         discountPercent: discountPercent,
         phoneNumber: phoneNumber,
         gMapsLink: gMapsLink,
@@ -426,7 +424,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         _rating == other._rating &&
         DeepCollectionEquality().equals(_cuisineType, other._cuisineType) &&
         _reviewNum == other._reviewNum &&
-        DeepCollectionEquality().equals(_discounts, other._discounts) &&
+        _discountDescription == other._discountDescription &&
         _discountPercent == other._discountPercent &&
         _phoneNumber == other._phoneNumber &&
         _gMapsLink == other._gMapsLink &&
@@ -467,9 +465,7 @@ class RestaurantInfoCard extends amplify_core.Model {
     buffer.write("reviewNum=" +
         (_reviewNum != null ? _reviewNum!.toString() : "null") +
         ", ");
-    buffer.write("discounts=" +
-        (_discounts != null ? _discounts!.toString() : "null") +
-        ", ");
+    buffer.write("discountDescription=" + "$_discountDescription" + ", ");
     buffer.write("discountPercent=" + "$_discountPercent" + ", ");
     buffer.write("phoneNumber=" + "$_phoneNumber" + ", ");
     buffer.write("gMapsLink=" + "$_gMapsLink" + ", ");
@@ -511,7 +507,7 @@ class RestaurantInfoCard extends amplify_core.Model {
       double? rating,
       List<String>? cuisineType,
       int? reviewNum,
-      List<String>? discounts,
+      String? discountDescription,
       String? discountPercent,
       String? phoneNumber,
       String? gMapsLink,
@@ -532,7 +528,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         rating: rating ?? this.rating,
         cuisineType: cuisineType ?? this.cuisineType,
         reviewNum: reviewNum ?? this.reviewNum,
-        discounts: discounts ?? this.discounts,
+        discountDescription: discountDescription ?? this.discountDescription,
         discountPercent: discountPercent ?? this.discountPercent,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         gMapsLink: gMapsLink ?? this.gMapsLink,
@@ -554,7 +550,7 @@ class RestaurantInfoCard extends amplify_core.Model {
       ModelFieldValue<double>? rating,
       ModelFieldValue<List<String>?>? cuisineType,
       ModelFieldValue<int>? reviewNum,
-      ModelFieldValue<List<String>?>? discounts,
+      ModelFieldValue<String>? discountDescription,
       ModelFieldValue<String>? discountPercent,
       ModelFieldValue<String>? phoneNumber,
       ModelFieldValue<String>? gMapsLink,
@@ -578,7 +574,9 @@ class RestaurantInfoCard extends amplify_core.Model {
         rating: rating == null ? this.rating : rating.value,
         cuisineType: cuisineType == null ? this.cuisineType : cuisineType.value,
         reviewNum: reviewNum == null ? this.reviewNum : reviewNum.value,
-        discounts: discounts == null ? this.discounts : discounts.value,
+        discountDescription: discountDescription == null
+            ? this.discountDescription
+            : discountDescription.value,
         discountPercent: discountPercent == null
             ? this.discountPercent
             : discountPercent.value,
@@ -621,7 +619,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         _rating = (json['rating'] as num?)?.toDouble(),
         _cuisineType = json['cuisineType']?.cast<String>(),
         _reviewNum = (json['reviewNum'] as num?)?.toInt(),
-        _discounts = json['discounts']?.cast<String>(),
+        _discountDescription = json['discountDescription'],
         _discountPercent = json['discountPercent'],
         _phoneNumber = json['phoneNumber'],
         _gMapsLink = json['gMapsLink'],
@@ -649,7 +647,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         'rating': _rating,
         'cuisineType': _cuisineType,
         'reviewNum': _reviewNum,
-        'discounts': _discounts,
+        'discountDescription': _discountDescription,
         'discountPercent': _discountPercent,
         'phoneNumber': _phoneNumber,
         'gMapsLink': _gMapsLink,
@@ -674,7 +672,7 @@ class RestaurantInfoCard extends amplify_core.Model {
         'rating': _rating,
         'cuisineType': _cuisineType,
         'reviewNum': _reviewNum,
-        'discounts': _discounts,
+        'discountDescription': _discountDescription,
         'discountPercent': _discountPercent,
         'phoneNumber': _phoneNumber,
         'gMapsLink': _gMapsLink,
@@ -704,7 +702,8 @@ class RestaurantInfoCard extends amplify_core.Model {
   static final RATING = amplify_core.QueryField(fieldName: "rating");
   static final CUISINETYPE = amplify_core.QueryField(fieldName: "cuisineType");
   static final REVIEWNUM = amplify_core.QueryField(fieldName: "reviewNum");
-  static final DISCOUNTS = amplify_core.QueryField(fieldName: "discounts");
+  static final DISCOUNTDESCRIPTION =
+      amplify_core.QueryField(fieldName: "discountDescription");
   static final DISCOUNTPERCENT =
       amplify_core.QueryField(fieldName: "discountPercent");
   static final PHONENUMBER = amplify_core.QueryField(fieldName: "phoneNumber");
@@ -801,12 +800,10 @@ class RestaurantInfoCard extends amplify_core.Model {
             amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: RestaurantInfoCard.DISCOUNTS,
+        key: RestaurantInfoCard.DISCOUNTDESCRIPTION,
         isRequired: true,
-        isArray: true,
         ofType: amplify_core.ModelFieldType(
-            amplify_core.ModelFieldTypeEnum.collection,
-            ofModelName: amplify_core.ModelFieldTypeEnum.string.name)));
+            amplify_core.ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.DISCOUNTPERCENT,
