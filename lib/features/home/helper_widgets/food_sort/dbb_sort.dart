@@ -246,38 +246,22 @@ class DbbSortState extends ConsumerState<DbbSort> {
                           Row(
                             children: [
                               Text(
-                                getHours(filteredRestaurants, index, weekday),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              FutureBuilder<Map<String, dynamic>>(
-                                future: getCurrentStatusWithColor(
-                                  getOpeningTime(
-                                      weekday, filteredRestaurants, index),
-                                  getClosingTime(
-                                      weekday, filteredRestaurants, index),
+                                getHour(filteredRestaurants[index], weekday),
+                                style: TextStyle(
+                                  color: timeColor(
+                                    DateTime.now(),
+                                    getOpeningTimeSingle(
+                                      weekday,
+                                      filteredRestaurants[index],
+                                    ),
+                                    getClosingTimeSingle(
+                                      weekday,
+                                      filteredRestaurants[index],
+                                    ),
+                                  ),
                                 ),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    safePrint(snapshot.error);
-                                    return Text('Error: ${snapshot.error}');
-                                  } else {
-                                    var status = snapshot.data?['status'] ??
-                                        'Unknown status';
-                                    var color =
-                                        snapshot.data?['color'] ?? Colors.black;
-                                    return Text(
-                                      status,
-                                      style: TextStyle(color: color),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    );
-                                  }
-                                },
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
                             ],
                           )

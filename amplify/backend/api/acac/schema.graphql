@@ -30,7 +30,6 @@ type RestaurantInfoCard @model @auth(rules: [{ allow: public }]) {
     address: String!
     imageSrc: String!
     imageLogo: String!
-    scannerDataMatch: String!
     hours: Time!
     rating: Float!
     cuisineType: [String]!

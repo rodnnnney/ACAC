@@ -33,7 +33,6 @@ class RestaurantInfoCard extends amplify_core.Model {
   final String? _address;
   final String? _imageSrc;
   final String? _imageLogo;
-  final String? _scannerDataMatch;
   final Time? _hours;
   final double? _rating;
   final List<String>? _cuisineType;
@@ -117,19 +116,6 @@ class RestaurantInfoCard extends amplify_core.Model {
   String get imageLogo {
     try {
       return _imageLogo!;
-    } catch (e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages
-              .codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion: amplify_core.AmplifyExceptionMessages
-              .codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString());
-    }
-  }
-
-  String get scannerDataMatch {
-    try {
-      return _scannerDataMatch!;
     } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages
@@ -315,7 +301,6 @@ class RestaurantInfoCard extends amplify_core.Model {
       required address,
       required imageSrc,
       required imageLogo,
-      required scannerDataMatch,
       required hours,
       required rating,
       required cuisineType,
@@ -336,7 +321,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         _address = address,
         _imageSrc = imageSrc,
         _imageLogo = imageLogo,
-        _scannerDataMatch = scannerDataMatch,
         _hours = hours,
         _rating = rating,
         _cuisineType = cuisineType,
@@ -360,7 +344,6 @@ class RestaurantInfoCard extends amplify_core.Model {
       required String address,
       required String imageSrc,
       required String imageLogo,
-      required String scannerDataMatch,
       required Time hours,
       required double rating,
       required List<String> cuisineType,
@@ -381,7 +364,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         address: address,
         imageSrc: imageSrc,
         imageLogo: imageLogo,
-        scannerDataMatch: scannerDataMatch,
         hours: hours,
         rating: rating,
         cuisineType: cuisineType != null
@@ -419,7 +401,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         _address == other._address &&
         _imageSrc == other._imageSrc &&
         _imageLogo == other._imageLogo &&
-        _scannerDataMatch == other._scannerDataMatch &&
         _hours == other._hours &&
         _rating == other._rating &&
         DeepCollectionEquality().equals(_cuisineType, other._cuisineType) &&
@@ -454,7 +435,6 @@ class RestaurantInfoCard extends amplify_core.Model {
     buffer.write("address=" + "$_address" + ", ");
     buffer.write("imageSrc=" + "$_imageSrc" + ", ");
     buffer.write("imageLogo=" + "$_imageLogo" + ", ");
-    buffer.write("scannerDataMatch=" + "$_scannerDataMatch" + ", ");
     buffer.write(
         "hours=" + (_hours != null ? _hours!.toString() : "null") + ", ");
     buffer.write(
@@ -502,7 +482,6 @@ class RestaurantInfoCard extends amplify_core.Model {
       String? address,
       String? imageSrc,
       String? imageLogo,
-      String? scannerDataMatch,
       Time? hours,
       double? rating,
       List<String>? cuisineType,
@@ -523,7 +502,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         address: address ?? this.address,
         imageSrc: imageSrc ?? this.imageSrc,
         imageLogo: imageLogo ?? this.imageLogo,
-        scannerDataMatch: scannerDataMatch ?? this.scannerDataMatch,
         hours: hours ?? this.hours,
         rating: rating ?? this.rating,
         cuisineType: cuisineType ?? this.cuisineType,
@@ -545,7 +523,6 @@ class RestaurantInfoCard extends amplify_core.Model {
       ModelFieldValue<String>? address,
       ModelFieldValue<String>? imageSrc,
       ModelFieldValue<String>? imageLogo,
-      ModelFieldValue<String>? scannerDataMatch,
       ModelFieldValue<Time>? hours,
       ModelFieldValue<double>? rating,
       ModelFieldValue<List<String>?>? cuisineType,
@@ -567,9 +544,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         address: address == null ? this.address : address.value,
         imageSrc: imageSrc == null ? this.imageSrc : imageSrc.value,
         imageLogo: imageLogo == null ? this.imageLogo : imageLogo.value,
-        scannerDataMatch: scannerDataMatch == null
-            ? this.scannerDataMatch
-            : scannerDataMatch.value,
         hours: hours == null ? this.hours : hours.value,
         rating: rating == null ? this.rating : rating.value,
         cuisineType: cuisineType == null ? this.cuisineType : cuisineType.value,
@@ -609,7 +583,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         _address = json['address'],
         _imageSrc = json['imageSrc'],
         _imageLogo = json['imageLogo'],
-        _scannerDataMatch = json['scannerDataMatch'],
         _hours = json['hours'] != null
             ? json['hours']['serializedData'] != null
                 ? Time.fromJson(new Map<String, dynamic>.from(
@@ -642,7 +615,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         'address': _address,
         'imageSrc': _imageSrc,
         'imageLogo': _imageLogo,
-        'scannerDataMatch': _scannerDataMatch,
         'hours': _hours?.toJson(),
         'rating': _rating,
         'cuisineType': _cuisineType,
@@ -667,7 +639,6 @@ class RestaurantInfoCard extends amplify_core.Model {
         'address': _address,
         'imageSrc': _imageSrc,
         'imageLogo': _imageLogo,
-        'scannerDataMatch': _scannerDataMatch,
         'hours': _hours,
         'rating': _rating,
         'cuisineType': _cuisineType,
@@ -696,8 +667,6 @@ class RestaurantInfoCard extends amplify_core.Model {
   static final ADDRESS = amplify_core.QueryField(fieldName: "address");
   static final IMAGESRC = amplify_core.QueryField(fieldName: "imageSrc");
   static final IMAGELOGO = amplify_core.QueryField(fieldName: "imageLogo");
-  static final SCANNERDATAMATCH =
-      amplify_core.QueryField(fieldName: "scannerDataMatch");
   static final HOURS = amplify_core.QueryField(fieldName: "hours");
   static final RATING = amplify_core.QueryField(fieldName: "rating");
   static final CUISINETYPE = amplify_core.QueryField(fieldName: "cuisineType");
@@ -762,12 +731,6 @@ class RestaurantInfoCard extends amplify_core.Model {
 
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
         key: RestaurantInfoCard.IMAGELOGO,
-        isRequired: true,
-        ofType: amplify_core.ModelFieldType(
-            amplify_core.ModelFieldTypeEnum.string)));
-
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-        key: RestaurantInfoCard.SCANNERDATAMATCH,
         isRequired: true,
         ofType: amplify_core.ModelFieldType(
             amplify_core.ModelFieldTypeEnum.string)));

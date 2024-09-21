@@ -218,7 +218,7 @@ class _AppState extends ConsumerState<App> {
         data: (list) async {
           safePrint('scanning');
           var matchingCard = list.firstWhere(
-            (card) => card.scannerDataMatch == test.rawContent,
+            (card) => card.id == test.rawContent,
           );
           safePrint(matchingCard);
           await sendData(matchingCard, user);

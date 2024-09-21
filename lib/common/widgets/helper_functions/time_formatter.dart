@@ -73,38 +73,61 @@ Map<String, dynamic> getStatusWithColor(
 }
 
 Color timeColor(DateTime currentTime, String openTimeStr, String closeTimeStr) {
+  // Return red if the restaurant is explicitly marked as 'closed'
   if (openTimeStr.toLowerCase() == 'closed' ||
       closeTimeStr.toLowerCase() == 'closed') {
     return Colors.red;
   }
-  TimeOfDay openTime = parseTimeOfDay(openTimeStr);
-  TimeOfDay closeTime = parseTimeOfDay(closeTimeStr);
+
+  // Helper function to safely parse TimeOfDay
+  TimeOfDay? parseTimeOfDaySafely(String timeStr) {
+    try {
+      return parseTimeOfDay(timeStr);
+    } catch (e) {
+      return null; // Return null if parsing fails
+    }
+  }
+
+  // Parse the opening and closing times
+  TimeOfDay? openTime = parseTimeOfDaySafely(openTimeStr);
+  TimeOfDay? closeTime = parseTimeOfDaySafely(closeTimeStr);
+
+  // If times cannot be parsed, assume closed
+  if (openTime == null || closeTime == null) {
+    return Colors.red;
+  }
+
+  // Create DateTime objects for opening and closing times
   DateTime openDateTime = DateTime(currentTime.year, currentTime.month,
       currentTime.day, openTime.hour, openTime.minute);
   DateTime closeDateTime = DateTime(currentTime.year, currentTime.month,
       currentTime.day, closeTime.hour, closeTime.minute);
-  // Handle closing time after midnight
-  if (closeTime.hour < openTime.hour) {
+
+  // If the closing time is after midnight, add one day to closeDateTime
+  if (closeTime.hour < openTime.hour ||
+      (closeTime.hour == openTime.hour && closeTime.minute < openTime.minute)) {
     closeDateTime = closeDateTime.add(const Duration(days: 1));
   }
+
+  // Color determination based on current time
   if (currentTime.isBefore(openDateTime.subtract(const Duration(hours: 1)))) {
-    return Colors.red;
+    return Colors.red; // More than 1 hour before opening
   } else if (currentTime
       .isAfter(closeDateTime.add(const Duration(minutes: 30)))) {
-    return Colors.red;
+    return Colors.red; // More than 30 minutes after closing
   } else if (currentTime
           .isAfter(openDateTime.subtract(const Duration(hours: 1))) &&
       currentTime.isBefore(openDateTime)) {
-    return Colors.orange;
+    return Colors.orange; // Within 1 hour before opening
   } else if (currentTime
           .isAfter(closeDateTime.subtract(const Duration(minutes: 30))) &&
       currentTime.isBefore(closeDateTime)) {
-    return Colors.orange;
+    return Colors.orange; // Within 30 minutes before closing
   } else if (currentTime.isAfter(openDateTime) &&
       currentTime.isBefore(closeDateTime)) {
-    return Colors.green;
+    return Colors.green; // During open hours
   } else {
-    return Colors.red;
+    return Colors.red; // Default to closed
   }
 }
 

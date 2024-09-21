@@ -68,7 +68,6 @@ class RestaurantInfoCardList extends _$RestaurantInfoCardList {
       address: restaurantAddress,
       imageSrc: restaurantImageSrc,
       imageLogo: restaurantImageLogo,
-      scannerDataMatch: '',
       hours: restaurantHours,
       rating: restaurantRatings,
       cuisineType: restaurantAttributes,

@@ -19,6 +19,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
+import 'package:url_launcher/url_launcher.dart';
 
 class AdditionalDataDbb extends ConsumerStatefulWidget {
   const AdditionalDataDbb(
@@ -345,36 +346,23 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                                 ),
                                 Row(
                                   children: [
-                                    Text(getHoursSingle(
-                                        widget.restaurant, weekday)),
-                                    const SizedBox(width: 7),
-                                    FutureBuilder<Map<String, dynamic>>(
-                                      future: getCurrentStatusWithColor(
+                                    Text(
+                                      getHour(widget.restaurant, weekday),
+                                      style: TextStyle(
+                                        color: timeColor(
+                                          DateTime.now(),
                                           getOpeningTimeSingle(
-                                              weekday, widget.restaurant),
+                                            weekday,
+                                            widget.restaurant,
+                                          ),
                                           getClosingTimeSingle(
-                                              weekday, widget.restaurant)),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const CircularProgressIndicator();
-                                        } else if (snapshot.hasError) {
-                                          return Text(
-                                              'Error: ${snapshot.error}');
-                                        } else {
-                                          var status =
-                                              snapshot.data?['status'] ??
-                                                  'Unknown status';
-                                          var color = snapshot.data?['color'] ??
-                                              Colors.black;
-                                          return Text(
-                                            status,
-                                            style: TextStyle(color: color),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          );
-                                        }
-                                      },
+                                            weekday,
+                                            widget.restaurant,
+                                          ),
+                                        ),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
                                     ),
                                   ],
                                 ),
@@ -407,17 +395,17 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                                   ],
                                 ),
                                 GestureDetector(
-                                  // onTap: () async {
-                                  //   final url =
-                                  //       Uri.parse(widget.restaurant.gMapsLink);
-                                  //   try {
-                                  //     if (await canLaunchUrl(url)) {
-                                  //       await launchUrl(url);
-                                  //     } else {}
-                                  //   } catch (e) {
-                                  //     //print(e);
-                                  //   }
-                                  // },
+                                  onTap: () async {
+                                    final url =
+                                        Uri.parse(widget.restaurant.gMapsLink);
+                                    try {
+                                      if (await canLaunchUrl(url)) {
+                                        await launchUrl(url);
+                                      } else {}
+                                    } catch (e) {
+                                      //print(e);
+                                    }
+                                  },
                                   child: Text(
                                     '${phoneCall.formatNumber(widget.restaurant.reviewNum)} + ratings',
                                     style: const TextStyle(
