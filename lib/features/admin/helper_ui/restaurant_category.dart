@@ -54,7 +54,7 @@ class _RestaurantCategoryState extends State<RestaurantCategory> {
   }
 
   bool hasAtLeastOneStringInteger() {
-    return restaurantTags.isNotEmpty &&
+    return restaurantTags.length >= 2 &&
         restaurantTags.any((tag) => int.tryParse(tag) != null);
   }
 
@@ -120,7 +120,8 @@ class _RestaurantCategoryState extends State<RestaurantCategory> {
                             } else {
                               setState(() {
                                 const ResponsePopUp(
-                                  response: 'Add at least one tag',
+                                  response:
+                                      'Add at least one tag and 1 price tag',
                                   location: DelightSnackbarPosition.top,
                                   icon: Icons.error_outline,
                                   color: AppTheme.kAlertRed,

@@ -351,18 +351,12 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
                                       style: TextStyle(
                                         color: timeColor(
                                           DateTime.now(),
-                                          getOpeningTimeSingle(
-                                            weekday,
-                                            widget.restaurant,
-                                          ),
-                                          getClosingTimeSingle(
-                                            weekday,
-                                            widget.restaurant,
-                                          ),
+                                          splitHour(getHour(widget.restaurant,
+                                              weekday))[0], // Opening time
+                                          splitHour(getHour(widget.restaurant,
+                                              weekday))[1], // Closing time
                                         ),
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
                                     ),
                                   ],
                                 ),

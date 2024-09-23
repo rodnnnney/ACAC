@@ -250,18 +250,14 @@ class DbbSortState extends ConsumerState<DbbSort> {
                                 style: TextStyle(
                                   color: timeColor(
                                     DateTime.now(),
-                                    getOpeningTimeSingle(
-                                      weekday,
-                                      filteredRestaurants[index],
-                                    ),
-                                    getClosingTimeSingle(
-                                      weekday,
-                                      filteredRestaurants[index],
-                                    ),
+                                    splitHour(getHour(
+                                        filteredRestaurants[index],
+                                        weekday))[0], // Opening time
+                                    splitHour(getHour(
+                                        filteredRestaurants[index],
+                                        weekday))[1], // Closing time
                                   ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
                               ),
                             ],
                           )

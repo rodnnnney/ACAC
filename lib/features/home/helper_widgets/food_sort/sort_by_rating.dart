@@ -6,6 +6,7 @@ import 'package:ACAC/common/services/cachedRestaurantProvider.dart';
 import 'package:ACAC/common/services/restaurant_provider.dart';
 import 'package:ACAC/common/widgets/helper_functions/location.dart';
 import 'package:ACAC/common/widgets/helper_functions/time_formatter.dart';
+import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
 import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/navigation_info_provider.dart';
@@ -17,8 +18,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
-
-import '../card/additional_data_dbb.dart';
 
 class SortedByRating extends ConsumerStatefulWidget {
   static const String id = 'sorted_by_rating_list';
@@ -71,9 +70,6 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                 return buildList(sortedRestaurants, DateTime.now().weekday);
             }
 
-            // final sortedRestaurants =
-            //     List<RestaurantInfoCard>.from(allInfoCards)
-            //       ..sort((a, b) => b.rating.compareTo(a.rating));
             return buildList(sortedRestaurants, DateTime.now().weekday);
           },
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -203,37 +199,16 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                           Row(
                             children: [
                               Text(
-                                getHours(sortedRestaurants, index, weekday),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              FutureBuilder<Map<String, dynamic>>(
-                                future: getCurrentStatusWithColor(
-                                  getOpeningTime(
-                                      weekday, sortedRestaurants, index),
-                                  getClosingTime(
-                                      weekday, sortedRestaurants, index),
+                                getHour(sortedRestaurants[index], weekday),
+                                style: TextStyle(
+                                  color: timeColor(
+                                    DateTime.now(),
+                                    splitHour(getHour(sortedRestaurants[index],
+                                        weekday))[0], // Opening time
+                                    splitHour(getHour(sortedRestaurants[index],
+                                        weekday))[1], // Closing time
+                                  ),
                                 ),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else {
-                                    var status = snapshot.data?['status'] ??
-                                        'Unknown status';
-                                    var color =
-                                        snapshot.data?['color'] ?? Colors.black;
-                                    return Text(
-                                      status,
-                                      style: TextStyle(color: color),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    );
-                                  }
-                                },
                               ),
                             ],
                           )

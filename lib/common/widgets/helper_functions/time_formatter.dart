@@ -72,6 +72,19 @@ Map<String, dynamic> getStatusWithColor(
   }
 }
 
+List<String> splitHour(String hour) {
+  if (hour == "Open 24 hours") {
+    // Handle the case where the restaurant is open 24 hours
+    return ["Open 24 hours", "Open 24 hours"];
+  } else if (hour == "Closed") {
+    // Handle the case where the restaurant is closed
+    return ["Closed", "Closed"];
+  } else {
+    // Split the normal hour format, e.g., "10:00 AM - 10:00 PM"
+    return hour.split(' - ');
+  }
+}
+
 Color timeColor(DateTime currentTime, String openTimeStr, String closeTimeStr) {
   // Return red if the restaurant is explicitly marked as 'closed'
   if (openTimeStr.toLowerCase() == 'closed' ||
@@ -290,6 +303,44 @@ String getHour(RestaurantInfoCard rest, int weekday) {
   if (start == "Open 24 hours" && stop == "Open 24 hours") {
     return "Open 24 hours";
   }
+
+  // Helper function to convert the string time into a number for comparison
+  int extractHour(String time) {
+    final hourPart = time.split(":")[0];
+    return int.tryParse(hourPart) ?? 0;
+  }
+
+  // Helper function to add AM/PM based on time and assumption logic
+  String formatTime(String time, bool isOpening) {
+    // If AM/PM already present, return as is
+    if (time.toLowerCase().contains('am') ||
+        time.toLowerCase().contains('pm')) {
+      return time;
+    }
+
+    // Extract hour for comparison
+    int hour = extractHour(time);
+
+    if (isOpening) {
+      // Assume 4:00 AM - 11:59 AM are morning times
+      if (hour >= 4 && hour < 12) {
+        return "$time AM";
+      } else {
+        return "$time PM"; // Anything else is PM
+      }
+    } else {
+      // Assume closing times are PM unless they are midnight or morning hours
+      if (hour >= 1 && hour < 12) {
+        return "$time PM";
+      } else {
+        return "$time AM"; // Midnight or early morning
+      }
+    }
+  }
+
+  // Format the start and stop times if AM/PM is missing
+  start = formatTime(start, true); // For opening time
+  stop = formatTime(stop, false); // For closing time
 
   // Return the formatted hours for non-24-hour days
   return '$start - $stop';
