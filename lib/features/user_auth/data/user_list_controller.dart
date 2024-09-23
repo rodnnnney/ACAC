@@ -58,23 +58,33 @@ class UserListController extends _$UserListController {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final itemsRepository = ref.read(userRepositoryProvider);
-      var userID = await Amplify.Auth.getCurrentUser();
-      User currentUser = await itemsRepository.getUser(userID.userId);
-      if (currentUser.favouriteRestaurants == null ||
-          currentUser.favouriteRestaurants.isEmpty) {
-        User updatedUser = currentUser.copyWith(favouriteRestaurants: [rest]);
+
+      // Fetch current user ID
+      var userId = (await Amplify.Auth.getCurrentUser()).userId;
+
+      // Fetch the current user object
+      User currentUser = await itemsRepository.getUser(userId);
+
+      // Check if the restaurant is already in the favorites
+      if (!currentUser.favouriteRestaurants.contains(rest)) {
+        // Create updated list of favorite restaurants
+        List<String> updatedFavorites = [
+          ...currentUser.favouriteRestaurants,
+          rest
+        ];
+
+        // Create updated user object
+        User updatedUser =
+            currentUser.copyWith(favouriteRestaurants: updatedFavorites);
+
+        // Print updated user (for debugging)
+        safePrint(updatedUser);
+
+        // Update the user in the repository
         await itemsRepository.updateUser(updatedUser);
-      } else {
-        if (!currentUser.favouriteRestaurants!.contains(rest)) {
-          List<String> updatedFavorites = [
-            ...currentUser.favouriteRestaurants,
-            rest
-          ];
-          User updatedUser =
-              currentUser.copyWith(favouriteRestaurants: updatedFavorites);
-          await itemsRepository.updateUser(updatedUser);
-        }
       }
+
+      // Optionally refresh or return something (ensure fetchUsers() is defined)
       return fetchUsers();
     });
   }
@@ -92,7 +102,7 @@ class UserListController extends _$UserListController {
       if (!isAlreadyFavorite) {
         // Create a new list with the existing favorites and the new restaurant
         List<String> updatedFavorites = [
-          ...?currentUser.favouriteRestaurants,
+          ...currentUser.favouriteRestaurants,
           restName
         ];
 
@@ -126,6 +136,7 @@ class UserListController extends _$UserListController {
 
       User updatedUser =
           currentUser.copyWith(favouriteRestaurants: updatedFavorites);
+      safePrint(updatedUser);
       await itemsRepository.updateUser(updatedUser);
 
       return fetchUsers();

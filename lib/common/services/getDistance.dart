@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ACAC/features/home/home.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,10 +20,10 @@ class GetDistance {
       if (response.statusCode == 200) {
         return response.body;
       } else {
-        print('Http error: ${response.statusCode}');
+        safePrint('Http error: ${response.statusCode}');
       }
     } catch (e) {
-      print('General error:$e');
+      safePrint('General error:$e');
     }
     return 'ERROR';
   }

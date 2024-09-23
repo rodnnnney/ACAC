@@ -333,7 +333,8 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                           try {
                             final restaurantInfoObject =
                                 await getRestaurantDetails(
-                                    widget.card!.googlePlacesId);
+                                    locationPrediction.placeId ??
+                                        widget.card!.googlePlacesId);
                             final s3path = dotenv.get("S3PATH");
                             //getting address
                             final restaurantAddress =

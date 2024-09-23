@@ -17,6 +17,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
+// Admin Page view of coupons
 class RestaurantCardView extends ConsumerStatefulWidget {
   const RestaurantCardView({super.key});
 

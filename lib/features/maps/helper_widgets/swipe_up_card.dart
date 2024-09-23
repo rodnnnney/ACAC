@@ -21,6 +21,77 @@ import 'package:provider/provider.dart' as provider;
 
 import '../service/navigation_info_provider.dart';
 
+// Individual cards seen after pressing button on maps page
+Map<String, dynamic> getStatusWithColor(
+    DateTime currentTime, String openTimeStr, String closeTimeStr) {
+  // Return 'closed' if the restaurant is explicitly closed
+  if (openTimeStr.toLowerCase() == 'closed' ||
+      closeTimeStr.toLowerCase() == 'closed') {
+    return {'status': 'closed', 'color': Colors.red};
+  }
+
+  // Helper function to parse TimeOfDay safely with default fallbacks
+  TimeOfDay? parseTimeOfDaySafely(String timeStr) {
+    try {
+      return parseTimeOfDay(timeStr);
+    } catch (e) {
+      return null; // If parsing fails, return null
+    }
+  }
+
+  // Parse the opening and closing times
+  TimeOfDay? openTime = parseTimeOfDaySafely(openTimeStr);
+  TimeOfDay? closeTime = parseTimeOfDaySafely(closeTimeStr);
+
+  // If open or close times cannot be parsed, assume it's closed
+  if (openTime == null || closeTime == null) {
+    return {'status': 'closed', 'color': Colors.red};
+  }
+
+  // Create DateTime objects for opening and closing times
+  DateTime openDateTime = DateTime(currentTime.year, currentTime.month,
+      currentTime.day, openTime.hour, openTime.minute);
+  DateTime closeDateTime = DateTime(currentTime.year, currentTime.month,
+      currentTime.day, closeTime.hour, closeTime.minute);
+
+  // If the closing time is after midnight, add 1 day to closeDateTime
+  if (closeTime.hour < openTime.hour ||
+      (closeTime.hour == openTime.hour && closeTime.minute < openTime.minute)) {
+    closeDateTime = closeDateTime.add(const Duration(days: 1));
+  }
+
+  // If the current time is before the opening time by more than 1 hour
+  if (currentTime.isBefore(openDateTime.subtract(const Duration(hours: 1)))) {
+    return {'status': 'closed', 'color': Colors.red};
+  }
+  // If the current time is more than 30 minutes after the closing time
+  else if (currentTime
+      .isAfter(closeDateTime.add(const Duration(minutes: 30)))) {
+    return {'status': 'closed', 'color': Colors.red};
+  }
+  // If the current time is within 1 hour before the opening time
+  else if (currentTime
+          .isAfter(openDateTime.subtract(const Duration(hours: 1))) &&
+      currentTime.isBefore(openDateTime)) {
+    return {'status': 'opening soon', 'color': Colors.orange};
+  }
+  // If the current time is within 30 minutes before the closing time
+  else if (currentTime
+          .isAfter(closeDateTime.subtract(const Duration(minutes: 30))) &&
+      currentTime.isBefore(closeDateTime)) {
+    return {'status': 'closing soon', 'color': Colors.orange};
+  }
+  // If the current time is between the opening and closing times
+  else if (currentTime.isAfter(openDateTime) &&
+      currentTime.isBefore(closeDateTime)) {
+    return {'status': 'open', 'color': Colors.green};
+  }
+  // Default: return closed
+  else {
+    return {'status': 'closed', 'color': Colors.red};
+  }
+}
+
 class SwipeUpCard extends ConsumerStatefulWidget {
   final RestaurantInfoCard restaurant;
   final LatLng userPosition;
@@ -225,18 +296,12 @@ class _SwipeUpCardState extends ConsumerState<SwipeUpCard> {
                         style: TextStyle(
                           color: timeColor(
                             DateTime.now(),
-                            getOpeningTimeSingle(
-                              weekday,
-                              widget.restaurant,
-                            ),
-                            getClosingTimeSingle(
-                              weekday,
-                              widget.restaurant,
-                            ),
+                            splitHour(getHour(widget.restaurant, weekday))[
+                                0], // Opening time
+                            splitHour(getHour(widget.restaurant, weekday))[
+                                1], // Closing time
                           ),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,

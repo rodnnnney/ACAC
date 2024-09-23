@@ -4,6 +4,7 @@ import 'package:ACAC/common/services/cachedRestaurantProvider.dart';
 import 'package:ACAC/common/widgets/helper_functions/location.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,8 +50,9 @@ class Markers {
           markerList.add(marker);
         }
       },
-      loading: () => print('Loading restaurant info...'),
-      error: (error, stack) => print('Error loading restaurant info: $error'),
+      loading: () => safePrint('Loading restaurant info...'),
+      error: (error, stack) =>
+          safePrint('Error loading restaurant info: $error'),
     );
   }
 

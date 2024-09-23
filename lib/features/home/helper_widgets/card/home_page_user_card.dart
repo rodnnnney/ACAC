@@ -16,6 +16,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'additional_data_dbb.dart';
 
+// Card Object that is in listview based on # times scanned
 class HomePageUserCard extends StatefulWidget {
   HomePageUserCard({
     super.key,
@@ -184,18 +185,12 @@ class _HomePageUserCardState extends State<HomePageUserCard> {
                               style: TextStyle(
                                 color: timeColor(
                                   DateTime.now(),
-                                  getOpeningTimeSingle(
-                                    weekday,
-                                    widget.restaurantInfoCard,
-                                  ),
-                                  getClosingTimeSingle(
-                                    weekday,
-                                    widget.restaurantInfoCard,
-                                  ),
+                                  splitHour(getHour(widget.restaurantInfoCard,
+                                      weekday))[0], // Opening time
+                                  splitHour(getHour(widget.restaurantInfoCard,
+                                      weekday))[1], // Closing time
                                 ),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
                           ],
                         ),

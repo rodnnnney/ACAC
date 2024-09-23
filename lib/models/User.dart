@@ -259,7 +259,11 @@ class User extends amplify_core.Model {
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
           authStrategy: amplify_core.AuthStrategy.PUBLIC,
-          operations: const [amplify_core.ModelOperation.READ]),
+          operations: const [
+            amplify_core.ModelOperation.READ,
+            amplify_core.ModelOperation.UPDATE,
+            amplify_core.ModelOperation.CREATE
+          ]),
       amplify_core.AuthRule(
           authStrategy: amplify_core.AuthStrategy.OWNER,
           ownerField: "owner",

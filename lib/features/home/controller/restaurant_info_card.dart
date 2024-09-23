@@ -5,6 +5,7 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Controller for operations related to RestaurantInfoCard
 final restaurantInfoCardAPIServiceProvider =
     Provider<RestaurantInfoCardAPIService>((ref) {
   final service = RestaurantInfoCardAPIService();
@@ -57,7 +58,8 @@ class RestaurantInfoCardAPIService {
     try {
       await Amplify.API
           .mutate(
-            request: ModelMutations.delete(restaurant),
+            request: ModelMutations.delete(restaurant,
+                authorizationMode: APIAuthorizationType.apiKey),
           )
           .response;
     } on Exception catch (error) {

@@ -21,6 +21,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:url_launcher/url_launcher.dart';
 
+// Page with additional info on RestaurantInfoCard => Popular dishes, coupon
+// info
 class AdditionalDataDbb extends ConsumerStatefulWidget {
   const AdditionalDataDbb(
       {super.key, required this.restaurant, required this.distance});
@@ -42,8 +44,7 @@ class _RestaurantAdditionalInfoState extends ConsumerState<AdditionalDataDbb> {
   @override
   void initState() {
     super.initState();
-    if (widget.restaurant.cuisineType != null ||
-        widget.restaurant.cuisineType.isNotEmpty) {
+    if (widget.restaurant.cuisineType.isNotEmpty) {
       filterTagSetup(widget.restaurant.cuisineType);
 
       //isFavourite(widget.restaurant.cuisineType);

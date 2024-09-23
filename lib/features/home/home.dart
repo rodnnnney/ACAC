@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/providers/riverpod_light_dark.dart';
@@ -31,6 +32,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'controller/marketing_card_controller.dart';
 import 'history.dart';
 
+// Home Page of the app
 class HomePage extends ConsumerStatefulWidget {
   static String id = 'home_screen';
 
@@ -76,7 +78,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final restaurantData = ref.watch(cachedRestaurantInfoCardListProvider);
-    final test = ref.watch(marketingCardControllerProvider);
+    final marketingCardAsync = ref.watch(marketingCardControllerProvider);
     final itemsRepository = ref.read(userRepositoryProvider);
     final userObject = ref.watch(currentUserProvider);
 
@@ -93,7 +95,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
       ),
       body: restaurantData.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error:${stack}')),
+          error: (error, stack) => Center(child: Text('Error:$stack')),
           data: (allInfoCards) {
             final restaurantsByTimesVisited =
                 List<RestaurantInfoCard>.from(allInfoCards)
@@ -166,7 +168,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                               const SizedBox(
                                 height: 5,
                               ),
-                              test.when(
+                              marketingCardAsync.when(
                                 loading: () => const Center(
                                     child: CircularProgressIndicator()),
                                 error: (error, stack) =>
@@ -224,7 +226,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                     height: 170,
                                     child: ListView.separated(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: 0,
+                                      itemCount: min(allInfoCards.length, 5),
                                       separatorBuilder:
                                           (BuildContext context, int index) =>
                                               const SizedBox(width: 10),
@@ -322,18 +324,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
                                   },
                                 ),
                               ),
-                              ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    const LinearGradient(colors: [
-                                  AppTheme.kDarkGreen,
-                                  AppTheme.kGreen,
-                                ], stops: [
-                                  0.0,
-                                  0.5,
-                                ]).createShader(bounds),
-                                child: const Text('Sort by:',
-                                    style: AppTheme.styling),
-                              ),
+                              const Text('Sort by:', style: AppTheme.styling),
                               SizedBox(
                                 height: 130,
                                 child: ListView(

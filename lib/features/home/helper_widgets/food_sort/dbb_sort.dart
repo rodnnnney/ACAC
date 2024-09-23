@@ -9,6 +9,7 @@ import 'package:ACAC/common/widgets/helper_functions/phone_call.dart';
 import 'package:ACAC/common/widgets/helper_functions/time_formatter.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
 import 'package:ACAC/features/home/home.dart';
+import 'package:ACAC/features/maps/helper_widgets/swipe_up_card.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/navigation_info_provider.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
@@ -23,8 +24,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
-
-import '../../../maps/helper_widgets/swipe_up_card.dart';
 
 class DbbSort extends ConsumerStatefulWidget {
   static const String id = 'card_viewer';

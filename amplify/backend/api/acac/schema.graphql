@@ -13,7 +13,7 @@ type Restaurant @model @auth(rules: [
     email: AWSEmail!
 }
 type User @model @auth(rules: [
-    { allow: public, operations: [read]},
+    { allow: public, operations: [read, update, create]},
     { allow: owner, operations: [create, update, delete, read] }
 ]) {
     id: ID!
