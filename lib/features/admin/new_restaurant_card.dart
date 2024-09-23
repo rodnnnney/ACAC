@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:ACAC/common/consts/globals.dart';
 import 'package:ACAC/common/widgets/ui/CustomCheckBox.dart';
 import 'package:ACAC/common/widgets/ui/confirm_quit.dart';
+import 'package:ACAC/common/widgets/ui/response_pop_up.dart';
 import 'package:ACAC/features/admin/helper_ui/PreviewImagePick.dart';
 import 'package:ACAC/features/admin/helper_ui/restaurant_category.dart';
 import 'package:ACAC/features/home/controller/restaurant_info_card_list.dart';
 import 'package:ACAC/features/home/helper_widgets/card/additional_data_dbb.dart';
 import 'package:ACAC/models/ModelProvider.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -122,6 +124,14 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
     dish2Title.dispose();
     dish3Title.dispose();
     super.dispose();
+  }
+
+  bool areFilesNotNull() {
+    return restaurantPreview != null &&
+        restaurantLogo != null &&
+        dish1 != null &&
+        dish2 != null &&
+        dish3 != null;
   }
 
   void filterTagSetup(List<String> infoTag) {
@@ -301,6 +311,24 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                 widget.card != null
                     ? GestureDetector(
                         onTap: () async {
+                          if (restaurantNameController.text.isEmpty ||
+                              discountController.text.isEmpty ||
+                              restaurantCategories.length >= 2 ||
+                              dish1Title.text.isEmpty ||
+                              dish2Title.text.isEmpty ||
+                              dish3Title.text.isEmpty) {
+                            setState(() {
+                              const ResponsePopUp(
+                                      response: "Fill out "
+                                          "necessary fields",
+                                      location: DelightSnackbarPosition.top,
+                                      icon: Icons.error_outline,
+                                      color: Colors.redAccent)
+                                  .showToast(context);
+                            });
+                            return;
+                          }
+
                           safePrint("EDITING");
                           try {
                             final restaurantInfoObject =
@@ -414,111 +442,131 @@ class _NewRestaurantCardState extends ConsumerState<NewRestaurantCard> {
                       )
                     : GestureDetector(
                         onTap: () async {
-                          safePrint('CREATING NEW');
-                          try {
-                            final restaurantInfoObject =
-                                await getRestaurantDetails(
-                                    locationPrediction.placeId!);
-                            final s3path = dotenv.get("S3PATH");
-                            //getting address
-                            final restaurantAddress =
-                                restaurantInfoObject['address'];
-                            int comma =
-                                restaurantAddress.toString().indexOf(',');
-                            safePrint(restaurantAddress
-                                .toString()
-                                .substring(0, comma));
-                            // getting lat lng
-                            final latitude = locationPrediction.lat;
-                            final longitude = locationPrediction.lng;
-
-                            safePrint(restaurantInfoObject);
-
-                            final websiteUrl = restaurantInfoObject['website'];
-                            final phoneNumber =
-                                restaurantInfoObject['phone_number'];
-
-                            //('${dotenv.get("S3PATH")}${result.uploadedItem.path}'),
-
-                            final restaurantRating =
-                                restaurantInfoObject['rating'];
-                            // safePrint(restaurantReviews); // double
-
-                            final totalRestaurantReviews =
-                                restaurantInfoObject['number_of_reviews'];
-                            // //safePrint(totalRestaurantReviews); //int
-                            //
-                            final restaurantHours = convertToTime(
-                                restaurantInfoObject["opening_hours"]);
-                            // FocusScope.of(context).unfocus();
-
-                            HapticFeedback.heavyImpact();
-                            // Upload file using Amplify Storage
-
-                            final uploadTasks = [
-                              _uploadFile(
-                                  'public/${restaurantPreview?.uri.pathSegments.last}',
-                                  restaurantPreview),
-                              _uploadFile(
-                                  'public/${restaurantLogo?.uri.pathSegments.last}',
-                                  restaurantLogo),
-                              _uploadFile(
-                                  'public/${dish1?.uri.pathSegments.last}',
-                                  dish1),
-                              _uploadFile(
-                                  'public/${dish2?.uri.pathSegments.last}',
-                                  dish2),
-                              _uploadFile(
-                                  'public/${dish3?.uri.pathSegments.last}',
-                                  dish3),
-                            ];
-
-                            final results = await Future.wait(uploadTasks);
-
-                            safePrint(results);
-
-                            await restaurant.addRestaurantInfo(
-                              restaurantName:
-                                  restaurantNameController.text.trim(),
-                              restaurantAddress: restaurantAddress
+                          if (restaurantNameController.text.isEmpty ||
+                              discountController.text.isEmpty ||
+                              restaurantCategories.length >= 2 ||
+                              dish1Title.text.isEmpty ||
+                              dish2Title.text.isEmpty ||
+                              dish3Title.text.isEmpty ||
+                              areFilesNotNull()) {
+                            setState(() {
+                              const ResponsePopUp(
+                                      response: "Fill out "
+                                          "necessary fields",
+                                      location: DelightSnackbarPosition.top,
+                                      icon: Icons.error_outline,
+                                      color: Colors.redAccent)
+                                  .showToast(context);
+                              return;
+                            });
+                          } else {
+                            safePrint('CREATING NEW');
+                            try {
+                              final restaurantInfoObject =
+                                  await getRestaurantDetails(
+                                      locationPrediction.placeId!);
+                              final s3path = dotenv.get("S3PATH");
+                              //getting address
+                              final restaurantAddress =
+                                  restaurantInfoObject['address'];
+                              int comma =
+                                  restaurantAddress.toString().indexOf(',');
+                              safePrint(restaurantAddress
                                   .toString()
-                                  .substring(0, comma),
-                              restaurantImageSrc: "$s3path${results[0]!}",
-                              restaurantImageLogo: "$s3path${results[1]!}",
-                              restaurantAttributes: restaurantCategories,
-                              latLng: LatLong(
-                                  latitude: latitude!, longitude: longitude!),
-                              restaurantHours: restaurantHours,
-                              restaurantRatings: restaurantRating,
-                              numRestaurantReviews: totalRestaurantReviews,
-                              restaurantDiscountPercentage:
-                                  discountController.text,
-                              restaurantTopItemName: [
-                                dish1Title.text,
-                                dish2Title.text,
-                                dish3Title.text
-                              ],
-                              restaurantTopItemImage: [
-                                "$s3path${results[2]!}",
-                                "$s3path${results[3]!}",
-                                "$s3path${results[4]!}",
-                              ],
-                              restaurantPhoneNumber: phoneNumber.toString(),
-                              websiteUrl: websiteUrl.toString(),
-                              restaurantDiscountDescription:
-                                  discountDescriptionController.text,
-                              restaurantGoogleMapsLink:
-                                  "${AppTheme.gmapsLink}${locationPrediction.placeId}",
-                              googleMapsId: locationPrediction.placeId!,
-                              googleMapsTextBox:
-                                  locationPrediction.description!,
-                            );
-                            safePrint('Successfully uploaded file: $results');
-                            if (context.mounted) {
-                              Navigator.pop(context);
+                                  .substring(0, comma));
+                              // getting lat lng
+                              final latitude = locationPrediction.lat;
+                              final longitude = locationPrediction.lng;
+
+                              safePrint(restaurantInfoObject);
+
+                              final websiteUrl =
+                                  restaurantInfoObject['website'];
+                              final phoneNumber =
+                                  restaurantInfoObject['phone_number'];
+
+                              //('${dotenv.get("S3PATH")}${result.uploadedItem.path}'),
+
+                              final restaurantRating =
+                                  restaurantInfoObject['rating'];
+                              // safePrint(restaurantReviews); // double
+
+                              final totalRestaurantReviews =
+                                  restaurantInfoObject['number_of_reviews'];
+                              // //safePrint(totalRestaurantReviews); //int
+                              //
+                              final restaurantHours = convertToTime(
+                                  restaurantInfoObject["opening_hours"]);
+                              // FocusScope.of(context).unfocus();
+
+                              HapticFeedback.heavyImpact();
+                              // Upload file using Amplify Storage
+
+                              final uploadTasks = [
+                                _uploadFile(
+                                    'public/${restaurantPreview?.uri.pathSegments.last}',
+                                    restaurantPreview),
+                                _uploadFile(
+                                    'public/${restaurantLogo?.uri.pathSegments.last}',
+                                    restaurantLogo),
+                                _uploadFile(
+                                    'public/${dish1?.uri.pathSegments.last}',
+                                    dish1),
+                                _uploadFile(
+                                    'public/${dish2?.uri.pathSegments.last}',
+                                    dish2),
+                                _uploadFile(
+                                    'public/${dish3?.uri.pathSegments.last}',
+                                    dish3),
+                              ];
+
+                              final results = await Future.wait(uploadTasks);
+
+                              safePrint(results);
+
+                              await restaurant.addRestaurantInfo(
+                                restaurantName:
+                                    restaurantNameController.text.trim(),
+                                restaurantAddress: restaurantAddress
+                                    .toString()
+                                    .substring(0, comma),
+                                restaurantImageSrc: "$s3path${results[0]!}",
+                                restaurantImageLogo: "$s3path${results[1]!}",
+                                restaurantAttributes: restaurantCategories,
+                                latLng: LatLong(
+                                    latitude: latitude!, longitude: longitude!),
+                                restaurantHours: restaurantHours,
+                                restaurantRatings: restaurantRating,
+                                numRestaurantReviews: totalRestaurantReviews,
+                                restaurantDiscountPercentage:
+                                    discountController.text,
+                                restaurantTopItemName: [
+                                  dish1Title.text,
+                                  dish2Title.text,
+                                  dish3Title.text
+                                ],
+                                restaurantTopItemImage: [
+                                  "$s3path${results[2]!}",
+                                  "$s3path${results[3]!}",
+                                  "$s3path${results[4]!}",
+                                ],
+                                restaurantPhoneNumber: phoneNumber.toString(),
+                                websiteUrl: websiteUrl.toString(),
+                                restaurantDiscountDescription:
+                                    discountDescriptionController.text,
+                                restaurantGoogleMapsLink:
+                                    "${AppTheme.gmapsLink}${locationPrediction.placeId}",
+                                googleMapsId: locationPrediction.placeId!,
+                                googleMapsTextBox:
+                                    locationPrediction.description!,
+                              );
+                              safePrint('Successfully uploaded file: $results');
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+                            } on StorageException catch (e) {
+                              safePrint(e.message);
                             }
-                          } on StorageException catch (e) {
-                            safePrint(e.message);
                           }
                         },
                         child: const CustomCheckBox(
