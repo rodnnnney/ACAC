@@ -121,9 +121,7 @@ class _HomePageUserCardState extends State<HomePageUserCard> {
                                 widget.restaurantInfoCard),
                             builder: (context, snapshot) {
                               return Text(
-                                snapshot.data ??
-                                    'Getting Distance'
-                                        '..',
+                                snapshot.data ?? '',
                                 style: const TextStyle(color: Colors.black),
                               );
                             },

@@ -12,6 +12,7 @@ import 'package:ACAC/features/maps/helper_widgets/swipe_up_card.dart';
 import 'package:ACAC/features/maps/maps.dart';
 import 'package:ACAC/features/maps/service/navigation_info_provider.dart';
 import 'package:ACAC/features/maps/service/polyline_info.dart';
+import 'package:ACAC/features/user_auth/controller/user_repository.dart';
 import 'package:ACAC/features/user_auth/data/user_list_controller.dart';
 import 'package:ACAC/models/RestaurantInfoCard.dart';
 import 'package:ACAC/models/User.dart';
@@ -23,8 +24,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
 
-import '../../../user_auth/controller/user_repository.dart';
-
+// cards after navigating to rating/trending/alpha row
 class SortedByRating extends ConsumerStatefulWidget {
   static const String id = 'sorted_by_rating_list';
 
@@ -246,8 +246,15 @@ class CardViewerHomePageState extends ConsumerState<SortedByRating> {
                               FutureBuilder(
                                 future: getDistance(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                      snapshot.data ?? 'Getting Distance..');
+                                  return Row(
+                                    children: [
+                                      const Icon(Icons.location_on),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(snapshot.data ?? ''),
+                                    ],
+                                  );
                                 },
                               ),
                             ],

@@ -234,8 +234,15 @@ class DbbSortState extends ConsumerState<DbbSort> {
                               FutureBuilder(
                                 future: getDistance(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                      snapshot.data ?? 'Getting Distance..');
+                                  return Row(
+                                    children: [
+                                      const Icon(Icons.location_on),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(snapshot.data ?? ''),
+                                    ],
+                                  );
                                 },
                               ),
                             ],
